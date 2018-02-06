@@ -57,20 +57,25 @@ metFilter = PSet(
 # Electron veto
 #================================================================================================
 eVeto = PSet(
-    electronPtCut     = 15.0,
-    electronEtaCut    = 2.5,
+    electronPtCut     = 10.0,   # sync: 10.0
+    electronEtaCut    = 2.1,    # sync:  2.1
+    electronIDType    = "MVA",  # options: "default", "MVA"
     electronID        = "cutBasedElectronID_Spring15_25ns_V1_standalone_veto",
-    electronIsolation = "veto", # loosest possible for vetoing ("veto"), "tight" for selecting
+    electronMVA       = "ElectronMVAEstimatorRun2Spring16GeneralPurposeV1Values",
+    electronMVACut    = "Loose",
+    electronIsolation = "veto", # options: "veto", "tight"
+    electronIsolType  = "mini", # options: "mini", "default"
     )
 
 #================================================================================================
 # Muon veto
 #================================================================================================
 muVeto = PSet(
-    muonPtCut         = 10.0,
-    muonEtaCut        = 2.5,
-    muonID            = "muIDLoose", # loosest option for vetoing (options: muIDLoose, muIDMedium, muIDTight)
-    muonIsolation     = "veto",      # loosest possible for vetoing ("veto"), "tight" for selecting
+    muonPtCut         = 10.0,        # sync: 10.0
+    muonEtaCut        = 2.4,         # sync:  2.4
+    muonID            = "muIDLoose", # options: "muIDLoose", "muIDMedium", "muIDTight"
+    muonIsolation     = "veto",      # options: "veto", "tight"
+    muonIsolType      = "mini",      # options: "mini", "default"
 )
 
 #================================================================================================
@@ -79,7 +84,6 @@ muVeto = PSet(
 jetSelection = PSet(
     jetType                  = "Jets",    # options: Jets (AK4PFCHS), JetsPuppi (AK4Puppi)
     jetPtCuts                = [40.0, 40.0, 40.0, 40.0, 40.0, 40.0, 30.0],
-#    jetPtCuts                = [30.0, 30.0, 30.0, 30.0, 30.0, 30.0, 30.0],  #test for topSelection
     jetEtaCuts               = [2.4],
     numberOfJetsCutValue     = 7,
     numberOfJetsCutDirection = ">=",      # options: ==, !=, <, <=, >, >=
@@ -143,7 +147,8 @@ fatjetSoftDropSelection = PSet(
 bjetSelection = PSet(
     triggerMatchingApply      = False,
     triggerMatchingCone       = 0.1,  # DeltaR for matching offline bjet with trigger::TriggerBjet
-    jetPtCuts                 = [40.0, 40.0, 30.0],
+    jetPtCuts                 = [40.0, 40.0, 30.0], # [default: [40.0, 40.0, 30.0] ]
+    #jetPtCuts                 = [40.0], # [default: [40.0, 40.0, 30.0] ]
     jetEtaCuts                = [2.4],
     bjetDiscr                 = "pfCombinedInclusiveSecondaryVertexV2BJetTags",
     bjetDiscrWorkingPoint     = "Medium",
@@ -202,19 +207,19 @@ topologySelection = PSet(
 # Top selection BDT                                               
 #================================================================================================        
 topSelectionBDT = PSet(
-    LdgMVACutValue         = 0.8,     # [default: 0.9]
+    LdgMVACutValue         = 0.85,    # [default: 0.85]
     LdgMVACutDirection     =  ">=",   # [default: ">="]
-    SubldgMVACutValue      = 0.8,     # [default: 0.9]
+    SubldgMVACutValue      = 0.85,    # [default: 0.85]
     SubldgMVACutDirection  =  ">=",   # [default: ">="]
     NjetsMax               = 999,     # [default: 999]
     NBjetsMax              = 999,     # [default: 999]
     # Speed-up calculation by skipping top candidates failing some criteria
-    CSV_bDiscCutValue      = 0.5426,  # [default: 0.8484] #Do not evaluate top candidate if b-jet assigned as b from top fails this cut
+    CSV_bDiscCutValue      = 0.8484,  # [default: 0.8484] #Do not evaluate top candidate if b-jet assigned as b from top fails this cut
     CSV_bDiscCutDirection  = ">=",    # [default: ">="]
     MassCutValue           = 600.0,   # [default: 400.0]
     MassCutDirection       = "<=",    # [default: "<"]
     # FIXME: Phase this out (currently only used in plots)
-    MVACutValue            = 0.8,     # [default: 0.9]
+    MVACutValue            = 0.85,    # [default: 0.85]
     MVACutDirection        =  ">=",   # [default: ">="]
 )
 
@@ -222,7 +227,7 @@ topSelectionBDT = PSet(
 # FakeB Measurement Options
 #================================================================================================
 fakeBMeasurement = PSet(
-    prelimTopMVACutValue              = 0.6,      # [default: 0.4]
+    prelimTopMVACutValue              = 0.60,     # [default: 0.60]
     prelimTopMVACutDirection          =  ">=",    # [default: ">="]
     # CSVv2-M (Baseline b-jets)
     numberOfBJetsCutValue             = 2,        # [VR, CR2: 2   , CR3, CR4: 1   ]
@@ -263,10 +268,10 @@ commonPlotsOptions = PSet(
     htBins            = PSet(nBins = 500, axisMin =  0.0, axisMax = 5000.0), # 10 GeV bin width 
     bjetDiscrBins     = PSet(nBins = 120, axisMin =  0.0, axisMax =    1.2),
     angularCuts1DBins = PSet(nBins =  52, axisMin =  0.0, axisMax =  260.0), 
-    topMassBins       = PSet(nBins = 300, axisMin =  0.0, axisMax = 1500.0), # 5 GeV bin width 
-    wMassBins         = PSet(nBins = 200, axisMin =  0.0, axisMax = 1000.0), # 5 GeV bin width 
-    mtBins            = PSet(nBins = 800, axisMin =  0.0, axisMax = 4000.0), # 5 GeV bin width
-    invMassBins       = PSet(nBins = 800, axisMin =  0.0, axisMax = 4000.0), # 5 GeV bin width    
+    topMassBins       = PSet(nBins = 300, axisMin =  0.0, axisMax = 1500.0), #  5 GeV bin width 
+    wMassBins         = PSet(nBins = 200, axisMin =  0.0, axisMax = 1000.0), #  5 GeV bin width 
+    mtBins            = PSet(nBins = 800, axisMin =  0.0, axisMax = 4000.0), #  5 GeV bin width
+    invMassBins       = PSet(nBins = 200, axisMin =  0.0, axisMax = 4000.0), # 20 GeV bin width    
 )
 
 #================================================================================================
@@ -281,7 +286,7 @@ allSelections = PSet(
     TauSelection          = tauSelection,
     METFilter             = metFilter,
     METSelection          = metSelection,
-    TopologySelection     = topologySelection,
+    # TopologySelection     = topologySelection,
     TopSelectionBDT       = topSelectionBDT,
     MuonSelection         = muVeto,
     Trigger               = trigger,
