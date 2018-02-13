@@ -377,6 +377,12 @@ def GetHistoKwargs(histo, opts):
         kwargs["xlabel"] = "#DeltaR_{min}"
         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
         
+    if "objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 3.0}
+        
     if "bfromHiggstop_Higgstop_dR" in histo:
         kwargs["ylabel"] = yLabel + " / %.1f"
         kwargs["xlabel"] = "#DeltaR"
@@ -387,6 +393,17 @@ def GetHistoKwargs(histo, opts):
         kwargs["ylabel"] = yLabel + " / %.1f"
         kwargs["xlabel"] = " "
         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+
+        # try with fat jets
+    #if "Hs_topQuark_fatjet_mindR" in histo:
+     #   kwargs["ylabel"] = yLabel + " / %.1f"
+      #  kwargs["xlabel"] = "#DeltaR_{min}"
+       # kwargs["cutBox"] = {"cutValue": 0.8, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        #kwargs["opts"]   = {"xmin": 0.0, "xmax": 5.0}
+    
+        
+        
+        #
 
     if "b_higgs_underdR" in histo:
         kwargs["ylabel"] = yLabel + " / %.1f"
@@ -469,6 +486,34 @@ def GetHistoKwargs(histo, opts):
         kwargs["ylabel"] = yLabel + " / %.1f"
         kwargs["xlabel"] = "#DeltaR_{min}"
         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 3.0}
+        
+        #for both
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 3.0}
+        
+        # 12.01
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 3.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7_tf" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "  
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+        #
 
     if "bNOTfromHiggstop_top_dR" in histo:
         kwargs["ylabel"] = yLabel + " / %.1f"
@@ -853,6 +898,382 @@ def GetHistoKwargs(histo, opts):
         kwargs["cutBox"] = {"cutValue": 0.8, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
         kwargs["opts"]   = {"xmin": 0.0, "xmax": 5.0}
         
+        # ----Study Boosted Topologies With fat Jets -------------------------
+        # try for both Hs and not
+    if "Hs_QuarksFromW_deltaR" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR"
+        kwargs["cutBox"] = {"cutValue": 0.8, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 5.0}
+        
+    if "Hs_QuarksFromW_Prob_deltaR" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_QuarksintoBaryCenterMultiplicity" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 5.0}
+        
+    if "Hs_isbQuarkintoBaryCenter" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 3.0}
+        
+    if "Hs_OnlyQQ_dR_less_p7" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_Prob_Diquark_match_with_fj" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_MatchedWithDiquark_fj_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 30.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_MatchedWithDiquark_Prob_fj_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+
+    if "Hs_objectsfromtop_dRmax_pTcuts" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{max}"
+        kwargs["cutBox"] = {"cutValue": 0.8, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 5.0}
+        
+    if "Hs_objectsfromtop_dRmin_pTcuts" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{min}"
+        kwargs["cutBox"] = {"cutValue": 0.8, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 5.0}
+        
+    if "Hs_objectsfromtop_Prob_dRmax_pTcuts" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{max}"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_objectsfromtop_Prob_dRmin_pTcuts" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{min}"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_QuarksFromTop_Passed_pTcuts" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+        
+    if "Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+
+    if "Hs_objectsfromtop_mindR_ltp8_matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 30.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 500.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 400.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 30.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 30.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 500.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 400.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 200.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 300.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+        # -------------Update 24.01.2018 after pt cuts---------------------------------------
+    if "Hs_Bc_MassOf_bq" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "m_{bq} (%s)" % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 350.0}
+        
+    if "Hs_Bc_bqq_Top_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 400.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_Bc_qq_Top_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 400.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_Bc_qq_bq_Top_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 400.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_Bc_bq_Top_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 400.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_Bc_bqq_W_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 300.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+
+    if "Hs_Bc_qq_W_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 300.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+
+    if "Hs_Bc_qq_bq_W_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 300.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_Bc_bq_W_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["cutBox"] = {"cutValue": 300.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "Hs_bqcase_deltaR_bq" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{bq}"
+        kwargs["cutBox"] = {"cutValue": 0.4, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "Hs_bqcase_Prob_deltaR_lt" in histo:
+         kwargs["ylabel"] = yLabel + " / %.1f"
+         kwargs["xlabel"] = "#DeltaR_{bq}"
+         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+         
+    if "Hs_BoostedW_deltaR_qq" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{qq}"
+        kwargs["cutBox"] = {"cutValue": 0.4, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+
+    if "Hs_BoostedW_Prob_deltaR_lt" in histo:
+         kwargs["ylabel"] = yLabel + " / %.1f"
+         kwargs["xlabel"] = "#DeltaR_{qq}"
+         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+
+    if "Hs_BoostedWcase_matchWithAk4" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 4.0}
+
+    if "Hs_otherBcloseToTopProd" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "Other b close"
+        kwargs["opts"]   = {"xmin": -0.5, "xmax": 3.5}
+        
+    if "Hs_otherBclose_BoostedTop" in histo:
+         kwargs["ylabel"] = yLabel + " / %.1f"
+         kwargs["xlabel"] = " "
+         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+         
+    if "Hs_otherBclose_BoostedW" in histo:
+         kwargs["ylabel"] = yLabel + " / %.1f"
+         kwargs["xlabel"] = " "
+         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+        
+    if "Hs_MatchedWithDiquark_fj_NumOf_Subjets" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "Subjets" 
+        kwargs["opts"]   = {"xmin": -0.5, "xmax": 3.5}
+        
+    if "Hs_MatchedWithDiquark_fj_hasBsubjet" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "Has b-subjet"
+        kwargs["opts"]   = {"xmin": -0.5, "xmax": 1.5}
+        
+    if "Hs_MatchedWithDiquark_fj_CSV" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "CSV"
+        kwargs["cutBox"] = {"cutValue": 0.8484, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "Hs_QuarksintoFatJetMultiplicity" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 4.0}
+        
+    if "Hs_BoostedWinFatJet_dR_qq" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#DeltaR_{qq}"
+        kwargs["cutBox"] = {"cutValue": 0.4, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+
+    if "Hs_BoostedWinFatJet_Prob_deltaR_lt" in histo:
+         kwargs["ylabel"] = yLabel + " / %.1f"
+         kwargs["xlabel"] = "#DeltaR_{qq}"
+         kwargs["opts"]   = {"xmin": 0.0, "xmax": 2.0}
+             
+        # n jettiness --------------------------------------------------------
+    if "InFatJet_fatjet_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["rebinX"] = 2
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+
+    if "InFatJet_Higgs_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["rebinX"] = 2
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+        
+    if "InFatJet_hasBsubjet" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "Has b-subjet"
+        kwargs["opts"]   = {"xmin": -0.5, "xmax": 1.5}
+        
+    if "InFatJet_Njettinesstau1" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#tau_{1}"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "InFatJet_Njettinesstau2" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#tau_{2}"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "InFatJet_Njettinesstau3" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#tau_{3}"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "InFatJet_Njettinesstau4" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#tau_{4}"
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "InFatJet_tau2DIVtau1" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#tau_{2} / #tau_{1}"
+        kwargs["cutBox"] = {"cutValue": 0.6, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "InFatJet_tau3DIVtau2" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = "#tau_{3} / #tau_{2}"
+        kwargs["cutBox"] = {"cutValue": 0.67, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1.0}
+        
+    if "InFatJet_ldgORsubldg" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        kwargs["xlabel"] = " "
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 3.0}
+
+    if "InFatJet_TFtau21cut_fatjet_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["rebinX"] = 2
+        kwargs["xlabel"] = "p_{T,jet} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+
+    if "InFatJet_TFtau32cut_fatjet_pT" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["rebinX"] = 2
+        kwargs["xlabel"] = "p_{T,jet} (%s)"  % units
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+
+
+        # -----TTsample, top-pt Reweighting ----------------------------------
+    if "ttsample_Top_pt" in histo:
+        kwargs["ylabel"] = yLabel + " / %.1f"
+        units            = "GeV"
+        kwargs["xlabel"] = "p_{T} (%s)"  % units
+        # kwargs["cutBox"] = {"cutValue": 30.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+        kwargs["opts"]   = {"xmin": 0.0, "xmax": 1000.0}
+
+  
         # -----TT sample, bs not from the tops --------------------------------
     if "ttsample_bfromtop_pt" in histo:
         kwargs["ylabel"] = yLabel + " / %.1f"
