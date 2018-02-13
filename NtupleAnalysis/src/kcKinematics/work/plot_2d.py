@@ -398,6 +398,29 @@ def GetHistoKwargs(histoName):
         kwargs["zmax"] = 1e+3
         kwargs["logZ"] = True
 
+        # update 24 /01 
+    elif "Hs_BoostedW_W_pT_Vs_Fatjet_pT" in h:
+        kwargs["xmax"] = 1000.0
+        kwargs["ymax"] = 1000.0
+        kwargs["zmin"] = 1e-1
+        kwargs["zmax"] = 1e+3
+        kwargs["logZ"] = True
+
+        # n jettiness
+    elif "InFatJet_fatjet_pT_Vs_Top_pT" in h:
+        kwargs["xmax"] = 1000.0
+        kwargs["ymax"] = 1000.0
+        kwargs["zmin"] = 1e-1
+        kwargs["zmax"] = 3e+1
+        kwargs["logZ"] = True
+        
+    elif "InFatJet_fatjet_pT_Vs_W_pT" in h:
+        kwargs["xmax"] = 1000.0
+        kwargs["ymax"] = 1000.0
+        kwargs["zmin"] = 1e-1
+        kwargs["zmax"] = 3e+1
+        kwargs["logZ"] = True
+
         # -----TTsample----------------------------------------------------------------------------------------
     elif "ttsample_ldgtop_extrab_dR_Vs_subldgtop_extrab_dR" in h:
         kwargs["xmax"] = 5.0
