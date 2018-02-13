@@ -31,7 +31,7 @@ tauSelection = PSet(
     applyTriggerMatching = False,
     triggerMatchingCone  =   0.1, # DeltaR for matching offline tau with trigger tau
     tauPtCut             =  20.0, #
-    tauEtaCut            =   2.3, #
+    tauEtaCut            =   2.1, # HToTauNu have 2.1
     tauLdgTrkPtCut       =   0.0, #
     prongs               =  -1,   # options: 1, 2, 3, 12, 13, 23, 123 or -1 (all)
     rtau                 =   0.0, # to disable set to 0.0
@@ -147,8 +147,7 @@ fatjetSoftDropSelection = PSet(
 bjetSelection = PSet(
     triggerMatchingApply      = False,
     triggerMatchingCone       = 0.1,  # DeltaR for matching offline bjet with trigger::TriggerBjet
-    jetPtCuts                 = [40.0, 40.0, 30.0], # [default: [40.0, 40.0, 30.0] ]
-    #jetPtCuts                 = [40.0], # [default: [40.0, 40.0, 30.0] ]
+    jetPtCuts                 = [40.0, 40.0, 30.0],
     jetEtaCuts                = [2.4],
     bjetDiscr                 = "pfCombinedInclusiveSecondaryVertexV2BJetTags",
     bjetDiscrWorkingPoint     = "Medium",
@@ -221,13 +220,15 @@ topSelectionBDT = PSet(
     # FIXME: Phase this out (currently only used in plots)
     MVACutValue            = 0.85,    # [default: 0.85]
     MVACutDirection        =  ">=",   # [default: ">="]
+    WeightFile             = "/uscms_data/d3/skonstan/CMSSW_8_0_28/src/HiggsAnalysis/NtupleAnalysis/src/EventSelection/interface/weights/TMVAClassification_BDTG_default.weights.xml",
+#    WeightFile             = "/uscms_data/d3/skonstan/CMSSW_8_0_28/src/HiggsAnalysis/NtupleAnalysis/src/TopReco/work/TMVA_BDT/test/weights_DeltaRminQuarks08/TMVAClassification_BDTG.weights.xml",
 )
 
 #================================================================================================
 # FakeB Measurement Options
 #================================================================================================
 fakeBMeasurement = PSet(
-    prelimTopMVACutValue              = 0.60,     # [default: 0.60]
+    prelimTopMVACutValue              = 0.50,     # [default: 0.60]
     prelimTopMVACutDirection          =  ">=",    # [default: ">="]
     # CSVv2-M (Baseline b-jets)
     numberOfBJetsCutValue             = 2,        # [VR, CR2: 2   , CR3, CR4: 1   ]
@@ -244,6 +245,11 @@ fakeBMeasurement = PSet(
     LdgTopMVACutDirection             = topSelectionBDT.LdgMVACutDirection, 
     SubldgTopMVACutValue              = topSelectionBDT.SubldgMVACutValue, # [VR CR2: 0.8 , CR3, CR4: 0.8 ]
     SubldgTopMVACutDirection          = "<",                               # [VR CR2: ">=", CR3, CR4: "<" ]
+    # All bjets (CSVv2-M and CSVv2-L)
+    allBJetsPtCuts        = bjetSelection.jetPtCuts,
+    allBJetsEtaCuts       = bjetSelection.jetEtaCuts,
+    allBJetsNCutValue     = bjetSelection.numberOfBJetsCutValue,
+    allBJetsNCutDirection = bjetSelection.numberOfBJetsCutDirection
     )
 
 
