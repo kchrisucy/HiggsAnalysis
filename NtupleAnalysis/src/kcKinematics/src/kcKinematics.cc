@@ -9,6 +9,10 @@
 #include "EventSelection/interface/CommonPlots.h"
 #include "EventSelection/interface/EventSelections.h"
 
+//kchristo
+#include "DataFormat/interface/AK8Jet.h"
+#include "DataFormat/interface/AK8JetsSoftDrop.h"
+
 // ROOT                                                                                                             
 #include "TDirectory.h"
 #include "Math/VectorUtil.h"
@@ -79,23 +83,26 @@ private:
   const std::vector<float> cfg_JetEtaCuts;
   const DirectionalCut<int> cfg_JetNumberCut;
   const ParameterSet PSet_HtSelection;
-  const DirectionalCut<float> cfg_HtCut;
+  // kchristo, different HT///////////////////////////////////////////////////////////////
+  const double cfg_HtCut;
+  //const DirectionalCut<float> cfg_HtCut;
+  ////////////////////////////////////////////////////////////////////////////////////////
   const ParameterSet PSet_BJetSelection;
   const std::vector<float> cfg_BJetPtCuts;
   const std::vector<float> cfg_BJetEtaCuts;
   const DirectionalCut<int> cfg_BJetNumberCut;
   // METSelection PSet_METSelection;                                                                                                                 
-  TopologySelection PSet_TopologySelection;
-  const DirectionalCut<double> cfg_SphericityCut;
-  const DirectionalCut<double> cfg_AplanarityCut;
-  const DirectionalCut<double> cfg_PlanarityCut;
-  const DirectionalCut<double> cfg_CircularityCut;
-  const DirectionalCut<double> cfg_Y23Cut;
-  const DirectionalCut<double> cfg_CparameterCut;
-  const DirectionalCut<double> cfg_DparameterCut;
-  const DirectionalCut<double> cfg_FoxWolframMomentCut;
-  const DirectionalCut<double> cfg_AlphaTCut;
-  const DirectionalCut<double> cfg_CentralityCut;
+  //TopologySelection PSet_TopologySelection;
+  //const DirectionalCut<double> cfg_SphericityCut;
+  //const DirectionalCut<double> cfg_AplanarityCut;
+  //const DirectionalCut<double> cfg_PlanarityCut;
+  //const DirectionalCut<double> cfg_CircularityCut;
+  //const DirectionalCut<double> cfg_Y23Cut;
+  //const DirectionalCut<double> cfg_CparameterCut;
+  //const DirectionalCut<double> cfg_DparameterCut;
+  //const DirectionalCut<double> cfg_FoxWolframMomentCut;
+  //const DirectionalCut<double> cfg_AlphaTCut;
+  //const DirectionalCut<double> cfg_CentralityCut;
   // TopSelection PSet_TopSelection;                                                                        
   const HistogramSettings cfg_PtBinSetting;
   const HistogramSettings cfg_EtaBinSetting;
@@ -115,7 +122,7 @@ private:
   Count cTauVeto;
   Count cJetSelection;
   Count cBJetSelection;
-  Count cTopologySelection;
+  //Count cTopologySelection;
   Count cTopSelection;
   Count cSelected;
 
@@ -170,11 +177,15 @@ private:
   // -----------Study Boosted Topologies----------
   WrappedTH1 *h_bfromH_Higgs_dR;
   WrappedTH2 *h_bfromH_Higgs_dR_Vs_Higgs_Pt;
+  // try with fat jets
+  //WrappedTH1 *h_Hs_topQuark_fatjet_mindR;
+  //
   WrappedTH1 *h_objectsfromHiggstop_maxdR;
   WrappedTH2 *h_objectsfromHiggstop_maxdR_Vs_Higgstop_Pt;
   WrappedTH2 *h_objectsfromHiggstop_maxdR_Vs_Higgs_Pt;
   WrappedTH1 *h_objectsfromHiggstop_mindR;
   WrappedTH1 *h_objectsfromHiggstop_Prob_mindR_lt_p8;
+  WrappedTH1 *h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than;
   WrappedTH2 *h_objectsfromHiggstop_mindR_Vs_Higgstop_Pt;
   WrappedTH2 *h_objectsfromHiggstop_mindR_Vs_Higgs_Pt;
   WrappedTH1 *h_bfromHiggstop_Higgstop_dR;
@@ -223,6 +234,7 @@ private:
   WrappedTH2 *h_objectsNOTfromHiggstop_maxdR_Vs_top_Pt;
   WrappedTH1 *h_objectsNOTfromHiggstop_mindR;
   WrappedTH1 *h_objectsNOTfromHiggstop_Prob_mindR_lt_p8;
+  WrappedTH1 *h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than;
   WrappedTH2 *h_objectsNOTfromHiggstop_mindR_Vs_top_Pt;
   WrappedTH2 *h_bNOTfromHiggstop_top_dR_Vs_top_Pt;
   WrappedTH1 *h_b_topNOTfromhiggs_underdR;
@@ -290,6 +302,7 @@ private:
   WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRmax_b_top;
   WrappedTH1 *h_Hs_mostdistantfromtop_isb_dRmin_b_objfromW;
   WrappedTH2 *h_Hs_mostdistantfromtop_isb__dRqq_Vs_W_pT;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than;
   WrappedTH2 *h_Hs_mostdistantfromtop_isb__dRqq_Vs_top_pT;
   
   WrappedTH1 *h_NotHs_mostdistantfromtop_isb__top_pT;
@@ -298,7 +311,175 @@ private:
   WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRmax_b_top;
   WrappedTH1 *h_NotHs_mostdistantfromtop_isb_dRmin_b_objfromW;
   WrappedTH2 *h_NotHs_mostdistantfromtop_isb__dRqq_Vs_W_pT;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than;
   WrappedTH2 *h_NotHs_mostdistantfromtop_isb__dRqq_Vs_top_pT;
+  
+  //12.01
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf;
+
+  //Study Boosted Topologies With fat Jets ----------------
+  WrappedTH1 *h_Hs_QuarksFromW_deltaR;
+  WrappedTH1 *h_Hs_QuarksFromW_Prob_deltaR;
+  WrappedTH1 *h_Hs_QuarksintoBaryCenterMultiplicity;
+  WrappedTH1 *h_Hs_isbQuarkintoBaryCenter;
+  WrappedTH1 *h_Hs_OnlyQQ_dR_less_p7;
+  WrappedTH1 *h_Hs_Prob_Diquark_match_with_fj;
+  WrappedTH1 *h_Hs_MatchedWithDiquark_fj_pT;
+  
+  WrappedTH1 *h_Hs_objectsfromtop_dRmax_pTcuts;
+  WrappedTH1 *h_Hs_objectsfromtop_dRmin_pTcuts;
+  WrappedTH1 *h_Hs_QuarksFromW_deltaR_pTcuts;
+  WrappedTH1 *h_Hs_objectsfromtop_Prob_dRmax_pTcuts;
+  WrappedTH1 *h_Hs_objectsfromtop_Prob_dRmin_pTcuts;
+  WrappedTH1 *h_Hs_QuarksFromW_Prob_deltaR_pTcuts;
+  WrappedTH1 *h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts;
+  WrappedTH1 *h_Hs_isbQuarkintoBaryCenter_pTcuts;
+  WrappedTH1 *h_Hs_OnlyQQ_dR_less_p7_pTcuts;
+  WrappedTH1 *h_Hs_Prob_Diquark_match_with_fj_pTcuts;
+  WrappedTH1 *h_Hs_MatchedWithDiquark_fj_pT_pTcuts;
+  WrappedTH1 *h_Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts;
+  WrappedTH1 *h_Hs_MatchedWithDiquark_Prob_fj_pT;
+  WrappedTH1 *h_Hs_QuarksFromTop_Passed_pTcuts;
+  
+  WrappedTH1 *h_NotHs_QuarksFromW_deltaR;
+  WrappedTH1 *h_NotHs_QuarksFromW_Prob_deltaR;
+  WrappedTH1 *h_NotHs_QuarksintoBaryCenterMultiplicity;
+  WrappedTH1 *h_NotHs_isbQuarkintoBaryCenter;
+  WrappedTH1 *h_NotHs_OnlyQQ_dR_less_p7;
+  WrappedTH1 *h_NotHs_Prob_Diquark_match_with_fj;
+  WrappedTH1 *h_NotHs_MatchedWithDiquark_fj_pT;
+
+  WrappedTH1 *h_NotHs_objectsfromtop_dRmax_pTcuts;
+  WrappedTH1 *h_NotHs_objectsfromtop_dRmin_pTcuts;
+  WrappedTH1 *h_NotHs_objectsfromtop_Prob_dRmax_pTcuts;
+  WrappedTH1 *h_NotHs_objectsfromtop_Prob_dRmin_pTcuts;
+  WrappedTH1 *h_NotHs_QuarksFromW_deltaR_pTcuts;
+  WrappedTH1 *h_NotHs_QuarksFromW_Prob_deltaR_pTcuts;
+  WrappedTH1 *h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts;
+  WrappedTH1 *h_NotHs_isbQuarkintoBaryCenter_pTcuts;
+  WrappedTH1 *h_NotHs_OnlyQQ_dR_less_p7_pTcuts;
+  WrappedTH1 *h_NotHs_Prob_Diquark_match_with_fj_pTcuts;
+  WrappedTH1 *h_NotHs_MatchedWithDiquark_fj_pT_pTcuts;
+  WrappedTH1 *h_NotHs_MatchedWithDiquark_Prob_fj_pT_pTcuts;
+  WrappedTH1 *h_NotHs_MatchedWithDiquark_Prob_fj_pT;
+  WrappedTH1 *h_NotHs_QuarksFromTop_Passed_pTcuts;
+  
+  WrappedTH1 *h_Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj;
+  WrappedTH1 *h_Hs_objectsfromtop_mindR_ltp8_matchedfj_pt;
+  WrappedTH1 *h_Hs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt;
+  WrappedTH1 *h_Hs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt;
+  
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt;
+  WrappedTH1 *h_Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt;
+
+
+  WrappedTH1 *h_NotHs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj;
+  WrappedTH1 *h_NotHs_objectsfromtop_mindR_ltp8_matchedfj_pt;
+  WrappedTH1 *h_NotHs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt;
+  WrappedTH1 *h_NotHs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt;
+
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt;
+  WrappedTH1 *h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt;
+  
+  // update 24.01.2018 after ptcuts
+  WrappedTH1 *h_Hs_Bc_MassOf_bq;
+  WrappedTH1 *h_Hs_Bc_bqq_Top_pT;
+  WrappedTH1 *h_Hs_Bc_qq_Top_pT;
+  WrappedTH1 *h_Hs_Bc_qq_bq_Top_pT;
+  WrappedTH1 *h_Hs_Bc_bq_Top_pT;
+  WrappedTH1 *h_Hs_Bc_bqq_W_pT;
+  WrappedTH1 *h_Hs_Bc_qq_W_pT;
+  WrappedTH1 *h_Hs_Bc_qq_bq_W_pT;
+  WrappedTH1 *h_Hs_Bc_bq_W_pT;
+  
+  WrappedTH1 *h_Hs_bqcase_deltaR_bq;
+  WrappedTH1 *h_Hs_bqcase_Prob_deltaR_lt;
+  WrappedTH1 *h_Hs_BoostedW_deltaR_qq;
+  WrappedTH1 *h_Hs_BoostedW_Prob_deltaR_lt;
+  //WrappedTH1 *h_Hs_BoostedWcase_matchWithAk4;
+
+  WrappedTH1 *h_Hs_otherBcloseToTopProd;
+  WrappedTH1 *h_Hs_otherBcloseToTopProd_whichProd;
+  WrappedTH1 *h_Hs_otherBclose_BoostedTop;
+  WrappedTH1 *h_Hs_otherBclose_BoostedW;
+   
+  WrappedTH1 *h_Hs_MatchedWithDiquark_fj_NumOf_Subjets;
+  WrappedTH1 *h_Hs_MatchedWithDiquark_fj_hasBsubjet;
+  WrappedTH1 *h_Hs_MatchedWithDiquark_fj_CSV;
+  WrappedTH2 *h_Hs_BoostedW_W_pT_Vs_Fatjet_pT;
+  
+  WrappedTH1 *h_Hs_QuarksintoFatJetMultiplicity;
+  WrappedTH1 *h_Hs_BoostedWinFatJet_dR_qq;
+  WrappedTH1 *h_Hs_BoostedWinFatJet_Prob_deltaR_lt;
+  
+  // njettiness 
+  WrappedTH1 *h_Hs_TopProdInFatJet_fatjet_pT;
+  WrappedTH2 *h_Hs_TopProdInFatJet_Top_pT_Vs_fatjet_pT;
+  WrappedTH1 *h_Hs_TopProdInFatJet_Higgs_pT;
+  WrappedTH1 *h_Hs_TopProdInFatJet_hasBsubjet;
+  WrappedTH1 *h_Hs_TopProdInFatJet_Njettinesstau1;
+  WrappedTH1 *h_Hs_TopProdInFatJet_Njettinesstau2;
+  WrappedTH1 *h_Hs_TopProdInFatJet_Njettinesstau3;
+  WrappedTH1 *h_Hs_TopProdInFatJet_Njettinesstau4;
+  WrappedTH1 *h_Hs_TopProdInFatJet_tau2DIVtau1;
+  WrappedTH1 *h_Hs_TopProdInFatJet_tau3DIVtau2;
+  WrappedTH2 *h_Hs_TopProdInFatJet_tau2DIVtau1_Vs_fatjet_pT;
+  WrappedTH2 *h_Hs_TopProdInFatJet_tau3DIVtau2_Vs_fatjet_pT;
+  WrappedTH1 *h_Hs_TopProdInFatJet_ldgORsubldg;
+  WrappedTH1Triplet *h_Hs_TopProdInFatJet_TFtau32cut_fatjet_pT;
+  WrappedTH1Triplet *h_Hs_TopProdInFatJet_TFtau21cut_fatjet_pT;
+
+  WrappedTH1 *h_Hs_WProdInFatJet_fatjet_pT;
+  WrappedTH2 *h_Hs_WProdInFatJet_W_pT_Vs_fatjet_pT;
+  WrappedTH1 *h_Hs_WProdInFatJet_Higgs_pT;
+  WrappedTH1 *h_Hs_WProdInFatJet_hasBsubjet;
+  WrappedTH1 *h_Hs_WProdInFatJet_Njettinesstau1;
+  WrappedTH1 *h_Hs_WProdInFatJet_Njettinesstau2;
+  WrappedTH1 *h_Hs_WProdInFatJet_Njettinesstau3;
+  WrappedTH1 *h_Hs_WProdInFatJet_Njettinesstau4;
+  WrappedTH1 *h_Hs_WProdInFatJet_tau2DIVtau1;
+  WrappedTH1 *h_Hs_WProdInFatJet_tau3DIVtau2;
+  WrappedTH2 *h_Hs_WProdInFatJet_tau2DIVtau1_Vs_fatjet_pT;
+  WrappedTH2 *h_Hs_WProdInFatJet_tau3DIVtau2_Vs_fatjet_pT;
+  WrappedTH1 *h_Hs_WProdInFatJet_ldgORsubldg;
+  WrappedTH1Triplet *h_Hs_WProdInFatJet_TFtau32cut_fatjet_pT;
+  WrappedTH1Triplet *h_Hs_WProdInFatJet_TFtau21cut_fatjet_pT;
+
+  WrappedTH1 *h_Hs_bqInFatJet_fatjet_pT;
+  WrappedTH2 *h_Hs_bqInFatJet_Top_pT_Vs_fatjet_pT;
+  WrappedTH2 *h_Hs_bqInFatJet_W_pT_Vs_fatjet_pT;
+  WrappedTH1 *h_Hs_bqInFatJet_Higgs_pT;
+  WrappedTH1 *h_Hs_bqInFatJet_hasBsubjet;
+  WrappedTH1 *h_Hs_bqInFatJet_Njettinesstau1;
+  WrappedTH1 *h_Hs_bqInFatJet_Njettinesstau2;
+  WrappedTH1 *h_Hs_bqInFatJet_Njettinesstau3;
+  WrappedTH1 *h_Hs_bqInFatJet_Njettinesstau4;
+  WrappedTH1 *h_Hs_bqInFatJet_tau2DIVtau1;
+  WrappedTH1 *h_Hs_bqInFatJet_tau3DIVtau2;
+  WrappedTH2 *h_Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT;
+  WrappedTH2 *h_Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT;
+  WrappedTH1 *h_Hs_bqInFatJet_ldgORsubldg;
+  WrappedTH1Triplet *h_Hs_bqInFatJet_TFtau32cut_fatjet_pT;
+  WrappedTH1Triplet *h_Hs_bqInFatJet_TFtau21cut_fatjet_pT;
+
+
+  // TTsample, top-pt Reweighting ------------------------
+  WrappedTH1 *h_ttsample_Top_pt;
 
   // --OV----TT sample, bs not from the tops---------------
   WrappedTH1 *h_ttsample_bfromtop_pt;
@@ -442,23 +623,26 @@ kcKinematics::kcKinematics(const ParameterSet& config, const TH1* skimCounters)
     cfg_JetEtaCuts(config.getParameter<std::vector<float>>("JetSelection.jetEtaCuts")),
     cfg_JetNumberCut(config, "JetSelection.numberOfJetsCut"),
     PSet_HtSelection(config.getParameter<ParameterSet>("JetSelection")),
-    cfg_HtCut(config, "JetSelection.HTCut"),
+    // kchristo, different HT///////////////////////////////////////////////////////////////
+    //cfg_HtCut(config, "JetSelection.HTCut"),
+    cfg_HtCut(900.0),
+    ////////////////////////////////////////////////////////////////////////////////////////
     PSet_BJetSelection(config.getParameter<ParameterSet>("BJetSelection")),
     cfg_BJetPtCuts(config.getParameter<std::vector<float>>("BJetSelection.jetPtCuts")),
     cfg_BJetEtaCuts(config.getParameter<std::vector<float>>("BJetSelection.jetEtaCuts")),
     cfg_BJetNumberCut(config, "BJetSelection.numberOfBJetsCut"),
     // PSet_METSelection(config.getParameter<ParameterSet>("METSelection")),                        
-    PSet_TopologySelection(config.getParameter<ParameterSet>("TopologySelection")),
-    cfg_SphericityCut(config, "TopologySelection.SphericityCut"),
-    cfg_AplanarityCut(config, "TopologySelection.AplanarityCut"),
-    cfg_PlanarityCut(config, "TopologySelection.PlanarityCut"),
-    cfg_CircularityCut(config, "TopologySelection.CircularityCut"),
-    cfg_Y23Cut(config, "TopologySelection.Y23Cut"),
-    cfg_CparameterCut(config, "TopologySelection.CparameterCut"),
-    cfg_DparameterCut(config, "TopologySelection.DparameterCut"),
-    cfg_FoxWolframMomentCut(config, "TopologySelection.FoxWolframMomentCut"),
-    cfg_AlphaTCut(config, "TopologySelection.AlphaTCut"),
-    cfg_CentralityCut(config, "TopologySelection.CentralityCut"),
+    //PSet_TopologySelection(config.getParameter<ParameterSet>("TopologySelection")),
+    //cfg_SphericityCut(config, "TopologySelection.SphericityCut"),
+    //cfg_AplanarityCut(config, "TopologySelection.AplanarityCut"),
+    //cfg_PlanarityCut(config, "TopologySelection.PlanarityCut"),
+    //cfg_CircularityCut(config, "TopologySelection.CircularityCut"),
+    //cfg_Y23Cut(config, "TopologySelection.Y23Cut"),
+    //cfg_CparameterCut(config, "TopologySelection.CparameterCut"),
+    //cfg_DparameterCut(config, "TopologySelection.DparameterCut"),
+    //cfg_FoxWolframMomentCut(config, "TopologySelection.FoxWolframMomentCut"),
+    //cfg_AlphaTCut(config, "TopologySelection.AlphaTCut"),
+    //cfg_CentralityCut(config, "TopologySelection.CentralityCut"),
     // PSet_TopSelection(config.getParameter<ParameterSet>("TopSelection")),                                                                         
     cfg_PtBinSetting(config.getParameter<ParameterSet>("CommonPlots.ptBins")),
     cfg_EtaBinSetting(config.getParameter<ParameterSet>("CommonPlots.etaBins")),
@@ -474,7 +658,7 @@ kcKinematics::kcKinematics(const ParameterSet& config, const TH1* skimCounters)
     cTauVeto(fEventCounter.addCounter("#tau-veto")),
     cJetSelection(fEventCounter.addCounter("Jets + H_{T}")),
     cBJetSelection(fEventCounter.addCounter("b-jets")),
-    cTopologySelection(fEventCounter.addCounter("Topology")),
+    //cTopologySelection(fEventCounter.addCounter("Topology")),
     cTopSelection(fEventCounter.addCounter("Top")),
     cSelected(fEventCounter.addCounter("All Selections"))
 { }
@@ -609,11 +793,16 @@ void kcKinematics::book(TDirectory *dir) {
   h_objectsfromHiggstop_mindR = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "objectsfromHiggstop_mindR", ";#DeltaR_{min}", 50 , 0.0 , 5.0 );
   h_objectsfromHiggstop_Prob_mindR_lt_p8 = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "objectsfromHiggstop_Prob_mindR_lt_p8",
 								      ";#DeltaR_{min}", 2 , 0.0, 2.0);
+  h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than", ";p_{T} (GeV)", 3 , 0.0, 3.0);
   h_bfromHiggstop_Higgstop_dR = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "bfromHiggstop_Higgstop_dR", ";#DeltaR", 50 , 0.0 , 5.0 );
   h_b_top_fromhiggs_underdR   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "b_top_fromhiggs_underdR"," ", 2 , 0.0, 2.0);
   h_b_higgs_underdR           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "b_higgs_underdR"," ", 2 , 0.0, 2.0);
 
   h_bfromH_Higgs_dR_Vs_Higgs_Pt              = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "bfromH_Higgs_dR_Vs_Higgs_Pt", ";#DeltaR;p_{t} (GeV)", nBinsdR, 0.0, 5.0, nBinsPt, 0.0, 1000.0);
+  // try with fat jets
+  //h_Hs_topQuark_fatjet_mindR                 = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_topQuark_fatjet_mindR", ";#DeltaR_{min}", 50 , 0.0 , 5.0 );
+  
+  //
   h_objectsfromHiggstop_maxdR_Vs_Higgstop_Pt = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "objectsfromHiggstop_maxdR_Vs_Higgstop_Pt", ";#DeltaR_{max};p_{T} (GeV)", nBinsdR,0.0, 5.0, nBinsPt, 0.0, 1000.0);
   h_objectsfromHiggstop_maxdR_Vs_Higgs_Pt    = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "objectsfromHiggstop_maxdR_Vs_Higgs_Pt",";#DeltaR_{max};p_{T} (GeV)", nBinsdR,0.0, 5.0, nBinsPt, 0.0, 1000.0);
   h_objectsfromHiggstop_mindR_Vs_Higgstop_Pt = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "objectsfromHiggstop_mindR_Vs_Higgstop_Pt", ";#DeltaR_{min};p_{T} (GeV)", nBinsdR,0.0, 5.0, nBinsPt, 0.0, 1000.0);
@@ -642,6 +831,7 @@ void kcKinematics::book(TDirectory *dir) {
   h_objectsNOTfromHiggstop_Prob_mindR_lt_p8 = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, 
 									 "objectsNOTfromHiggstop_Prob_mindR_lt_p8",";#DeltaR_{min}", 
 									 2 , 0.0, 2.0);
+  h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "objectsfromNOTHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than", ";p_{T} (GeV)", 3 , 0.0, 3.0);
   h_objectsNOTfromHiggstop_mindR_Vs_top_Pt = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "objectsNOTfromHiggstop_mindR_Vs_top_Pt",";#DeltaR_{min};p_{T} (GeV)", nBinsdR,0.0, 5.0, nBinsPt, 0.0, 1000.0);
   h_bNOTfromHiggstop_top_dR_Vs_top_Pt      = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "bNOTfromHiggstop_top_dR_Vs_top_Pt",";#DeltaR;p_{t} (GeV)", nBinsdR, 0.0, 5.0, nBinsPt, 0.0, 1000.0);
   h_b_topNOTfromhiggs_underdR    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "b_topNOTfromhiggs_underdR"," ", 2 , 0.0, 2.0);  
@@ -748,6 +938,8 @@ void kcKinematics::book(TDirectory *dir) {
   h_Hs_mostdistantfromtop_isb__dRmax_b_top     = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRmax_b_top", ";#DeltaR",  50 , 0.0 , 5.0 );
   h_Hs_mostdistantfromtop_isb_dRmin_b_objfromW = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb_dRmin_b_objfromW", ";#DeltaR_{min}",  50 , 0.0 , 5.0 );
   h_Hs_mostdistantfromtop_isb__dRqq_Vs_W_pT    = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_mostdistantfromtop_isb__dRqq_Vs_W_pT", ";#DeltaR;p_{t} (GeV)", nBinsdR, 0.0, 5.0, 100, 0.0, 1000.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than", ";p_{T} (GeV)", 3 , 0.0, 3.0);
+
   h_Hs_mostdistantfromtop_isb__dRqq_Vs_top_pT  = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_mostdistantfromtop_isb__dRqq_Vs_top_pT", ";#DeltaR;p_{t} (GeV)", nBinsdR, 0.0, 5.0, 100, 0.0, 1000.0);
   
   h_NotHs_mostdistantfromtop_isb__top_pT          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__top_pT" , ";p_{t} (GeV)", 100 , 0.0, 1000.0);
@@ -756,9 +948,243 @@ void kcKinematics::book(TDirectory *dir) {
   h_NotHs_mostdistantfromtop_isb__dRmax_b_top     = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRmax_b_top", ";#DeltaR",  50 , 0.0 , 5.0 );
   h_NotHs_mostdistantfromtop_isb_dRmin_b_objfromW = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb_dRmin_b_objfromW", ";#DeltaR_{min}",  50 , 0.0 , 5.0 );
   h_NotHs_mostdistantfromtop_isb__dRqq_Vs_W_pT   = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "NotHs_mostdistantfromtop_isb__dRqq_Vs_W_pT", ";#DeltaR;p_{t} (GeV)", nBinsdR, 0.0, 5.0, 100, 0.0, 1000.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than", ";p_{T} (GeV)", 3 , 0.0, 3.0);
+  // 12.01
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than", ";p_{T} (GeV)", 3 , 0.0, 3.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7_tf", " ", 2 , 0.0, 2.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than", ";p_{T} (GeV)", 3 , 0.0, 3.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf", " ", 2 , 0.0, 2.0);
+    //
   h_NotHs_mostdistantfromtop_isb__dRqq_Vs_top_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "NotHs_mostdistantfromtop_isb__dRqq_Vs_top_pT", ";#DeltaR;p_{t} (GeV)", nBinsdR, 0.0, 5.0, 100, 0.0, 1000.0);
 
-  // --OV-------TT sample, bs not from the tops---------------                                                                                        
+  //Study Boosted Topologies With fat Jets --------------------------------------------------------------------------------------- 
+  // h_NotHs_QuarksFromW_deltaR  h_NotHs_QuarksintoBaryCenterMultiplicity  h_NotHs_isbQuarkintoBaryCenter
+  
+  h_Hs_QuarksFromW_deltaR = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksFromW_deltaR", ";#DeltaR", 50 , 0.0 , 5.0 );
+  h_Hs_QuarksFromW_Prob_deltaR          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksFromW_Prob_deltaR", ";#DeltaR" , 2 , 0.0 , 2.0 );
+  h_Hs_QuarksintoBaryCenterMultiplicity = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksintoBaryCenterMultiplicity", " ", 5 , 0.0 , 5.0 );
+  h_Hs_isbQuarkintoBaryCenter = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_isbQuarkintoBaryCenter", " " , 3 , 0.0 , 3.0 );
+  h_Hs_OnlyQQ_dR_less_p7      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_OnlyQQ_dR_less_p7", " " , 2 , 0.0 , 2.0 );
+  h_Hs_Prob_Diquark_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Prob_Diquark_match_with_fj", " " , 2 , 0.0 , 2.0 );
+  h_Hs_MatchedWithDiquark_fj_pT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_fj_pT",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  
+  h_Hs_objectsfromtop_dRmax_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_objectsfromtop_dRmax_pTcuts", ";#DeltaR_{max}", 50 , 0.0 , 5.0 );
+  h_Hs_objectsfromtop_dRmin_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_objectsfromtop_dRmin_pTcuts", ";#DeltaR_{min}", 50 , 0.0 , 5.0 );
+  h_Hs_objectsfromtop_Prob_dRmax_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_objectsfromtop_Prob_dRmax_pTcuts", ";#DeltaR_{max}", 2 , 0.0 , 2.0 );
+  h_Hs_objectsfromtop_Prob_dRmin_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_objectsfromtop_Prob_dRmin_pTcuts", ";#DeltaR_{min}", 2 , 0.0 , 2.0 );
+  h_Hs_QuarksFromW_deltaR_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksFromW_deltaR_pTcuts", ";#DeltaR", 50 , 0.0 , 5.0 );
+  h_Hs_QuarksFromW_Prob_deltaR_pTcuts  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksFromW_Prob_deltaR_pTcuts", ";#DeltaR" ,2 , 0.0 , 2.0 );
+  h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksintoBaryCenterMultiplicity_pTcuts", " ", 5 , 0.0 , 5.0 );
+  h_Hs_isbQuarkintoBaryCenter_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_isbQuarkintoBaryCenter_pTcuts", " " , 3 , 0.0 , 3.0 );
+  h_Hs_OnlyQQ_dR_less_p7_pTcuts      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_OnlyQQ_dR_less_p7_pTcuts", " " , 2 , 0.0 , 2.0 );
+  h_Hs_Prob_Diquark_match_with_fj_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Prob_Diquark_match_with_fj_pTcuts", " " , 2 , 0.0 ,2.0 );
+  h_Hs_MatchedWithDiquark_fj_pT_pTcuts   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_fj_pT_pTcuts",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts", " " , 2, 0.0 ,2.0 );
+  h_Hs_MatchedWithDiquark_Prob_fj_pT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_Prob_fj_pT", " ", 2, 0.0 ,2.0 );
+
+  h_Hs_QuarksFromTop_Passed_pTcuts       = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksFromTop_Passed_pTcuts", " " , 2 , 0.0 ,2.0 );
+
+  h_NotHs_QuarksFromW_deltaR = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksFromW_deltaR", ";#DeltaR", 50 , 0.0 , 5.0 );
+  h_NotHs_QuarksFromW_Prob_deltaR          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksFromW_Prob_deltaR", ";#DeltaR" ,2 , 0.0 , 2.0 );
+  h_NotHs_QuarksintoBaryCenterMultiplicity = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksintoBaryCenterMultiplicity", " ", 5 , 0.0 , 5.0 );
+  h_NotHs_isbQuarkintoBaryCenter = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_isbQuarkintoBaryCenter", " " , 3 , 0.0 , 3.0 );
+  h_NotHs_OnlyQQ_dR_less_p7      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_OnlyQQ_dR_less_p7", " " , 2 , 0.0 , 2.0 );
+  h_NotHs_Prob_Diquark_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_Prob_Diquark_match_with_fj", " " , 2 , 0.0 ,2.0 );
+  h_NotHs_MatchedWithDiquark_fj_pT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_MatchedWithDiquark_fj_pT",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  
+  h_NotHs_objectsfromtop_dRmax_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_objectsfromtop_dRmax_pTcuts", ";#DeltaR_{max}", 50 , 0.0 , 5.0 );
+  h_NotHs_objectsfromtop_dRmin_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_objectsfromtop_dRmin_pTcuts", ";#DeltaR_{min}", 50 , 0.0 , 5.0 );
+  h_NotHs_objectsfromtop_Prob_dRmax_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_objectsfromtop_Prob_dRmax_pTcuts", ";#DeltaR_{max}", 2 , 0.0 , 2.0 );
+  h_NotHs_objectsfromtop_Prob_dRmin_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_objectsfromtop_Prob_dRmin_pTcuts", ";#DeltaR_{min}", 2 , 0.0 , 2.0 );
+  h_NotHs_QuarksFromW_deltaR_pTcuts   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksFromW_deltaR_pTcuts", ";#DeltaR", 50 , 0.0 , 5.0 );
+  h_NotHs_QuarksFromW_Prob_deltaR_pTcuts  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksFromW_Prob_deltaR_pTcuts", ";#DeltaR" ,2 , 0.0 , 2.0 );
+  h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksintoBaryCenterMultiplicity_pTcuts", " ", 5 , 0.0 , 5.0 );
+  h_NotHs_isbQuarkintoBaryCenter_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_isbQuarkintoBaryCenter_pTcuts", " " , 3 ,0.0 , 3.0 );
+  h_NotHs_OnlyQQ_dR_less_p7_pTcuts      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_OnlyQQ_dR_less_p7_pTcuts", " " , 2 , 0.0 , 2.0 );
+  h_NotHs_Prob_Diquark_match_with_fj_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_Prob_Diquark_match_with_fj_pTcuts", " " , 2 , 0.0 ,2.0 );
+  h_NotHs_MatchedWithDiquark_fj_pT_pTcuts   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_MatchedWithDiquark_fj_pT_pTcuts",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_MatchedWithDiquark_Prob_fj_pT_pTcuts = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_MatchedWithDiquark_Prob_fj_pT_pTcuts", " " , 2, 0.0 ,2.0 );
+  h_NotHs_MatchedWithDiquark_Prob_fj_pT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_MatchedWithDiquark_Prob_fj_pT", " " , 2, 0.0 ,2.0 );
+  h_NotHs_QuarksFromTop_Passed_pTcuts       = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_QuarksFromTop_Passed_pTcuts", " " , 2, 0.0 ,2.0 );
+
+
+
+  h_Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1,
+										     "Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj",
+										     " ", 2 , 0.0, 2.0);
+  h_Hs_objectsfromtop_mindR_ltp8_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, 
+									   "Hs_objectsfromtop_mindR_ltp8_matchedfj_pt" , 
+									   ";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj"," ", 2 , 0.0, 2.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj"," ", 2 , 0.0, 2.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+
+
+  h_NotHs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1,
+                                                                                     "NotHs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj",
+                                                                                     " ", 2 , 0.0, 2.0);
+  h_NotHs_objectsfromtop_mindR_ltp8_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1,
+                                                                           "NotHs_objectsfromtop_mindR_ltp8_matchedfj_pt" ,
+                                                                           ";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj"," ", 2 , 0.0, 2.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj"," ", 2 , 0.0, 2.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt",";p_{t} (GeV)", 100 , 0.0, 1000.0);
+
+  // update 24.01.2018 after ptcuts
+  h_Hs_Bc_MassOf_bq    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_MassOf_bq",";m_{bq} (GeV)", 70, 0.0, 350.0);
+  h_Hs_Bc_bqq_Top_pT   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_bqq_Top_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_qq_Top_pT    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_qq_Top_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_qq_bq_Top_pT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_qq_bq_Top_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_bq_Top_pT    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_bq_Top_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_bqq_W_pT   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_bqq_W_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_qq_W_pT    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_qq_W_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_qq_bq_W_pT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_qq_bq_W_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_Bc_bq_W_pT    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_Bc_bq_W_pT",";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  
+  h_Hs_bqcase_deltaR_bq  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqcase_deltaR_bq", ";#DeltaR_{qq}", 10 , 0.0 , 1.0 );
+  h_Hs_bqcase_Prob_deltaR_lt  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqcase_Prob_deltaR_lt", ";#DeltaR_{qq}", 2 , 0.0 , 2.0 );
+  h_Hs_BoostedW_deltaR_qq  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_BoostedW_deltaR_qq", ";#DeltaR_{bq}", 10 , 0.0 , 1.0 );
+  h_Hs_BoostedW_Prob_deltaR_lt = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_BoostedW_Prob_deltaR_lt", ";#DeltaR_{bq}", 2 , 0.0, 2.0 );
+  //h_Hs_BoostedWcase_matchWithAk4 = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_BoostedWcase_matchWithAk4"," ", 4, 0.0, 4.0);
+
+
+  h_Hs_otherBcloseToTopProd = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_otherBcloseToTopProd",";Other b close", 4, -0.5, 3.5);
+  h_Hs_otherBcloseToTopProd_whichProd = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_otherBcloseToTopProd_whichProd"," ", 2, 0.0, 2.0);
+  h_Hs_otherBclose_BoostedW = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_otherBclose_BoostedW"," ", 2, 0.0, 2.0);
+  h_Hs_otherBclose_BoostedTop = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_otherBclose_BoostedTop"," ", 2, 0.0, 2.0);
+
+  h_Hs_MatchedWithDiquark_fj_NumOf_Subjets = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_fj_NumOf_Subjets",";Subjets", 4, -0.5, 3.5);
+  h_Hs_MatchedWithDiquark_fj_hasBsubjet    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_fj_hasBsubjet",";Has b-subjet", 2, -0.5, 1.5);
+  h_Hs_MatchedWithDiquark_fj_CSV           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_MatchedWithDiquark_fj_CSV",";CSV", 100, 0.0, 1.0);
+  h_Hs_BoostedW_W_pT_Vs_Fatjet_pT          = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_BoostedW_W_pT_Vs_Fatjet_pT"\
+									, ";p_{t} (GeV);p_{t} (GeV)", 100, 0.0, 1000.0, 100, 0.0, 1000.0);
+ 
+  h_Hs_QuarksintoFatJetMultiplicity = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_QuarksintoFatJetMultiplicity"," ", 4, 0.0, 4.0);
+  h_Hs_BoostedWinFatJet_dR_qq       = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_BoostedWinFatJet_dR_qq", ";#DeltaR_{qq}", 20 , 0.0 , 2.0 );
+  h_Hs_BoostedWinFatJet_Prob_deltaR_lt  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_BoostedWinFatJet_Prob_deltaR_lt", ";#DeltaR_{qq}", 2 , 0.0, 2.0 );
+  
+  // njettiness
+  h_Hs_TopProdInFatJet_fatjet_pT           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_fatjet_pT",
+									";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_TopProdInFatJet_Top_pT_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_TopProdInFatJet_Top_pT_Vs_fatjet_pT" \
+                                                                        , ";p_{T,jet} (GeV);p_{T,top} (GeV)", 100, 0.0, 1000.0, 100, 0.0, 1000.0);
+  h_Hs_TopProdInFatJet_Higgs_pT            = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_Higgs_pT",
+									";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_TopProdInFatJet_hasBsubjet          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_hasBsubjet",
+									";Has b-subjet", 2 , 0.0, 2.0 );
+  h_Hs_TopProdInFatJet_Njettinesstau1      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_Njettinesstau1",
+                                                                        ";#tau_{1}", 50 , 0.0, 1.0);
+  h_Hs_TopProdInFatJet_Njettinesstau2      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_Njettinesstau2",
+								        ";#tau_{2}", 50 , 0.0, 1.0);
+  h_Hs_TopProdInFatJet_Njettinesstau3      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_Njettinesstau3",
+								        ";#tau_{3}", 50 , 0.0, 1.0);
+  h_Hs_TopProdInFatJet_Njettinesstau4      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_Njettinesstau4",
+									";#tau_{4}", 50 , 0.0, 1.0);
+  h_Hs_TopProdInFatJet_tau2DIVtau1         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_tau2DIVtau1",
+                                                                        ";#tau_{2} / #tau_{1}", 50 , 0.0, 1.0);
+  h_Hs_TopProdInFatJet_tau3DIVtau2         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_tau3DIVtau2",
+								      ";#tau_{3} / #tau_{2}", 50 , 0.0, 1.0);
+  h_Hs_TopProdInFatJet_tau2DIVtau1_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_TopProdInFatJet_tau2DIVtau1_Vs_fatjet_pT", ";p_{t,jet} (GeV);#tau_{2} / #tau_{1}", 100, 0.0, 1000.0, 100, 0.0, 1.0);
+  h_Hs_TopProdInFatJet_tau3DIVtau2_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_TopProdInFatJet_tau3DIVtau2_Vs_fatjet_pT", ";p_{t,jet} (GeV);#tau_{3} / #tau_{2}", 100, 0.0, 1000.0, 100, 0.0, 1.0); 
+  h_Hs_TopProdInFatJet_ldgORsubldg = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_TopProdInFatJet_ldgORsubldg"," ", 3, 0.0, 3.0);
+  h_Hs_TopProdInFatJet_TFtau32cut_fatjet_pT      = fHistoWrapper.makeTHTriplet<TH1F>(true, HistoLevel::kVital, myTripletDirs,
+										     "Hs_TopProdInFatJet_TFtau32cut_fatjet_pT",
+										     ";p_{T,jet} (GeV)",
+										     100, 0.0, 1000.0);
+  h_Hs_TopProdInFatJet_TFtau21cut_fatjet_pT      = fHistoWrapper.makeTHTriplet<TH1F>(true, HistoLevel::kVital, myTripletDirs,
+                                                                                     "Hs_TopProdInFatJet_TFtau21cut_fatjet_pT",
+                                                                                     ";p_{T,jet} (GeV)",
+                                                                                     100, 0.0, 1000.0);
+  
+
+  h_Hs_WProdInFatJet_fatjet_pT           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_fatjet_pT",
+								      ";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_WProdInFatJet_W_pT_Vs_fatjet_pT   = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_WProdInFatJet_W_pT_Vs_fatjet_pT" \
+								      , ";p_{T,jet} (GeV);p_{T,W} (GeV)", 100, 0.0, 1000.0, 100, 0.0, 1000.0);
+  h_Hs_WProdInFatJet_Higgs_pT            = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_Higgs_pT",
+								      ";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_WProdInFatJet_hasBsubjet          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_hasBsubjet",
+								      ";Has b-subjet", 2 , 0.0, 2.0 );
+  h_Hs_WProdInFatJet_Njettinesstau1      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_Njettinesstau1",
+								      ";#tau_{1}", 50 , 0.0, 1.0);
+  h_Hs_WProdInFatJet_Njettinesstau2      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_Njettinesstau2",
+								      ";#tau_{2}", 50 , 0.0, 1.0);
+  h_Hs_WProdInFatJet_Njettinesstau3      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_Njettinesstau3",
+								      ";#tau_{3}", 50 , 0.0, 1.0);
+  h_Hs_WProdInFatJet_Njettinesstau4      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_Njettinesstau4",
+								      ";#tau_{4}", 50 , 0.0, 1.0);
+  h_Hs_WProdInFatJet_tau2DIVtau1         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_tau2DIVtau1",
+								      ";#tau_{2} / #tau_{1}", 50 , 0.0, 1.0);
+  h_Hs_WProdInFatJet_tau3DIVtau2         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_tau3DIVtau2",
+								      ";#tau_{3} / #tau_{2}", 50 , 0.0, 1.0);
+  h_Hs_WProdInFatJet_tau2DIVtau1_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_WProdInFatJet_tau2DIVtau1_Vs_fatjet_pT", ";p_{T,jet} (GeV);#tau_{2} / #tau_{1}", 100, 0.0, 1000.0, 100, 0.0, 1.0);
+  h_Hs_WProdInFatJet_tau3DIVtau2_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_WProdInFatJet_tau3DIVtau2_Vs_fatjet_pT", ";p_{T,jet} (GeV);#tau_{3} / #tau_{2}", 100, 0.0, 1000.0, 100, 0.0, 1.0);
+  h_Hs_WProdInFatJet_ldgORsubldg = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_WProdInFatJet_ldgORsubldg"," ", 3, 0.0, 3.0);
+  h_Hs_WProdInFatJet_TFtau32cut_fatjet_pT      = fHistoWrapper.makeTHTriplet<TH1F>(true, HistoLevel::kVital, myTripletDirs,
+                                                                                   "Hs_WProdInFatJet_TFtau32cut_fatjet_pT",
+                                                                                   ";p_{T,jet} (GeV)",
+                                                                                   100, 0.0, 1000.0);
+  h_Hs_WProdInFatJet_TFtau21cut_fatjet_pT      = fHistoWrapper.makeTHTriplet<TH1F>(true, HistoLevel::kVital, myTripletDirs,
+                                                                                   "Hs_WProdInFatJet_TFtau21cut_fatjet_pT",
+                                                                                   ";p_{T,jet} (GeV)",
+                                                                                   100, 0.0, 1000.0);
+
+
+  h_Hs_bqInFatJet_fatjet_pT           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_fatjet_pT",
+                                                                      ";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_bqInFatJet_Top_pT_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_bqInFatJet_Top_pT_Vs_fatjet_pT" \
+                                                                      , ";p_{T,jet} (GeV);p_{T,top} (GeV)", 100, 0.0, 1000.0, 100, 0.0, 1000.0);
+  h_Hs_bqInFatJet_W_pT_Vs_fatjet_pT   = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_bqInFatJet_W_pT_Vs_fatjet_pT" \
+								   , ";p_{T,jet} (GeV);p_{T,W} (GeV)", 100, 0.0, 1000.0, 100, 0.0, 1000.0);
+  h_Hs_bqInFatJet_Higgs_pT            = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_Higgs_pT",
+                                                                      ";p_{T} (GeV)", 100 , 0.0, 1000.0);
+  h_Hs_bqInFatJet_hasBsubjet          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_hasBsubjet",
+                                                                      ";Has b-subjet", 2 , 0.0, 2.0 );
+  h_Hs_bqInFatJet_Njettinesstau1      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_Njettinesstau1",
+                                                                      ";#tau_{1}", 50 , 0.0, 1.0);
+  h_Hs_bqInFatJet_Njettinesstau2      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_Njettinesstau2",
+                                                                      ";#tau_{2}", 50 , 0.0, 1.0);
+  h_Hs_bqInFatJet_Njettinesstau3      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_Njettinesstau3",
+                                                                      ";#tau_{3}", 50 , 0.0, 1.0);
+  h_Hs_bqInFatJet_Njettinesstau4      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_Njettinesstau4",
+                                                                      ";#tau_{4}", 50 , 0.0, 1.0);
+  h_Hs_bqInFatJet_tau2DIVtau1         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_tau2DIVtau1",
+                                                                      ";#tau_{2} / #tau_{1}", 50 , 0.0, 1.0);
+  h_Hs_bqInFatJet_tau3DIVtau2         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_tau3DIVtau2",
+                                                                      ";#tau_{3} / #tau_{2}", 50 , 0.0, 1.0);
+  h_Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT", ";p_{T,jet} (GeV);#tau_{2} / #tau_{1}", 100, 0.0, 1000.0, 100, 0.0, 1.0);
+  h_Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT", ";p_{T,,jet} (GeV);#tau_{3} / #tau_{2}", 100, 0.0, 1000.0, 100, 0.0, 1.0);
+  h_Hs_bqInFatJet_ldgORsubldg = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "Hs_bqInFatJet_ldgORsubldg"," ", 3, 0.0, 3.0);
+  h_Hs_bqInFatJet_TFtau32cut_fatjet_pT      = fHistoWrapper.makeTHTriplet<TH1F>(true, HistoLevel::kVital, myTripletDirs,
+										"Hs_bqInFatJet_TFtau32cut_fatjet_pT",
+										";p_{T,jet} (GeV)",
+										100, 0.0, 1000.0);
+  h_Hs_bqInFatJet_TFtau21cut_fatjet_pT      = fHistoWrapper.makeTHTriplet<TH1F>(true, HistoLevel::kVital, myTripletDirs,
+                                                                                "Hs_bqInFatJet_TFtau21cut_fatjet_pT",
+                                                                                ";p_{T,jet} (GeV)",
+                                                                                100, 0.0, 1000.0);
+  
+  // ------TTsample, top-pt Reweighting ----------------------
+  h_ttsample_Top_pt   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "ttsample_Top_pt",";p_{T} (GeV)",100, 0.0, 1000.0);
+
+
+  // --OV-------TT sample, bs not from the tops---------------    
   h_ttsample_bfromtop_pt       = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "ttsample_bfromtop_pt",";p_{T} (GeV)",30, 0.0, 150.0);
   h_ttsample_bNOTfromtop_pt    = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "ttsample_bNOTfromtop_pt",";p_{T} (GeV)",30, 0.0, 150.0);
   h_ttsample_bfromtop_eta      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kInformative, th1, "ttsample_bfromtop_eta",";#eta",100 , -5.0, 5.0);
@@ -974,7 +1400,10 @@ void kcKinematics::process(Long64_t entry) {
       selJets_p4.push_back( jet_p4 );
     }
 
-  if ( !cfg_HtCut.passedCut(genJ_HT) ) return;
+  // kchristo, different HT///////////////////////////////////////////////////////////////
+  //if ( !cfg_HtCut.passedCut(genJ_HT) ) return;
+  if (genJ_HT < cfg_HtCut) return;
+  ////////////////////////////////////////////////////////////////////////////////////////
   cJetSelection.increment();
 
   //================================================================================================                                                  
@@ -1052,27 +1481,27 @@ void kcKinematics::process(Long64_t entry) {
   //================================================================================================                    
   // 11) Topology selection                                                                                  
   //================================================================================================                                  
-  float C, D, H2;
-  float Circularity;
-  float y23, Sphericity, SphericityT, Aplanarity, Planarity, Y; // functions to return values when properly implemented           
-  float HT, JT, MHT, Centrality;
-  vector<float> a = GetMomentumTensorEigenValues(selJets_p4, C, D, H2);
-  vector<float> b = GetMomentumTensorEigenValues2D(selJets_p4, Circularity);
-  vector<float> c = GetSphericityTensorEigenValues(selJets_p4, y23, Sphericity, SphericityT, Aplanarity, Planarity, Y);
-  double alphaT   = GetAlphaT(selJets_p4, HT, JT, MHT, Centrality);
+  //float C, D, H2;
+  //float Circularity;
+  //float y23, Sphericity, SphericityT, Aplanarity, Planarity, Y; // functions to return values when properly implemented           
+  //float HT, JT, MHT, Centrality;
+  //vector<float> a = GetMomentumTensorEigenValues(selJets_p4, C, D, H2);
+  //vector<float> b = GetMomentumTensorEigenValues2D(selJets_p4, Circularity);
+  //vector<float> c = GetSphericityTensorEigenValues(selJets_p4, y23, Sphericity, SphericityT, Aplanarity, Planarity, Y);
+  //double alphaT   = GetAlphaT(selJets_p4, HT, JT, MHT, Centrality);
 
   // Apply cuts                                                                                           
-  if ( !cfg_CparameterCut.passedCut(C) ) return;
-  if ( !cfg_DparameterCut.passedCut(D) ) return;
-  if ( !cfg_FoxWolframMomentCut.passedCut(H2) ) return;
-  if ( !cfg_CircularityCut.passedCut(Circularity) ) return;
-  if ( !cfg_Y23Cut.passedCut(y23) ) return;
-  if ( !cfg_SphericityCut.passedCut(Sphericity) ) return;
-  if ( !cfg_AplanarityCut.passedCut(Aplanarity) ) return;
-  if ( !cfg_PlanarityCut.passedCut(Planarity) ) return;
-  if ( !cfg_CentralityCut.passedCut(Centrality) ) return;
-  if ( !cfg_AlphaTCut.passedCut(alphaT) ) return;
-  cTopologySelection.increment();
+  //if ( !cfg_CparameterCut.passedCut(C) ) return;
+  //if ( !cfg_DparameterCut.passedCut(D) ) return;
+  //if ( !cfg_FoxWolframMomentCut.passedCut(H2) ) return;
+  //if ( !cfg_CircularityCut.passedCut(Circularity) ) return;
+  //if ( !cfg_Y23Cut.passedCut(y23) ) return;
+  //if ( !cfg_SphericityCut.passedCut(Sphericity) ) return;
+  //if ( !cfg_AplanarityCut.passedCut(Aplanarity) ) return;
+  //if ( !cfg_PlanarityCut.passedCut(Planarity) ) return;
+  //if ( !cfg_CentralityCut.passedCut(Centrality) ) return;
+  //if ( !cfg_AlphaTCut.passedCut(alphaT) ) return;
+  //cTopologySelection.increment();
 
 
   //================================================================================================                                    
@@ -1096,22 +1525,22 @@ void kcKinematics::process(Long64_t entry) {
   h_genMET_Et    ->Fill(fEvent.genMET().et());
   h_genMET_Phi   ->Fill(fEvent.genMET().Phi());
   h_genHT_GenJets->Fill(genJ_HT);
-  h_y23          ->Fill(y23);
-  h_Sphericity   ->Fill(Sphericity);
-  h_SphericityT  ->Fill(SphericityT);
-  h_Y            ->Fill(Y);
-  h_S_Vs_Y       ->Fill(Sphericity, Y);
-  h_Aplanarity   ->Fill(Aplanarity);
-  h_Planarity    ->Fill(Planarity);
-  h_CParameter   ->Fill(C);
-  h_DParameter   ->Fill(D);
-  h_H2           ->Fill(H2);
-  h_Circularity  ->Fill(Circularity);
-  h_Centrality   ->Fill(Centrality);
-  h_HT           ->Fill(HT);
-  h_JT           ->Fill(JT);
-  h_MHT          ->Fill(MHT);
-  h_AlphaT       ->Fill(alphaT);
+  //h_y23          ->Fill(y23);
+  //h_Sphericity   ->Fill(Sphericity);
+  //h_SphericityT  ->Fill(SphericityT);
+  //h_Y            ->Fill(Y);
+  //h_S_Vs_Y       ->Fill(Sphericity, Y);
+  //h_Aplanarity   ->Fill(Aplanarity);
+  //h_Planarity    ->Fill(Planarity);
+  //h_CParameter   ->Fill(C);
+  //h_DParameter   ->Fill(D);
+  //h_H2           ->Fill(H2);
+  //h_Circularity  ->Fill(Circularity);
+  //h_Centrality   ->Fill(Centrality);
+  //h_HT           ->Fill(HT);
+  //h_JT           ->Fill(JT);
+  //h_MHT          ->Fill(MHT);
+  //h_AlphaT       ->Fill(alphaT);
 
   ///////////////////////////////////////////////////////////////////////////                                            
   // GenParticles                                                                                                           
@@ -1216,7 +1645,7 @@ void kcKinematics::process(Long64_t entry) {
    // if (!p.isLastCopyBeforeFSR()) continue;                                                                                                        
 
    // Add table rows                                                                                                                                 
-   if(cfg_Verbose) //to print the table with mothers/daugthers etc  if (1) //if(cfg_Verbose)
+   if(0) //to print the table with mothers/daugthers etc  if (1) //if(cfg_Verbose)
      {
        table.AddRowColumn(row, auxTools.ToString(entry)           );
        table.AddRowColumn(row, auxTools.ToString(genP_index)      );
@@ -1270,7 +1699,7 @@ void kcKinematics::process(Long64_t entry) {
 
  }//for-loop: genParticles                                                                                                                           
 
- if (cfg_Verbose) table.Print();// to print the table with mothers/daugthers etc if(1) //if (cfg_Verbose)
+ if (0) table.Print();// to print the table with mothers/daugthers etc if(1) //if (cfg_Verbose)
 
 
  //////////////////////////////////////////////////////////////////////////////////////////////////////   
@@ -1472,7 +1901,7 @@ void kcKinematics::process(Long64_t entry) {
  //////kchristo////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
  ////////////////////////////////////////////////////// Study Boosted Topologies///////////////////////////////////////////////////////////// 
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
- if(1)
+ if(0)
    {
      math::XYZTLorentzVector b_fromH_p4(0,0,0,0);
      for (auto& p: fEvent.genparticles().getGenParticles())
@@ -1544,6 +1973,27 @@ void kcKinematics::process(Long64_t entry) {
 		   }//for Higgs daus 
 
 		 Top_fromH_p4 = p.p4();
+		 
+		 // lets see if we can match it with a fatjet//////////////////////////////////////////////////////////////
+		 //double deltaRmin_fatJet_topQuark = 1e6; //give an initial, non sense valu
+		 //math::XYZTLorentzVector closest_fatJet_p4(0,0,0,0);
+		 //int AK8jetSD_index = -1;
+		 //for(AK8JetsSoftDrop fatjet: fEvent.ak8jetsSoftDrop())
+		 //{
+		 //  AK8jetSD_index++;
+		 //  math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+		 //  fatJet_p4 = fatjet.p4();
+		 //  double deltaR_fatJet_topQuark  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,Top_fromH_p4);
+		 //  if(deltaR_fatJet_topQuark < deltaRmin_fatJet_topQuark) 
+		 //    {
+			 //deltaRmin_fatJet_topQuark = deltaR_fatJet_topQuark;
+			 //closest_fatJet_p4 = fatjet.p4();
+			 //}
+		     // }
+		 // try with fat jets
+		 //h_Hs_topQuark_fatjet_mindR -> Fill(deltaRmin_fatJet_topQuark);
+		 //////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 		 unsigned int lastcopy = GetTheLastCopy(p.index()); // we need to find the last copy in order to find the real daughters     
 		 genParticle lastT; //create the particle object of the last copy of top                        
 		 lastT =  fEvent.genparticles().getGenParticles()[lastcopy];
@@ -1629,7 +2079,16 @@ void kcKinematics::process(Long64_t entry) {
 		 h_objectsfromHiggstop_mindR                                -> Fill(deltaRmin);
 		 //
 		 h_objectsfromHiggstop_Prob_mindR_lt_p8                     -> Fill("<0.8",0);
-		 if(deltaRmin < 0.8) h_objectsfromHiggstop_Prob_mindR_lt_p8 -> Fill("<0.8",1);
+		 if(deltaRmin < 0.8) 
+		   {
+		     h_objectsfromHiggstop_Prob_mindR_lt_p8 -> Fill("<0.8",1);
+		     h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",0);
+		     h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",0);
+		     if     (Top_fromH_p4.pt() > 500.0) h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("> 500",1);
+		     else if(Top_fromH_p4.pt() > 400.0) h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",1);
+		     else                               h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",1);
+		   }
+			    
 		 else  h_objectsfromHiggstop_Prob_mindR_lt_p8               -> Fill(">0.8",1);
 		 //
                  h_objectsfromHiggstop_mindR_Vs_Higgstop_Pt                 -> Fill(deltaRmin,p.pt());
@@ -1773,9 +2232,37 @@ void kcKinematics::process(Long64_t entry) {
 		     
 		     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7)
 		       {
+			 // try with fat jets
+			 //if(deltaRmin_fatJet_topQuark <0.8)
+			 //{
+			 //  top_fat_matched=true;
+			 //  if(Top_fromH_p4.pt() > 400.0) h_Hs_topPt_more400_MatchedFatJet_pT -> Fill(closest_fatJet_p4.pt());
+			 //  if(Top_fromH_p4.pt() > 500.0) h_Hs_topPt_more500_MatchedFatJet_pT -> Fill(closest_fatJet_p4.pt());
+			 //  h_Hs_top_fat_matched -> Fill();
+			 //}
+			 //else h_Hs_top_fat_matched -> Fill();
+
 			 h_Hs_mostdistantfromtop_isb__dRqq_Vs_W_pT   -> Fill(deltaR_obj1_obj2,W_fromTop_fromH_p4.pt());
 			 h_Hs_mostdistantfromtop_isb__dRqq_Vs_top_pT -> Fill(deltaR_obj1_obj2,Top_fromH_p4.pt());
+			 
+			 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",0);
+			 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",0);
+			 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",0);
+                         h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",0);
+			 if     (Top_fromH_p4.pt() > 500.0) h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("> 500",1);
+			 else if(Top_fromH_p4.pt() > 400.0) h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",1);
+			 else                               h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",1);
+			 
+			 if     (W_fromTop_fromH_p4.pt() > 300.0) h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("> 300",1);
+                         else if(W_fromTop_fromH_p4.pt() > 200.0) h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",1);
+                         else                               h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",1);
 		       }
+		     
+		     // 12.01
+		     h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",0);
+		     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7) h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",1);
+		     else                                                     h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("False",1);
+                       
 		     // upd++++++++++++++++++++++++++++++++++++++++++++
 		     
                    }
@@ -1809,6 +2296,7 @@ void kcKinematics::process(Long64_t entry) {
 		     decayproductsintofatjet++;
 		     bQuarkIntoFatJet = true;
 		   }
+		 else bQuarkIntoFatJet = false;
 		 if(deltaR_obj1_fromTop_Top < 0.8) decayproductsintofatjet++;// obj1 into fatjet
 		 if(deltaR_obj2_fromTop_Top < 0.8) decayproductsintofatjet++;// obj2 into fatjet
 	     
@@ -1943,6 +2431,7 @@ void kcKinematics::process(Long64_t entry) {
 			 jets_intofatjet++;// bjet into fatjet        
 			 bJetInsideFatJet = true;
 		       }
+		     else bJetInsideFatJet = false;
 		     if(deltaR_jet1_fromTop_Top < 0.8) jets_intofatjet++;// jet1 into fatjet
 		     if(deltaR_jet2_fromTop_Top < 0.8) jets_intofatjet++;// jet2 into fatjet         
 
@@ -2053,6 +2542,26 @@ void kcKinematics::process(Long64_t entry) {
 		 bool bQuarkIntoFatJet = false;
 
 		 Top_NOTfromH_p4 = p.p4();
+		 
+		 // lets see if we can match it with a fatjet//////////////////////////////////////////////////////////////   
+                 //double deltaRmin_fatJet_topQuark = 1e6; //give an initial, non sense valu             
+		 //math::XYZTLorentzVector closest_fatJet_p4(0,0,0,0);
+                 //int AK8jetSD_index = -1;
+                 //for(AK8JetsSoftDrop fatjet: fEvent.ak8jetsSoftDrop())
+		 //{
+		 //  AK8jetSD_index++;
+		 //  math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+		 //  fatJet_p4 = fatjet.p4();
+		 //  double deltaR_fatJet_topQuark  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,Top_NOTfromH_p4);
+		 //  if(deltaR_fatJet_topQuark < deltaRmin_fatJet_topQuark)
+		 //    {
+		 //      deltaRmin_fatJet_topQuark = deltaR_fatJet_topQuark;
+		 //      closest_fatJet_p4 = fatjet.p4();
+		 //    }
+		 //}
+                 // try with fat jets              
+                 ////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+		 
 		 unsigned int lastcopy = GetTheLastCopy(p.index()); // we need to find the last copy in order to find the real daughters      
                  genParticle lastT; //create the particle object of the last copy of top                                                      
                  lastT =  fEvent.genparticles().getGenParticles()[lastcopy];
@@ -2140,7 +2649,15 @@ void kcKinematics::process(Long64_t entry) {
                  h_objectsNOTfromHiggstop_mindR                                -> Fill(deltaRmin);
 		 //   
                  h_objectsNOTfromHiggstop_Prob_mindR_lt_p8                     -> Fill("<0.8",0);
-                 if(deltaRmin < 0.8) h_objectsNOTfromHiggstop_Prob_mindR_lt_p8 -> Fill("<0.8",1);
+                 if(deltaRmin < 0.8) 
+		   {
+		     h_objectsNOTfromHiggstop_Prob_mindR_lt_p8 -> Fill("<0.8",1);
+		     h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",0);
+                     h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",0);
+		     if     (Top_NOTfromH_p4.pt() > 500.0) h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("> 500",1);
+                     else if(Top_NOTfromH_p4.pt() > 400.0) h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",1);
+                     else                                  h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",1);
+		   }
                  else  h_objectsNOTfromHiggstop_Prob_mindR_lt_p8               -> Fill(">0.8",1);
                  //
                  h_objectsNOTfromHiggstop_mindR_Vs_top_Pt                      -> Fill(deltaRmin,p.pt());
@@ -2264,7 +2781,24 @@ void kcKinematics::process(Long64_t entry) {
 		       {
                          h_NotHs_mostdistantfromtop_isb__dRqq_Vs_W_pT   -> Fill(deltaR_obj1_obj2,W_fromTop_NOTfromH_p4.pt());
                          h_NotHs_mostdistantfromtop_isb__dRqq_Vs_top_pT -> Fill(deltaR_obj1_obj2,Top_NOTfromH_p4.pt());
+			 
+			 h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",0);
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",0);
+			 h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",0);
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",0);
+                         if     (Top_NOTfromH_p4.pt() > 500.0) h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("> 500",1);
+                         else if(Top_NOTfromH_p4.pt() > 400.0) h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",1);
+                         else                                  h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",1);
+
+                         if     (W_fromTop_NOTfromH_p4.pt() > 300.0) h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill(">300",1);
+                         else if(W_fromTop_NOTfromH_p4.pt() > 200.0) h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",1);
+                         else                                        h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",1);
                        }
+
+                     // 12.01  
+                     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",0);
+                     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7) h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",1);
+                     else                                                     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("False",1);
                      // upd++++++++++++++++++++++++++++++++++++++++++++ 
 
                    }
@@ -2292,7 +2826,12 @@ void kcKinematics::process(Long64_t entry) {
                  h_NotHs_objectsfromtop_top_mindR -> Fill(objtop_deltaRmin);
 		 
 
-                 if(deltaR_b_fromTop_Top < 0.8)    decayproductsintofatjet++;  // b into fatjet                                       
+                 if(deltaR_b_fromTop_Top < 0.8)  // b into fatjet
+		   {
+		     decayproductsintofatjet++;
+		     bQuarkIntoFatJet = true;
+		   }
+		 else bQuarkIntoFatJet = false;
                  if(deltaR_obj1_fromTop_Top < 0.8) decayproductsintofatjet++;  // obj1 into fatjet                
                  if(deltaR_obj2_fromTop_Top < 0.8) decayproductsintofatjet++;  // obj2 into fatjet                               
 
@@ -2428,6 +2967,7 @@ void kcKinematics::process(Long64_t entry) {
 			 jets_intofatjet++;// bjet into fatjet  
 			 bJetInsideFatJet = true;
 		       }
+		     else bJetInsideFatJet = false;
                      if(deltaR_jet1_fromTop_Top < 0.8) jets_intofatjet++;// jet1 into fatjet  
                      if(deltaR_jet2_fromTop_Top < 0.8) jets_intofatjet++;// jet2 into fatjet    
 
@@ -2533,8 +3073,1701 @@ void kcKinematics::process(Long64_t entry) {
  //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
- 
+ //////kchristo////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ ////////////////////////////////////////////////////// Study Boosted Topologies///////////////////////////////////////////////////////////// 
+ /////////////////////////////////////////////////////////With fat Jets//////////////////////////////////////////////////////////////////////
+ if(1)
+   {
+     for (auto& p: fEvent.genparticles().getGenParticles())
+       {
 
+         if(std::abs(p.pdgId()) == 6 && p.isFirstCopy()) // find the top   
+           {
+	     std::vector<short> top_mothers = p.mothers();
+             //for (unsigned int j = 0; j < top_mothers.size() ; j++)                                    
+             genParticle m = fEvent.genparticles().getGenParticles()[top_mothers.at(0)]; //create the particle object
+
+	     if(std::abs(m.pdgId()) == 37)//if the top comes from Higgs//////////////////////////////////////////////////////////////
+               {
+		 math::XYZTLorentzVector b_fromTop_fromH_p4(0,0,0,0), obj1_fromW_fromTop_p4(0,0,0,0), obj2_fromW_fromTop_p4(0,0,0,0);
+		 math::XYZTLorentzVector W_fromTop_fromH_p4(0,0,0,0), Top_fromH_p4(0,0,0,0);
+                 bool isTheRightTop    = true;
+                 bool obj1_exist       = false;
+                 bool bQuarkIntoFatJet = false;
+		 unsigned int b_fromTop_fromH_index = 0;
+
+                 Top_fromH_p4 = p.p4();
+		 
+		 unsigned int lastcopy = GetTheLastCopy(p.index()); // we need to find the last copy in order to find the real daughters 
+                 genParticle lastT =  fEvent.genparticles().getGenParticles()[lastcopy]; //create the particle object of the last copy of top
+		 std::vector<short> lastT_daughters = lastT.daughters();
+
+                 for (unsigned int i = 0; i < lastT_daughters.size() ; i++)
+                   {
+                     genParticle d; //create the particle object
+                     d =  fEvent.genparticles().getGenParticles()[lastT_daughters.at(i)];
+
+                     if (std::abs(d.pdgId()) == 24) // if W from top  
+                       {
+                         W_fromTop_fromH_p4 = d.p4();
+                         genParticle lastW;
+                         unsigned int lastWcopy = GetTheLastCopy(d.index()); // we need to find the last copy in order to find the real daughters
+			 lastW = fEvent.genparticles().getGenParticles()[lastWcopy];
+			 std::vector<short> W_daughters = lastW.daughters();
+                         for (size_t k = 0; k < W_daughters.size() ; k++)
+                           {
+                             genParticle top_grand_d; //create the particle object, i define this as grand_d, the daus of the W, so the grand-daughters of Top     
+			     top_grand_d =  fEvent.genparticles().getGenParticles()[W_daughters.at(k)];
+			     
+			     if ( !mcTools.IsQuark(top_grand_d.pdgId()) ) //if the daus of W are not quarks (f.e. leptons), we reject the top 
+			       {
+				 isTheRightTop = false;
+				 continue;
+			       }
+			     
+			     if (obj1_exist == false)
+			       {
+				 obj1_exist = true;
+				 obj1_fromW_fromTop_p4 = top_grand_d.p4();
+			       }
+			     else
+                               {
+                                 obj2_fromW_fromTop_p4 = top_grand_d.p4();
+                               }
+
+                           }      //for loop, W's daus                            
+                         if (!isTheRightTop) continue; // move out from the checking loop, reject this top    
+
+                       } // if W from top   
+
+                     if (std::abs(d.pdgId()) == 5) // if b from top 
+                       {
+                         b_fromTop_fromH_p4 = d.p4();
+			 b_fromTop_fromH_index = d.index();
+                       }
+                   }//for top from Higgs daus
+
+		 if (!isTheRightTop) continue; // move out from the checking loop, reject this top 
+		 
+		 // Matching top and W with fat-jet++++++++++++++++++++++++++++++++++++++++++++++++++++ 
+                 // what i will use from here: bool TheTopQuarkIsMatched_WithFatJet & closest_toTop_fatJet_p4
+		 // what i will use from here: bool TheWQuarkIsMatched_WithFatJet & closest_toW_fatJet_p4
+                 bool TheTopQuarkIsMatched_WithFatJet = false;
+		 bool TheWQuarkIsMatched_WithFatJet = false;
+
+                 double deltaRmin_fatJet_topQuark = 1e6; //give an initial, non sense value  
+		 double deltaRmin_fatJet_WQuark = 1e6; //give an initial, non sense value
+		 math::XYZTLorentzVector closest_toTop_fatJet_p4(0,0,0,0), closest_toW_fatJet_p4(0,0,0,0);
+                 int AK8jetSD_index = -1;
+                 for(AK8JetsSoftDrop fatjet: fEvent.ak8jetsSoftDrop())
+                   {
+                     AK8jetSD_index++;
+		     math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+                     fatJet_p4 = fatjet.p4();
+                     double deltaR_fatJet_topQuark  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,Top_fromH_p4);
+		     double deltaR_fatJet_WQuark    = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,W_fromTop_fromH_p4);
+                     if(deltaR_fatJet_topQuark < deltaRmin_fatJet_topQuark)
+                       {
+                         deltaRmin_fatJet_topQuark = deltaR_fatJet_topQuark;
+                         closest_toTop_fatJet_p4 = fatjet.p4();
+                       }
+		     if(deltaR_fatJet_WQuark < deltaRmin_fatJet_WQuark)
+                       {
+                         deltaRmin_fatJet_WQuark = deltaR_fatJet_WQuark;
+                         closest_toW_fatJet_p4 = fatjet.p4();
+                       }
+                   }   //for fat-jets loop
+		 
+                 if(deltaRmin_fatJet_topQuark <0.8) TheTopQuarkIsMatched_WithFatJet = true;
+		 if(deltaRmin_fatJet_WQuark <0.8)   TheWQuarkIsMatched_WithFatJet = true;
+                 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+		 double deltaR_b_fromTop_obj1 = ROOT::Math::VectorUtil::DeltaR(b_fromTop_fromH_p4, obj1_fromW_fromTop_p4);
+                 double deltaR_b_fromTop_obj2 = ROOT::Math::VectorUtil::DeltaR(b_fromTop_fromH_p4, obj2_fromW_fromTop_p4);
+                 double deltaR_obj1_obj2      = ROOT::Math::VectorUtil::DeltaR(obj1_fromW_fromTop_p4, obj2_fromW_fromTop_p4);
+                 double deltaRmax = -1;  // give an initial, non sense value           
+                 double deltaRmin = 1e6; //give an initial, non sense value         
+
+		 // find the dRmax 
+                 if(deltaR_b_fromTop_obj1 > deltaR_b_fromTop_obj2 && deltaR_b_fromTop_obj1 > deltaR_obj1_obj2)   
+		   {
+		     deltaRmax = deltaR_b_fromTop_obj1;
+		   }
+                 else if(deltaR_b_fromTop_obj2 > deltaR_b_fromTop_obj1 && deltaR_b_fromTop_obj2 > deltaR_obj1_obj2) 
+		   {
+		     deltaRmax = deltaR_b_fromTop_obj2;
+		   }
+                 else deltaRmax = deltaR_obj1_obj2;
+
+                 h_objectsfromHiggstop_maxdR                  -> Fill(deltaRmax);
+
+                 //find the dRmin 
+                 if(deltaR_b_fromTop_obj1 < deltaR_b_fromTop_obj2 && deltaR_b_fromTop_obj1 < deltaR_obj1_obj2)      
+		   {
+		     deltaRmin = deltaR_b_fromTop_obj1;
+		   }
+                 else if(deltaR_b_fromTop_obj2 < deltaR_b_fromTop_obj1 && deltaR_b_fromTop_obj2 < deltaR_obj1_obj2) 
+		   {
+		     deltaRmin = deltaR_b_fromTop_obj2;
+		   }
+                 else deltaRmin = deltaR_obj1_obj2;
+
+                 h_objectsfromHiggstop_mindR                                -> Fill(deltaRmin);
+		 
+		 h_objectsfromHiggstop_Prob_mindR_lt_p8                     -> Fill("<0.8",0);
+                 if(deltaRmin < 0.8)
+                   {
+		     // what i will use from fat: bool TheTopQuarkIsMatched_WithFatJet & closest_toTop_fatJet_p4        
+		     // what i will use from fat: bool TheWQuarkIsMatched_WithFatJet & closest_toW_fatJet_p4
+		     h_Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj -> Fill("Matched",0);
+		     if(TheTopQuarkIsMatched_WithFatJet) 
+		       {
+			 h_Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj -> Fill("Matched",1);
+			 h_Hs_objectsfromtop_mindR_ltp8_matchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+		       }
+		     else                                h_Hs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj -> Fill("Not Matched",1);
+		       
+                     h_objectsfromHiggstop_Prob_mindR_lt_p8 -> Fill("<0.8",1);
+                     h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",0);
+                     h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",0);
+                     if     (Top_fromH_p4.pt() > 500.0) 
+		       {
+			 h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("> 500",1);
+			 if(TheTopQuarkIsMatched_WithFatJet)
+			   {
+			     h_Hs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+			   }
+		       }
+                     else if(Top_fromH_p4.pt() > 400.0) h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",1);
+                     else                               h_objectsfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",1);
+		     
+		     if     (Top_fromH_p4.pt() > 400.0)
+                       {
+			 if(TheTopQuarkIsMatched_WithFatJet)
+                           {
+                             h_Hs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+			   }
+                       }
+                   }
+
+                 else  h_objectsfromHiggstop_Prob_mindR_lt_p8               -> Fill(">0.8",1);
+
+                 h_objectsfromHiggstop_mindR_Vs_Higgstop_Pt                 -> Fill(deltaRmin,p.pt());
+                 h_objectsfromHiggstop_mindR_Vs_Higgs_Pt                    -> Fill(deltaRmin,m.pt());
+		 
+		 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+                 /////////////////////////////////////////////////BaryCenter//////////////////////////////////////////////////////////////// 
+                 double deltaR_b_fromTop_Top    = ROOT::Math::VectorUtil::DeltaR(b_fromTop_fromH_p4, Top_fromH_p4);
+                 double deltaR_obj1_fromTop_Top = ROOT::Math::VectorUtil::DeltaR(obj1_fromW_fromTop_p4, Top_fromH_p4);
+                 double deltaR_obj2_fromTop_Top = ROOT::Math::VectorUtil::DeltaR(obj2_fromW_fromTop_p4, Top_fromH_p4);
+                 unsigned int decayproductsintofatjet = 0;
+                 double objtop_deltaRmax = -1;  // give an initial, non sense value  
+                 double objtop_deltaRmin = 999;  // give an initial, non sense value        
+
+                 h_Hs_which_objectfromtop_maxdR -> Fill ("W'obj",0) ; //just to determinate the first label      
+
+                 if(deltaR_b_fromTop_Top > deltaR_obj1_fromTop_Top && deltaR_b_fromTop_Top > deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmax = deltaR_b_fromTop_Top;
+                     h_Hs_which_objectfromtop_maxdR -> Fill("b",1) ;
+                     // update 4/12/2017 ++++++++++++++++++++++++++++++       
+                     if(deltaR_b_fromTop_Top > 0.8)
+                       {
+                         h_Hs_mostdistantfromtop_isb__top_pT      -> Fill(Top_fromH_p4.pt());
+                         h_Hs_mostdistantfromtop_isb__W_pT        -> Fill(W_fromTop_fromH_p4.pt());
+                         h_Hs_mostdistantfromtop_isb__b_pT        -> Fill(b_fromTop_fromH_p4.pt());
+                         h_Hs_mostdistantfromtop_isb__dRmax_b_top -> Fill(deltaR_b_fromTop_Top);
+			 
+			 if(deltaR_b_fromTop_obj1 < deltaR_b_fromTop_obj2) 
+			   {
+			     h_Hs_mostdistantfromtop_isb_dRmin_b_objfromW -> Fill(deltaR_b_fromTop_obj1);
+			   }
+                         else   
+			   {
+			     h_Hs_mostdistantfromtop_isb_dRmin_b_objfromW -> Fill(deltaR_b_fromTop_obj2);
+			   }
+                       }
+
+                     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7)
+                       {
+			 h_Hs_mostdistantfromtop_isb__dRqq_Vs_W_pT   -> Fill(deltaR_obj1_obj2,W_fromTop_fromH_p4.pt());
+                         h_Hs_mostdistantfromtop_isb__dRqq_Vs_top_pT -> Fill(deltaR_obj1_obj2,Top_fromH_p4.pt());
+
+			 // what i will use from fat: bool TheTopQuarkIsMatched_WithFatJet & closest_toTop_fatJet_p4
+			 // what i will use from fat: bool TheWQuarkIsMatched_WithFatJet & closest_toW_fatJet_p4
+			 //h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt ->Fill(closest_toTop_fatJet_p4.pt());
+			 h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj -> Fill("Matched",0);
+			 if(TheTopQuarkIsMatched_WithFatJet)
+			   {
+			     h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj -> Fill("Matched",1);
+			     h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+			   }
+			 else h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj -> Fill("Not Matched",1);
+			 
+			 h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj -> Fill("Matched",0);
+                         if(TheWQuarkIsMatched_WithFatJet)
+                           {
+                             h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj -> Fill("Matched",1);
+                             h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt -> Fill(closest_toW_fatJet_p4.pt());
+                           }
+                         else h_Hs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj -> Fill("Not Matched",1);
+			 
+
+                         h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",0);
+                         h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",0);
+                         h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",0);
+                         h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",0);
+                        
+			 if     (Top_fromH_p4.pt() > 500.0) 
+			   {
+			     h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("> 500",1);
+			     if(TheTopQuarkIsMatched_WithFatJet)
+			       {
+				 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt ->Fill(closest_toTop_fatJet_p4.pt());
+			       }
+			   }
+                         else if(Top_fromH_p4.pt() > 400.0)
+			   {
+			     h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",1);
+			   }
+                         else h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",1);
+			 
+			 if     (Top_fromH_p4.pt() > 400.0)
+			   {
+			     if(TheTopQuarkIsMatched_WithFatJet)
+			       {
+                                 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt ->Fill(closest_toTop_fatJet_p4.pt());
+                               }
+                           }
+			 
+
+                         if     (W_fromTop_fromH_p4.pt() > 300.0)
+			   {
+			     h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("> 300",1);
+			     if(TheWQuarkIsMatched_WithFatJet)
+			       {
+                                 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt ->Fill(closest_toW_fatJet_p4.pt());
+                               }
+			   }
+                         else if(W_fromTop_fromH_p4.pt() > 200.0) 
+			   {
+			     h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",1);
+			   }
+                         else h_Hs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",1);
+			 
+			 if     (W_fromTop_fromH_p4.pt() > 200.0)
+                           {
+                             if(TheWQuarkIsMatched_WithFatJet)
+                               {
+                                 h_Hs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt ->Fill(closest_toW_fatJet_p4.pt());
+                               }
+                           }
+                       }
+
+		     // 12.01                
+                     h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",0);
+                     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7) h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",1);
+                     else                                                     h_Hs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("False",1);
+
+                     // upd++++++++++++++++++++++++++++++++++++++++++++     
+
+                   }
+                 else if(deltaR_obj1_fromTop_Top > deltaR_b_fromTop_Top && deltaR_obj1_fromTop_Top > deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmax = deltaR_obj1_fromTop_Top;
+                     h_Hs_which_objectfromtop_maxdR-> Fill("W'obj",1);
+                   }
+                 else
+                   {
+                     objtop_deltaRmax = deltaR_obj2_fromTop_Top;
+                     h_Hs_which_objectfromtop_maxdR-> Fill("W'obj",1);
+                   }
+                 h_Hs_objectsfromtop_top_maxdR -> Fill(objtop_deltaRmax);
+
+                 if(deltaR_b_fromTop_Top < deltaR_obj1_fromTop_Top && deltaR_b_fromTop_Top < deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmin = deltaR_b_fromTop_Top;
+                   }
+		 else if(deltaR_obj1_fromTop_Top < deltaR_b_fromTop_Top && deltaR_obj1_fromTop_Top < deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmin = deltaR_obj1_fromTop_Top;
+                   }
+                 else objtop_deltaRmin = deltaR_obj2_fromTop_Top;
+                 h_Hs_objectsfromtop_top_mindR -> Fill(objtop_deltaRmin);
+
+		 if(deltaR_b_fromTop_Top < 0.8)    // b into fatjet  
+                   {
+                     decayproductsintofatjet++;
+                     bQuarkIntoFatJet = true;
+                   }
+                 else bQuarkIntoFatJet = false;
+                 if(deltaR_obj1_fromTop_Top < 0.8) decayproductsintofatjet++;// obj1 into fatjet                
+                 if(deltaR_obj2_fromTop_Top < 0.8) decayproductsintofatjet++;// obj2 into fatjet      
+
+                 h_Probdecayproductsintofatjet_Hs         -> Fill("0",0);  //just to determinate the label of the first bin    
+                 h_Probdecayproductsintofatjet_Hs         -> Fill("1",0);  //just to determinate the label of the second bin       
+                 h_Probdecayproductsintofatjet_Hs         -> Fill("2",0);  //just to determinate the label of the third bin          
+
+                 h_Hs_QuarksintofatjetMultiplicity -> Fill("0",0);  //just to determinate the label of the first bin                          
+                 h_Hs_QuarksintofatjetMultiplicity -> Fill("q",0);
+                 h_Hs_QuarksintofatjetMultiplicity -> Fill("b",0);
+                 h_Hs_QuarksintofatjetMultiplicity -> Fill("qq",0);
+                 h_Hs_QuarksintofatjetMultiplicity -> Fill("bq",0);
+
+                 h_Hs_isbQuarkintofatjet           -> Fill("No b",0);  //just to determinate the label of the first bin      
+
+                 if      (decayproductsintofatjet == 0)
+                   {
+                     h_Probdecayproductsintofatjet_Hs  -> Fill("0",1);
+                     h_Hs_QuarksintofatjetMultiplicity -> Fill("0",1);
+                     h_Hs_isbQuarkintofatjet           -> Fill("No b",1);
+                   }
+		 else if (decayproductsintofatjet == 1)
+                   {
+                     h_Probdecayproductsintofatjet_Hs -> Fill("1",1);
+                     if(bQuarkIntoFatJet)
+                       {
+                         h_Hs_QuarksintofatjetMultiplicity -> Fill("b",1);
+                         h_Hs_isbQuarkintofatjet           -> Fill("b",1);
+                       }
+                     else
+                       {
+                         h_Hs_QuarksintofatjetMultiplicity -> Fill("q",1);
+                         h_Hs_isbQuarkintofatjet           -> Fill("No b",1);
+                       }
+                   }
+                 else if (decayproductsintofatjet == 2)
+                   {
+                     h_Probdecayproductsintofatjet_Hs -> Fill("2",1);
+                     if(bQuarkIntoFatJet)
+                       {
+                         h_Hs_QuarksintofatjetMultiplicity -> Fill("bq",1);
+                         h_Hs_isbQuarkintofatjet           -> Fill("b",1);
+                       }
+		     else
+                       {
+                         h_Hs_QuarksintofatjetMultiplicity -> Fill("qq",1);
+                         h_Hs_isbQuarkintofatjet           -> Fill("No b",1);
+                       }
+                   }
+                 else
+                   {
+                     h_Probdecayproductsintofatjet_Hs  -> Fill("All 3",1);
+                     h_Hs_QuarksintofatjetMultiplicity -> Fill("bq",1);
+                     h_Hs_isbQuarkintofatjet           -> Fill("b",1);
+                   }
+		 
+		 if (decayproductsintofatjet == 3)
+                   {
+                     unsigned int Num_pairs_withenough_deltaR_amongthemselves = 0;
+                     if      (deltaR_b_fromTop_obj1 < 0.4 && deltaR_b_fromTop_obj2 < 0.4 && deltaR_obj1_obj2 < 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 0;
+		       }
+
+                     else if (deltaR_b_fromTop_obj1 > 0.4 && deltaR_obj1_obj2 < 0.4 && deltaR_b_fromTop_obj2 < 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 1;
+		       }
+                     else if (deltaR_b_fromTop_obj2 > 0.4 && deltaR_obj1_obj2 < 0.4 && deltaR_b_fromTop_obj1 < 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 1;
+		       }
+                     else if (deltaR_obj1_obj2 > 0.4 && deltaR_b_fromTop_obj1 < 0.4 && deltaR_b_fromTop_obj2 < 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 1;
+		       }
+		     
+                     else if (deltaR_b_fromTop_obj1 > 0.4 && deltaR_obj1_obj2 > 0.4 && deltaR_b_fromTop_obj2 < 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 2;
+		       }
+                     else if (deltaR_b_fromTop_obj2 > 0.4 && deltaR_obj1_obj2 > 0.4 && deltaR_b_fromTop_obj1 < 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 2;
+		       }
+                     else if (deltaR_b_fromTop_obj2 > 0.4 && deltaR_b_fromTop_obj1 > 0.4 && deltaR_obj1_obj2 <0.4 )
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 2;
+		       }
+
+                     else if (deltaR_b_fromTop_obj1 > 0.4 && deltaR_b_fromTop_obj2 > 0.4 && deltaR_obj1_obj2 > 0.4) 
+		       {
+			 Num_pairs_withenough_deltaR_amongthemselves = 3;
+		       }
+		     
+		     h_Pairsinbarycenter_enoughdeltaR_Hs         -> Fill("0",0);  //just to determinate the label of the first bin 
+                     h_Pairsinbarycenter_enoughdeltaR_Hs         -> Fill("1 pair",0);  //just to determinate the label of the second bin      
+                     h_Pairsinbarycenter_enoughdeltaR_Hs         -> Fill("2 pairs",0);  //just to determinate the label of the third bin 
+
+                     if      (Num_pairs_withenough_deltaR_amongthemselves == 0)   h_Pairsinbarycenter_enoughdeltaR_Hs -> Fill("0",1);
+                     else if (Num_pairs_withenough_deltaR_amongthemselves == 1)   h_Pairsinbarycenter_enoughdeltaR_Hs -> Fill("1 pair",1);
+                     else if (Num_pairs_withenough_deltaR_amongthemselves == 2)   h_Pairsinbarycenter_enoughdeltaR_Hs -> Fill("2 pairs",1);
+                     else                                                         h_Pairsinbarycenter_enoughdeltaR_Hs -> Fill("All 3",1);
+
+                     h_Iffatjet_Hs_Top_pT               -> Fill (Top_fromH_p4.pt());
+		     h_Iffatjet_Hs_EventsWithHighTop_pT -> Fill("top.pT < 400 GeV", 0);
+                     if(Top_fromH_p4.pt() > 400.0)       h_Iffatjet_Hs_EventsWithHighTop_pT -> Fill("top.pT > 400 GeV", 1);
+                     else                                h_Iffatjet_Hs_EventsWithHighTop_pT -> Fill("top.pT < 400 GeV", 1);
+		 
+		   } // if all 3 decay products are into 0.8
+		 
+		 /////////////////////////////////////////////////BaryCenter////////////////////////////////////////////////////////////////
+		 // barycenter not the top-direction
+		 
+		 h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("0",0);  //just to determinate the label of the first bin
+		 h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("qq",0);
+                 h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("bq",0);
+		 h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("qq-bq",0);
+
+                 h_Hs_isbQuarkintoBaryCenter           -> Fill("No b",0);  //just to determinate the label of the first bin
+		 h_Hs_isbQuarkintoBaryCenter           -> Fill("?",0);
+		 
+		 h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("0",0);  //just to determinate the label of the first bin     
+                 h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq",0);
+                 h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("bq",0);
+                 h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq-bq",0);
+
+                 h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("No b",0);  //just to determinate the label of the first bin 
+                 h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("?",0);
+		 
+		 int otherBcloseToTopProd = 0;
+		 std::vector<bool> otherBintoBoostTop(2);
+		 std::vector<bool> otherBintoBoostW(2);
+		 std::vector<math::XYZTLorentzVector> otherBcloseToTopProd_p4(2);
+		 math::XYZTLorentzVector p4_initializer(0,0,0,0);
+		 for(size_t otherb=0; otherb < otherBcloseToTopProd_p4.size(); otherb++)
+		   {
+		     otherBcloseToTopProd_p4.at(otherb) = p4_initializer;
+		     otherBintoBoostTop.at(otherb) = false;
+		     otherBintoBoostW.at(otherb) = false;
+		   }
+		 
+		 for (unsigned int applyCut = 0; applyCut < 2 ; applyCut++)
+		   {
+		     double quarksPtCut = 30.0;
+		     if(applyCut)
+		       {
+			 h_Hs_QuarksFromTop_Passed_pTcuts -> Fill("Passed",0);
+			 if((obj1_fromW_fromTop_p4.pt() < quarksPtCut) || (obj2_fromW_fromTop_p4.pt() < quarksPtCut) ||  (b_fromTop_fromH_p4.pt() < quarksPtCut)) 
+			   {
+			     h_Hs_QuarksFromTop_Passed_pTcuts -> Fill("Not Passed",1);
+			     continue;
+			   }
+			 else h_Hs_QuarksFromTop_Passed_pTcuts -> Fill("Passed",1);
+			 
+			 for (auto& gp: fEvent.genparticles().getGenParticles()) // for genpar %4  
+			   {
+			     if(std::abs(gp.pdgId()) == 5 && gp.isFirstCopy()) // find the b
+			       {
+				 double deltaR_bfromTop_any_b         = ROOT::Math::VectorUtil::DeltaR(b_fromTop_fromH_p4,gp.p4());
+				 double deltaR_obj1fromWfromTop_any_b = ROOT::Math::VectorUtil::DeltaR(obj1_fromW_fromTop_p4,gp.p4());
+				 double deltaR_obj2fromWfromTop_any_b = ROOT::Math::VectorUtil::DeltaR(obj2_fromW_fromTop_p4,gp.p4());
+				 if(b_fromTop_fromH_index == gp.index() || gp.pt() < quarksPtCut) continue; //dont take the b you have or a soft one
+				 else if(deltaR_bfromTop_any_b > 0.8 && deltaR_obj1fromWfromTop_any_b > 0.8 && deltaR_obj2fromWfromTop_any_b > 0.8) continue;
+				 else 
+				   {
+				     
+				     if (deltaRmax < 0.8) //boosted top
+				       {
+					 if(deltaR_bfromTop_any_b < 0.8 && deltaR_obj1fromWfromTop_any_b < 0.8 && deltaR_obj2fromWfromTop_any_b) otherBintoBoostTop.at(otherBcloseToTopProd) = true; 
+					 //h_Hs_otherBclose_BoostedTop -> Fill("bqq->bbqq",0);
+					 //if(deltaR_bfromTop_any_b < 0.8 && deltaR_obj1fromWfromTop_any_b < 0.8 && deltaR_obj2fromWfromTop_any_b) h_Hs_otherBclose_BoostedTop -> Fill("bqq->bbqq",1);
+					 //else h_Hs_otherBclose_BoostedTop -> Fill("bqq",1);
+				       }
+				     else if(deltaR_obj1_obj2 < 0.8 && deltaR_b_fromTop_obj1 > 0.8 && deltaR_b_fromTop_obj2 > 0.8) //BoostedW
+				       {
+					 if(deltaR_obj1fromWfromTop_any_b < 0.8 && deltaR_obj2fromWfromTop_any_b) otherBintoBoostW.at(otherBcloseToTopProd) = true;
+					 //h_Hs_otherBclose_BoostedW -> Fill("qq -> bqq",0);
+                                         //if(deltaR_obj1fromWfromTop_any_b < 0.8 && deltaR_obj2fromWfromTop_any_b) h_Hs_otherBclose_BoostedW -> Fill("qq -> bqq",1);
+                                         //else h_Hs_otherBclose_BoostedW -> Fill("qq",1);
+				       }
+				      
+				     otherBcloseToTopProd++;
+				     if(otherBcloseToTopProd == 2)  break;
+				   }
+			       }
+			   }// for genpar %4 
+			 h_Hs_otherBcloseToTopProd -> Fill(otherBcloseToTopProd);
+		       }
+		     
+		     if(applyCut)
+		       {
+			 h_Hs_objectsfromtop_dRmax_pTcuts        -> Fill(deltaRmax);
+			 h_Hs_objectsfromtop_Prob_dRmax_pTcuts        -> Fill("< 0.8",0);
+                         if(deltaRmax < 0.8) h_Hs_objectsfromtop_Prob_dRmax_pTcuts -> Fill("< 0.8",1);
+                         else                h_Hs_objectsfromtop_Prob_dRmax_pTcuts -> Fill("> 0.8",1);
+
+			 h_Hs_objectsfromtop_dRmin_pTcuts        -> Fill(deltaRmin);
+			 h_Hs_objectsfromtop_Prob_dRmin_pTcuts        -> Fill("< 0.8",0);
+                         if(deltaRmin < 0.8) h_Hs_objectsfromtop_Prob_dRmin_pTcuts -> Fill("< 0.8",1);
+                         else                h_Hs_objectsfromtop_Prob_dRmin_pTcuts -> Fill("> 0.8",1);
+			 
+
+			 h_Hs_QuarksFromW_deltaR_pTcuts          -> Fill(deltaR_obj1_obj2);
+			 h_Hs_QuarksFromW_Prob_deltaR_pTcuts     -> Fill("< 0.8",0);
+			 if(deltaR_obj1_obj2 < 0.8) h_Hs_QuarksFromW_Prob_deltaR_pTcuts -> Fill("< 0.8",1);
+			 else                       h_Hs_QuarksFromW_Prob_deltaR_pTcuts -> Fill("> 0.8",1);
+		       }
+		     else
+		       {
+			 h_Hs_QuarksFromW_deltaR                                -> Fill(deltaR_obj1_obj2);
+			 h_Hs_QuarksFromW_Prob_deltaR-> Fill("< 0.8",0);
+			 if(deltaR_obj1_obj2 < 0.8) h_Hs_QuarksFromW_Prob_deltaR-> Fill("< 0.8",1);
+			 else                       h_Hs_QuarksFromW_Prob_deltaR-> Fill("> 0.8",1);
+		       }
+
+		     if (deltaRmax < 0.8)             
+		       {
+			 if(applyCut)
+			   {
+			     h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("bqq",1);
+			     h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("b",1);
+			     h_Hs_Bc_bqq_Top_pT                           -> Fill(Top_fromH_p4.pt());
+			     h_Hs_Bc_bqq_W_pT                             -> Fill(W_fromTop_fromH_p4.pt());
+			     
+			     h_Hs_otherBclose_BoostedTop -> Fill("bqq->bbqq",0);                                                 
+			     if(otherBintoBoostTop.at(0) || otherBintoBoostTop.at(1)) h_Hs_otherBclose_BoostedTop -> Fill("bqq->bbqq",1);    
+			     else h_Hs_otherBclose_BoostedTop -> Fill("bqq",1);
+			   }
+			 else
+			   {
+			     h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("bqq",1);
+			     h_Hs_isbQuarkintoBaryCenter           -> Fill("b",1);
+			   }
+		       }
+		     else if(deltaR_obj1_obj2 < 0.8 && deltaR_b_fromTop_obj1 > 0.8 && deltaR_b_fromTop_obj2 > 0.8)
+		       {
+			 if(applyCut)
+                           {
+			     h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq",1);
+			     h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("No b",1);
+
+			     h_Hs_BoostedW_deltaR_qq      -> Fill(deltaR_obj1_obj2);
+			     h_Hs_BoostedW_Prob_deltaR_lt -> Fill("< 0.4",0);
+			     if(deltaR_obj1_obj2 < 0.4) h_Hs_BoostedW_Prob_deltaR_lt -> Fill("< 0.4",1);
+			     else                       h_Hs_BoostedW_Prob_deltaR_lt -> Fill("> 0.4",1);
+			     
+                             h_Hs_otherBclose_BoostedW -> Fill("qq->bqq",0);
+                             if(otherBintoBoostW.at(0) || otherBintoBoostW.at(1)) h_Hs_otherBclose_BoostedW -> Fill("qq->bqq",1);
+                             else h_Hs_otherBclose_BoostedW -> Fill("qq",1);
+			     
+			     h_Hs_Bc_qq_Top_pT                            -> Fill(Top_fromH_p4.pt());
+			     h_Hs_Bc_qq_W_pT                              -> Fill(W_fromTop_fromH_p4.pt());
+			   } //if apply cuts, boosted W
+		     
+			 else
+			   {
+			     h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("qq",1);
+			     h_Hs_isbQuarkintoBaryCenter           -> Fill("No b",1);
+			   }
+		       }
+		     else if(deltaR_obj1_obj2 < 0.8 && (deltaR_b_fromTop_obj1 < 0.8 || deltaR_b_fromTop_obj2 < 0.8))
+		       {
+			 if(applyCut)
+                           {
+			     h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq-bq",1);
+			     h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("?",1);
+			     h_Hs_Bc_qq_bq_Top_pT                         -> Fill(Top_fromH_p4.pt());
+			     h_Hs_Bc_qq_bq_W_pT                           -> Fill(W_fromTop_fromH_p4.pt());
+			   }
+			 else
+			   {
+			     h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("qq-bq",1);
+			     h_Hs_isbQuarkintoBaryCenter           -> Fill("?",1);
+			   }
+		       }
+		     else if(deltaR_obj1_obj2 > 0.8 && (deltaR_b_fromTop_obj1 < 0.8 || deltaR_b_fromTop_obj2 < 0.8)) 
+		       {
+			 if(applyCut)
+                           {
+			     h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("bq",1);
+			     h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("b",1);
+			     h_Hs_Bc_bq_Top_pT                            -> Fill(Top_fromH_p4.pt());
+			     h_Hs_Bc_bq_W_pT                              -> Fill(W_fromTop_fromH_p4.pt());
+			     
+			     math::XYZTLorentzVector bc_bq_sump4(0,0,0,0);
+			     h_Hs_bqcase_Prob_deltaR_lt -> Fill("< 0.4",0);
+			     if(deltaR_b_fromTop_obj1 < 0.8) 
+			       {
+				 bc_bq_sump4 = b_fromTop_fromH_p4 + obj1_fromW_fromTop_p4; 
+				 h_Hs_bqcase_deltaR_bq -> Fill(deltaR_b_fromTop_obj1);
+				 if(deltaR_b_fromTop_obj1 < 0.4) h_Hs_bqcase_Prob_deltaR_lt -> Fill("< 0.4",1);
+				 else                            h_Hs_bqcase_Prob_deltaR_lt -> Fill("> 0.4",1);
+			       }
+			     else
+			       {
+				 bc_bq_sump4 = b_fromTop_fromH_p4 + obj2_fromW_fromTop_p4;
+				 h_Hs_bqcase_deltaR_bq -> Fill(deltaR_b_fromTop_obj2);
+                                 if(deltaR_b_fromTop_obj2 < 0.4) h_Hs_bqcase_Prob_deltaR_lt -> Fill("< 0.4",1);
+                                 else                            h_Hs_bqcase_Prob_deltaR_lt -> Fill("> 0.4",1);				 
+			       }
+			     double MassOf_bq = bc_bq_sump4.M();
+			     h_Hs_Bc_MassOf_bq            -> Fill(MassOf_bq);
+			   }
+			 else
+			   {
+			     h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("bq",1);
+			     h_Hs_isbQuarkintoBaryCenter           -> Fill("b",1); 
+			   }
+		       }
+		     else
+		       {
+			 if(applyCut)
+                           {
+			     h_Hs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("0",1);
+			     h_Hs_isbQuarkintoBaryCenter_pTcuts           -> Fill("No b",1);
+			   }
+			 else
+			   {
+			     h_Hs_QuarksintoBaryCenterMultiplicity -> Fill("0",1);
+			     h_Hs_isbQuarkintoBaryCenter           -> Fill("No b",1);
+			   }
+		       }
+		     
+		     if(applyCut) h_Hs_OnlyQQ_dR_less_p7_pTcuts -> Fill("True",0);
+		     else         h_Hs_OnlyQQ_dR_less_p7        -> Fill("True",0);
+
+		     if ((deltaR_b_fromTop_obj1 > 0.8) && (deltaR_b_fromTop_obj2 > 0.8) && (deltaR_obj1_obj2 < 0.8))  // %1
+		       {
+			 if(applyCut) h_Hs_OnlyQQ_dR_less_p7_pTcuts -> Fill("True",1);
+			 else         h_Hs_OnlyQQ_dR_less_p7        ->Fill("True",1);
+
+			 double deltaRmin_fatJet_obj1 = 1e6; //give an initial, non sense value             
+			 math::XYZTLorentzVector closest_toObj1_fatJet_p4(0,0,0,0);
+			 int closest_toObj1_fatJet_Subjets = 0;
+			 bool closest_toObj1_fatJet_hasBsubjet = false;
+			 double closest_toObj1_fatJet_CSV = 0.0;
+			 int AK8jetSD_index = -1;
+			 for(AK8JetsSoftDrop fatjet: fEvent.ak8jetsSoftDrop())
+			   {
+			     AK8jetSD_index++;
+			     math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+			     fatJet_p4 = fatjet.p4();
+			     if((fatJet_p4.pt() < 100.0) || (fatJet_p4.eta() > 2.4) || !fatjet.IDloose()) continue;
+			     double deltaR_fatJet_obj1  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,obj1_fromW_fromTop_p4);
+			     if(deltaR_fatJet_obj1 < deltaRmin_fatJet_obj1)
+			       {
+				 deltaRmin_fatJet_obj1 = deltaR_fatJet_obj1;
+				 closest_toObj1_fatJet_p4 = fatjet.p4();
+				 closest_toObj1_fatJet_Subjets    = fatjet.nSubjets();
+				 closest_toObj1_fatJet_hasBsubjet = fatjet.hasBTagSubjets();
+				 closest_toObj1_fatJet_CSV        = fatjet.pfCombinedInclusiveSecondaryVertexV2BJetTags();
+			       }
+			   }   //for fat-jets loop         
+			 
+			 if(deltaRmin_fatJet_obj1 <0.8) //%2
+			   {
+			     double deltaR_fatJet_obj2  = ROOT::Math::VectorUtil::DeltaR(closest_toObj1_fatJet_p4,obj2_fromW_fromTop_p4);
+			     h_Hs_Prob_Diquark_match_with_fj ->Fill("Matched",0);
+			     if(deltaR_fatJet_obj2 < 0.8) 
+			       {
+				 if(applyCut)
+				   {
+				     h_Hs_Prob_Diquark_match_with_fj_pTcuts  -> Fill("Matched",1);
+				     
+				     h_Hs_MatchedWithDiquark_fj_NumOf_Subjets-> Fill(closest_toObj1_fatJet_Subjets);
+				     if(closest_toObj1_fatJet_hasBsubjet) h_Hs_MatchedWithDiquark_fj_hasBsubjet   -> Fill(1);
+				     else                                 h_Hs_MatchedWithDiquark_fj_hasBsubjet   -> Fill(0);
+				     h_Hs_MatchedWithDiquark_fj_CSV       ->Fill(closest_toObj1_fatJet_CSV);
+				     h_Hs_BoostedW_W_pT_Vs_Fatjet_pT      ->Fill(W_fromTop_fromH_p4.pt(),closest_toObj1_fatJet_p4.pt());
+
+				     h_Hs_MatchedWithDiquark_fj_pT_pTcuts    -> Fill(closest_toObj1_fatJet_p4.pt());
+				     h_Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts -> Fill("<300 GeV",0);
+				     if(closest_toObj1_fatJet_p4.pt() < 300.0) h_Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts-> Fill("<300 GeV",1);
+				     else                                      h_Hs_MatchedWithDiquark_Prob_fj_pT_pTcuts-> Fill(">300 GeV",1);
+				   }
+				 else
+				   {
+				     h_Hs_Prob_Diquark_match_with_fj -> Fill("Matched",1);
+				     h_Hs_MatchedWithDiquark_fj_pT -> Fill(closest_toObj1_fatJet_p4.pt());
+				     h_Hs_MatchedWithDiquark_Prob_fj_pT -> Fill("<300 GeV",0);
+                                     if(closest_toObj1_fatJet_p4.pt() < 300.0) h_Hs_MatchedWithDiquark_Prob_fj_pT -> Fill("<300 GeV",1);
+                                     else                                      h_Hs_MatchedWithDiquark_Prob_fj_pT -> Fill(">300 GeV",1);
+				   }
+			       }
+			     else if(applyCut) h_Hs_Prob_Diquark_match_with_fj_pTcuts ->Fill("Not Matched",1);
+			     else              h_Hs_Prob_Diquark_match_with_fj ->Fill("Not Matched",1);
+			   } //%2
+			 
+		       } // %1
+		     
+		     else if(applyCut) h_Hs_OnlyQQ_dR_less_p7_pTcuts -> Fill("False",1);
+		     else              h_Hs_OnlyQQ_dR_less_p7 -> Fill("False",1);
+		     
+		     
+		     // first the matching, after the dR
+		     if (applyCut)
+		       {
+			 double deltaRmin_fatJet_obj1 = 1e6, deltaRmin_fatJet_obj2 = 1e6, deltaRmin_fatJet_b = 1e6;
+			 int MatchedFj_withobj1_index = 0, MatchedFj_withobj2_index = 0, MatchedFj_withB_index = 0;
+			 math::XYZTLorentzVector ldgPtFatjet_p4(0,0,0,0);
+			 math::XYZTLorentzVector subldgPtFatjet_p4(0,0,0,0);
+			 int ldgPtFatjet_index = 0, subldgPtFatjet_index = 0;
+			 math::XYZTLorentzVector closest_toObj1_fatJet_p4(0,0,0,0);
+			 //math::XYZTLorentzVector closest_toObj2_fatJet_p4(0,0,0,0);
+			 math::XYZTLorentzVector closest_toB_fatJet_p4(0,0,0,0);
+			 bool closest_toObj1_fatJet_hasBsubjet = false, closest_toB_fatJet_hasBsubjet = false;
+
+			 ///////////
+			 std::vector<double> closest_toObj1_fatJet_Njettiness(5), closest_toB_fatJet_Njettiness(5);
+			 //std::vector<double>closest_toObj2_fatJet_Njettiness(5);
+			 for(size_t jettinessInitializer=0; jettinessInitializer < closest_toObj1_fatJet_Njettiness.size(); jettinessInitializer++)
+			   {
+			     closest_toObj1_fatJet_Njettiness.at(jettinessInitializer) = 0.0;
+			     //closest_toObj2_fatJet_Njettiness.at(jettinessInitializer) = 0.0;
+			     closest_toB_fatJet_Njettiness.at(jettinessInitializer) = 0.0;
+			   }
+			 ////////////
+ 
+			 //double closest_toObj1_fatJet_CSV = 0.0;
+			 int AK8jetSD_index = -1;
+			 for(AK8Jet fatjet: fEvent.ak8jets())
+			   {
+			     AK8jetSD_index++;
+			     math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+			     fatJet_p4 = fatjet.p4();
+			     if((fatJet_p4.pt() < 170.0) || (fatJet_p4.eta() > 2.4) || !fatjet.IDloose()) continue;
+			     
+			     if(fatJet_p4.pt() > ldgPtFatjet_p4.pt())
+			       {
+				 subldgPtFatjet_p4    = ldgPtFatjet_p4;
+				 subldgPtFatjet_index = ldgPtFatjet_index;   // first the ldg goes to subldg 
+				 ldgPtFatjet_p4     = fatJet_p4;          // and then give the new ldg
+				 ldgPtFatjet_index  = AK8jetSD_index;
+			       }
+			     else if(fatJet_p4.pt() > subldgPtFatjet_p4.pt())
+			       {
+                                 subldgPtFatjet_p4    = fatJet_p4;
+                                 subldgPtFatjet_index = AK8jetSD_index;
+			       }
+			    
+			     
+			     double deltaR_fatJet_obj1  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,obj1_fromW_fromTop_p4);
+			     double deltaR_fatJet_obj2  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,obj2_fromW_fromTop_p4);
+			     double deltaR_fatJet_b     = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,b_fromTop_fromH_p4);
+			     if(deltaR_fatJet_obj1 < deltaRmin_fatJet_obj1)
+			       {
+				 deltaRmin_fatJet_obj1 = deltaR_fatJet_obj1;
+				 closest_toObj1_fatJet_p4 = fatjet.p4();
+				 MatchedFj_withobj1_index = AK8jetSD_index;
+				 //closest_toObj1_fatJet_hasBsubjet = fatjet.hasBTagSubjets();
+
+				 // Njettiness
+				 closest_toObj1_fatJet_Njettiness.at(1) = fatjet.NjettinessAK8CHStau1();
+				 closest_toObj1_fatJet_Njettiness.at(2) = fatjet.NjettinessAK8CHStau2();
+				 closest_toObj1_fatJet_Njettiness.at(3) = fatjet.NjettinessAK8CHStau3();
+				 closest_toObj1_fatJet_Njettiness.at(4) = fatjet.NjettinessAK8CHStau4();
+			 
+			       }
+			     if(deltaR_fatJet_obj2 < deltaRmin_fatJet_obj2)
+                               {
+                                 deltaRmin_fatJet_obj2 = deltaR_fatJet_obj2;
+                                 //closest_toObj2_fatJet_p4 = fatjet.p4();
+                                 MatchedFj_withobj2_index = AK8jetSD_index;
+                               }
+			     if(deltaR_fatJet_b < deltaRmin_fatJet_b)
+                               {
+                                 deltaRmin_fatJet_b = deltaR_fatJet_b;
+                                 closest_toB_fatJet_p4 = fatjet.p4();
+                                 MatchedFj_withB_index = AK8jetSD_index;
+				 //closest_toB_fatJet_hasBsubjet = fatjet.hasBTagSubjets();
+				 
+				 // Njettiness   
+                                 closest_toB_fatJet_Njettiness.at(1) = fatjet.NjettinessAK8CHStau1();
+                                 closest_toB_fatJet_Njettiness.at(2) = fatjet.NjettinessAK8CHStau2();
+                                 closest_toB_fatJet_Njettiness.at(3) = fatjet.NjettinessAK8CHStau3();
+                                 closest_toB_fatJet_Njettiness.at(4) = fatjet.NjettinessAK8CHStau4();
+
+                               }
+			   
+			     //closest_toObj1_fatJet_hasBsubjet = fatjet.hasBTagSubjets();
+			     //closest_toObj1_fatJet_CSV        = fatjet.pfCombinedInclusiveSecondaryVertexV2BJetTags();
+			   }   //for fat-jets loop
+			 
+			 h_Hs_QuarksintoFatJetMultiplicity -> Fill("0",0);  //just to determinate the label of the first bin        
+			 h_Hs_QuarksintoFatJetMultiplicity -> Fill("qq",0);
+			 h_Hs_QuarksintoFatJetMultiplicity -> Fill("bq",0);
+			 
+			 h_Hs_BoostedWinFatJet_Prob_deltaR_lt ->Fill("< 0.4",0);
+
+			 if(MatchedFj_withobj1_index == MatchedFj_withobj2_index && MatchedFj_withobj2_index == MatchedFj_withB_index &&
+			    deltaRmin_fatJet_obj1 < 0.8 && deltaRmin_fatJet_obj2 < 0.8 && deltaRmin_fatJet_b < 0.8)
+			   {
+			     h_Hs_QuarksintoFatJetMultiplicity       -> Fill("bqq",1);
+			     h_Hs_TopProdInFatJet_fatjet_pT          -> Fill(closest_toB_fatJet_p4.pt());
+			     h_Hs_TopProdInFatJet_Top_pT_Vs_fatjet_pT-> Fill(closest_toB_fatJet_p4.pt(), Top_fromH_p4.pt());
+			     h_Hs_TopProdInFatJet_Higgs_pT           -> Fill(m.pt());
+			     h_Hs_TopProdInFatJet_hasBsubjet         -> Fill(closest_toB_fatJet_hasBsubjet);
+			     h_Hs_TopProdInFatJet_Njettinesstau1     -> Fill(closest_toB_fatJet_Njettiness.at(1));
+			     h_Hs_TopProdInFatJet_Njettinesstau2     -> Fill(closest_toB_fatJet_Njettiness.at(2));
+			     h_Hs_TopProdInFatJet_Njettinesstau3     -> Fill(closest_toB_fatJet_Njettiness.at(3));
+                             h_Hs_TopProdInFatJet_Njettinesstau4     -> Fill(closest_toB_fatJet_Njettiness.at(4));
+			     double tau2DIVtau1 = (closest_toB_fatJet_Njettiness.at(2))/(closest_toB_fatJet_Njettiness.at(1));
+			     double tau3DIVtau2 = (closest_toB_fatJet_Njettiness.at(3))/(closest_toB_fatJet_Njettiness.at(2));
+			     h_Hs_TopProdInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+			     h_Hs_TopProdInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_TopProdInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau2DIVtau1);
+			     h_Hs_TopProdInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau3DIVtau2);
+			     
+			     bool passtau32cut = false, passtau21cut=false;
+			     if(tau2DIVtau1 < 0.6) passtau21cut=true;
+			     if(tau3DIVtau2 < 0.67) passtau32cut = true;
+			     h_Hs_TopProdInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toB_fatJet_p4.pt());
+			     h_Hs_TopProdInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toB_fatJet_p4.pt());
+
+			     h_Hs_TopProdInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+			     h_Hs_TopProdInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+			     if (MatchedFj_withB_index == ldgPtFatjet_index)         h_Hs_TopProdInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+			     else if (MatchedFj_withB_index == subldgPtFatjet_index) h_Hs_TopProdInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+			     else h_Hs_TopProdInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+			   }
+
+			 else if(MatchedFj_withobj1_index == MatchedFj_withobj2_index && MatchedFj_withobj2_index == MatchedFj_withB_index &&
+                                 deltaRmin_fatJet_b > 0.8 && deltaRmin_fatJet_obj1 < 0.8 && deltaRmin_fatJet_obj2 < 0.8)
+                           {
+                             h_Hs_QuarksintoFatJetMultiplicity -> Fill("qq",1);
+			     h_Hs_BoostedWinFatJet_dR_qq       -> Fill(deltaR_obj1_obj2);
+			     if(deltaR_obj1_obj2 < 0.4) h_Hs_BoostedWinFatJet_Prob_deltaR_lt -> Fill("< 0.4",1);
+			     else h_Hs_BoostedWinFatJet_Prob_deltaR_lt ->Fill("> 0.4",1);
+			     
+			     h_Hs_WProdInFatJet_fatjet_pT          -> Fill(closest_toObj1_fatJet_p4.pt());
+                             h_Hs_WProdInFatJet_W_pT_Vs_fatjet_pT  -> Fill(closest_toObj1_fatJet_p4.pt(), W_fromTop_fromH_p4.pt());
+                             h_Hs_WProdInFatJet_Higgs_pT           -> Fill(m.pt());
+                             h_Hs_WProdInFatJet_hasBsubjet         -> Fill(closest_toObj1_fatJet_hasBsubjet);
+                             h_Hs_WProdInFatJet_Njettinesstau1     -> Fill(closest_toObj1_fatJet_Njettiness.at(1));
+                             h_Hs_WProdInFatJet_Njettinesstau2     -> Fill(closest_toObj1_fatJet_Njettiness.at(2));
+                             h_Hs_WProdInFatJet_Njettinesstau3     -> Fill(closest_toObj1_fatJet_Njettiness.at(3));
+                             h_Hs_WProdInFatJet_Njettinesstau4     -> Fill(closest_toObj1_fatJet_Njettiness.at(4));
+                             double tau2DIVtau1 = (closest_toObj1_fatJet_Njettiness.at(2))/(closest_toObj1_fatJet_Njettiness.at(1));
+                             double tau3DIVtau2 = (closest_toObj1_fatJet_Njettiness.at(3))/(closest_toObj1_fatJet_Njettiness.at(2));
+                             h_Hs_WProdInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+                             h_Hs_WProdInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_WProdInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toObj1_fatJet_p4.pt(), tau2DIVtau1);
+                             h_Hs_WProdInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toObj1_fatJet_p4.pt(), tau3DIVtau2);
+
+			     bool passtau32cut = false, passtau21cut=false;
+                             if(tau2DIVtau1 < 0.6) passtau21cut=true;
+                             if(tau3DIVtau2 < 0.67) passtau32cut = true;
+                             h_Hs_WProdInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toObj1_fatJet_p4.pt());
+                             h_Hs_WProdInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toObj1_fatJet_p4.pt());
+
+			     h_Hs_WProdInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+                             h_Hs_WProdInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+                             if (MatchedFj_withobj1_index == ldgPtFatjet_index)         h_Hs_WProdInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+                             else if (MatchedFj_withobj1_index == subldgPtFatjet_index) h_Hs_WProdInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+                             else h_Hs_WProdInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+
+                           }
+			 else if(MatchedFj_withobj1_index == MatchedFj_withobj2_index && MatchedFj_withobj2_index != MatchedFj_withB_index &&
+				 deltaRmin_fatJet_obj1 < 0.8 && deltaRmin_fatJet_obj2 < 0.8)
+			   {
+                             h_Hs_QuarksintoFatJetMultiplicity -> Fill("qq",1);
+			     h_Hs_BoostedWinFatJet_dR_qq       -> Fill(deltaR_obj1_obj2);
+			     if(deltaR_obj1_obj2 < 0.4) h_Hs_BoostedWinFatJet_Prob_deltaR_lt ->Fill("< 0.4",1);
+                             else h_Hs_BoostedWinFatJet_Prob_deltaR_lt ->Fill("> 0.4",1);
+
+			     h_Hs_WProdInFatJet_fatjet_pT          -> Fill(closest_toObj1_fatJet_p4.pt());
+                             h_Hs_WProdInFatJet_W_pT_Vs_fatjet_pT  -> Fill(closest_toObj1_fatJet_p4.pt(), W_fromTop_fromH_p4.pt());
+                             h_Hs_WProdInFatJet_Higgs_pT           -> Fill(m.pt());
+                             h_Hs_WProdInFatJet_hasBsubjet         -> Fill(closest_toObj1_fatJet_hasBsubjet);
+                             h_Hs_WProdInFatJet_Njettinesstau1     -> Fill(closest_toObj1_fatJet_Njettiness.at(1));
+                             h_Hs_WProdInFatJet_Njettinesstau2     -> Fill(closest_toObj1_fatJet_Njettiness.at(2));
+                             h_Hs_WProdInFatJet_Njettinesstau3     -> Fill(closest_toObj1_fatJet_Njettiness.at(3));
+                             h_Hs_WProdInFatJet_Njettinesstau4     -> Fill(closest_toObj1_fatJet_Njettiness.at(4));
+                             double tau2DIVtau1 = (closest_toObj1_fatJet_Njettiness.at(2))/(closest_toObj1_fatJet_Njettiness.at(1));
+                             double tau3DIVtau2 = (closest_toObj1_fatJet_Njettiness.at(3))/(closest_toObj1_fatJet_Njettiness.at(2));
+                             h_Hs_WProdInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+                             h_Hs_WProdInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_WProdInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toObj1_fatJet_p4.pt(), tau2DIVtau1);
+                             h_Hs_WProdInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toObj1_fatJet_p4.pt(), tau3DIVtau2);
+
+			     bool passtau32cut = false, passtau21cut=false;
+                             if(tau2DIVtau1 < 0.6) passtau21cut=true;
+                             if(tau3DIVtau2 < 0.67) passtau32cut = true;
+                             h_Hs_WProdInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toObj1_fatJet_p4.pt());
+                             h_Hs_WProdInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toObj1_fatJet_p4.pt());
+
+			     h_Hs_WProdInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+                             h_Hs_WProdInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+                             if (MatchedFj_withobj1_index == ldgPtFatjet_index)         h_Hs_WProdInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+                             else if (MatchedFj_withobj1_index == subldgPtFatjet_index) h_Hs_WProdInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+                             else h_Hs_WProdInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+
+                           }
+
+			 else if(MatchedFj_withobj1_index == MatchedFj_withB_index && MatchedFj_withobj2_index == MatchedFj_withB_index &&
+                                 deltaRmin_fatJet_obj2 > 0.8 && deltaRmin_fatJet_obj1 < 0.8 && deltaRmin_fatJet_b < 0.8)
+                           {
+                             h_Hs_QuarksintoFatJetMultiplicity -> Fill("bq",1);
+			     
+                             h_Hs_bqInFatJet_fatjet_pT          -> Fill(closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_Top_pT_Vs_fatjet_pT-> Fill(closest_toB_fatJet_p4.pt(), Top_fromH_p4.pt());
+			     h_Hs_bqInFatJet_W_pT_Vs_fatjet_pT  -> Fill(closest_toB_fatJet_p4.pt(), W_fromTop_fromH_p4.pt());
+                             h_Hs_bqInFatJet_Higgs_pT           -> Fill(m.pt());
+                             h_Hs_bqInFatJet_hasBsubjet         -> Fill(closest_toB_fatJet_hasBsubjet);
+                             h_Hs_bqInFatJet_Njettinesstau1     -> Fill(closest_toB_fatJet_Njettiness.at(1));
+                             h_Hs_bqInFatJet_Njettinesstau2     -> Fill(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_Njettinesstau3     -> Fill(closest_toB_fatJet_Njettiness.at(3));
+                             h_Hs_bqInFatJet_Njettinesstau4     -> Fill(closest_toB_fatJet_Njettiness.at(4));
+                             double tau2DIVtau1 = (closest_toB_fatJet_Njettiness.at(2))/(closest_toB_fatJet_Njettiness.at(1));
+                             double tau3DIVtau2 = (closest_toB_fatJet_Njettiness.at(3))/(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau3DIVtau2);
+
+			     bool passtau32cut = false, passtau21cut=false;
+                             if(tau2DIVtau1 < 0.6) passtau21cut=true;
+                             if(tau3DIVtau2 < 0.67) passtau32cut = true;
+                             h_Hs_bqInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toB_fatJet_p4.pt());
+
+			     h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+                             h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+                             if (MatchedFj_withB_index == ldgPtFatjet_index)         h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+                             else if (MatchedFj_withB_index == subldgPtFatjet_index) h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+                             else h_Hs_bqInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+			     
+                           }
+                         else if(MatchedFj_withobj1_index == MatchedFj_withB_index && MatchedFj_withobj2_index != MatchedFj_withB_index &&
+                                 deltaRmin_fatJet_obj1 < 0.8 && deltaRmin_fatJet_b < 0.8)
+                           {
+                             h_Hs_QuarksintoFatJetMultiplicity -> Fill("bq",1);
+			     
+			     h_Hs_bqInFatJet_fatjet_pT          -> Fill(closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_Top_pT_Vs_fatjet_pT-> Fill(closest_toB_fatJet_p4.pt(), Top_fromH_p4.pt());
+                             h_Hs_bqInFatJet_W_pT_Vs_fatjet_pT  -> Fill(closest_toB_fatJet_p4.pt(), W_fromTop_fromH_p4.pt());
+                             h_Hs_bqInFatJet_Higgs_pT           -> Fill(m.pt());
+                             h_Hs_bqInFatJet_hasBsubjet         -> Fill(closest_toB_fatJet_hasBsubjet);
+                             h_Hs_bqInFatJet_Njettinesstau1     -> Fill(closest_toB_fatJet_Njettiness.at(1));
+                             h_Hs_bqInFatJet_Njettinesstau2     -> Fill(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_Njettinesstau3     -> Fill(closest_toB_fatJet_Njettiness.at(3));
+                             h_Hs_bqInFatJet_Njettinesstau4     -> Fill(closest_toB_fatJet_Njettiness.at(4));
+                             double tau2DIVtau1 = (closest_toB_fatJet_Njettiness.at(2))/(closest_toB_fatJet_Njettiness.at(1));
+                             double tau3DIVtau2 = (closest_toB_fatJet_Njettiness.at(3))/(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau3DIVtau2);
+
+			     bool passtau32cut = false, passtau21cut=false;
+                             if(tau2DIVtau1 < 0.6) passtau21cut=true;
+                             if(tau3DIVtau2 < 0.67) passtau32cut = true;
+                             h_Hs_bqInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toB_fatJet_p4.pt());
+
+			     h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+                             h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+                             if (MatchedFj_withB_index == ldgPtFatjet_index)         h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+                             else if (MatchedFj_withB_index == subldgPtFatjet_index) h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+                             else h_Hs_bqInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+
+                           }
+			 else if(MatchedFj_withobj2_index == MatchedFj_withB_index && MatchedFj_withobj1_index == MatchedFj_withB_index &&
+                                 deltaRmin_fatJet_obj1 > 0.8 && deltaRmin_fatJet_obj2 < 0.8 && deltaRmin_fatJet_b < 0.8)
+                           {
+                             h_Hs_QuarksintoFatJetMultiplicity -> Fill("bq",1);
+			     
+			     h_Hs_bqInFatJet_fatjet_pT          -> Fill(closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_Top_pT_Vs_fatjet_pT-> Fill(closest_toB_fatJet_p4.pt(), Top_fromH_p4.pt());
+                             h_Hs_bqInFatJet_W_pT_Vs_fatjet_pT  -> Fill(closest_toB_fatJet_p4.pt(), W_fromTop_fromH_p4.pt());
+                             h_Hs_bqInFatJet_Higgs_pT           -> Fill(m.pt());
+                             h_Hs_bqInFatJet_hasBsubjet         -> Fill(closest_toB_fatJet_hasBsubjet);
+                             h_Hs_bqInFatJet_Njettinesstau1     -> Fill(closest_toB_fatJet_Njettiness.at(1));
+                             h_Hs_bqInFatJet_Njettinesstau2     -> Fill(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_Njettinesstau3     -> Fill(closest_toB_fatJet_Njettiness.at(3));
+                             h_Hs_bqInFatJet_Njettinesstau4     -> Fill(closest_toB_fatJet_Njettiness.at(4));
+                             double tau2DIVtau1 = (closest_toB_fatJet_Njettiness.at(2))/(closest_toB_fatJet_Njettiness.at(1));
+                             double tau3DIVtau2 = (closest_toB_fatJet_Njettiness.at(3))/(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau3DIVtau2);
+			     
+			     bool passtau32cut = false, passtau21cut=false;
+                             if(tau2DIVtau1 < 0.6) passtau21cut=true;
+                             if(tau3DIVtau2 < 0.67) passtau32cut = true;
+                             h_Hs_bqInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toB_fatJet_p4.pt());
+
+			     h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+                             h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+                             if (MatchedFj_withB_index == ldgPtFatjet_index)         h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+                             else if (MatchedFj_withB_index == subldgPtFatjet_index) h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+                             else h_Hs_bqInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+			     
+                           }
+                         else if(MatchedFj_withobj2_index == MatchedFj_withB_index && MatchedFj_withobj1_index != MatchedFj_withB_index &&
+                                 deltaRmin_fatJet_obj2 < 0.8 && deltaRmin_fatJet_b < 0.8)
+                           {
+                             h_Hs_QuarksintoFatJetMultiplicity -> Fill("bq",1);
+			     
+			     h_Hs_bqInFatJet_fatjet_pT          -> Fill(closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_Top_pT_Vs_fatjet_pT-> Fill(closest_toB_fatJet_p4.pt(), Top_fromH_p4.pt());
+                             h_Hs_bqInFatJet_W_pT_Vs_fatjet_pT  -> Fill(closest_toB_fatJet_p4.pt(), W_fromTop_fromH_p4.pt());
+                             h_Hs_bqInFatJet_Higgs_pT           -> Fill(m.pt());
+                             h_Hs_bqInFatJet_hasBsubjet         -> Fill(closest_toB_fatJet_hasBsubjet);
+                             h_Hs_bqInFatJet_Njettinesstau1     -> Fill(closest_toB_fatJet_Njettiness.at(1));
+                             h_Hs_bqInFatJet_Njettinesstau2     -> Fill(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_Njettinesstau3     -> Fill(closest_toB_fatJet_Njettiness.at(3));
+                             h_Hs_bqInFatJet_Njettinesstau4     -> Fill(closest_toB_fatJet_Njettiness.at(4));
+                             double tau2DIVtau1 = (closest_toB_fatJet_Njettiness.at(2))/(closest_toB_fatJet_Njettiness.at(1));
+                             double tau3DIVtau2 = (closest_toB_fatJet_Njettiness.at(3))/(closest_toB_fatJet_Njettiness.at(2));
+                             h_Hs_bqInFatJet_tau2DIVtau1        -> Fill(tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2        -> Fill(tau3DIVtau2);
+			     h_Hs_bqInFatJet_tau2DIVtau1_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau2DIVtau1);
+                             h_Hs_bqInFatJet_tau3DIVtau2_Vs_fatjet_pT -> Fill(closest_toB_fatJet_p4.pt(), tau3DIVtau2);
+
+			     bool passtau32cut = false, passtau21cut=false;
+                             if(tau2DIVtau1 < 0.6) passtau21cut=true;
+                             if(tau3DIVtau2 < 0.67) passtau32cut = true;
+                             h_Hs_bqInFatJet_TFtau32cut_fatjet_pT -> Fill(passtau32cut, closest_toB_fatJet_p4.pt());
+                             h_Hs_bqInFatJet_TFtau21cut_fatjet_pT -> Fill(passtau21cut, closest_toB_fatJet_p4.pt());
+
+			     h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",0);
+                             h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",0);
+                             if (MatchedFj_withB_index == ldgPtFatjet_index)         h_Hs_bqInFatJet_ldgORsubldg -> Fill("leadingPt",1);
+                             else if (MatchedFj_withB_index == subldgPtFatjet_index) h_Hs_bqInFatJet_ldgORsubldg -> Fill("subleadingPt",1);
+                             else h_Hs_bqInFatJet_ldgORsubldg -> Fill("NoneOf2",1);
+
+                           }
+			 else h_Hs_QuarksintoFatJetMultiplicity -> Fill("0",1);
+
+			 
+		       }//if apply cuts
+		     
+		   }// for applying cuts
+		 
+		 
+	       }   // if top from Higgs
+	     
+	     else //if top is not from Higgs//////////////////////////////////////////////////////////////////////////////////////////////
+	       {
+		 math::XYZTLorentzVector b_fromTop_NOTfromH_p4(0,0,0,0), obj1_fromW_fromTop_p4(0,0,0,0), obj2_fromW_fromTop_p4(0,0,0,0);
+		 math::XYZTLorentzVector W_fromTop_NOTfromH_p4(0,0,0,0), Top_NOTfromH_p4(0,0,0,0);
+                 bool isTheRightTop = true;
+                 bool obj1_exist = false;
+                 bool bQuarkIntoFatJet = false;
+
+                 Top_NOTfromH_p4 = p.p4();
+		 unsigned int lastcopy = GetTheLastCopy(p.index()); // we need to find the last copy in order to find the real daughters      
+                 genParticle lastT; //create the particle object of the last copy of top                                                      
+                 lastT =  fEvent.genparticles().getGenParticles()[lastcopy];
+		 std::vector<short> lastT_daughters = lastT.daughters();
+
+                 for (unsigned int i = 0; i < lastT_daughters.size() ; i++)
+                   {
+                     genParticle d; //create the particle object   
+                     d =  fEvent.genparticles().getGenParticles()[lastT_daughters.at(i)];
+                     if (std::abs(d.pdgId()) == 24) // if W from top             
+                       {
+                         W_fromTop_NOTfromH_p4 = d.p4();
+                         genParticle lastW;
+                         unsigned int lastWcopy = GetTheLastCopy(d.index()); // we need to find the last copy in order to find the real daughters                                                                                                                                           
+			 lastW = fEvent.genparticles().getGenParticles()[lastWcopy];
+			 std::vector<short> W_daughters = lastW.daughters();
+			 for (size_t k = 0; k < W_daughters.size() ; k++)
+			   {
+			     genParticle top_grand_d; //create the particle object, i define this as grand_d, the daus of the W, so the grand-daughters of Top
+			     top_grand_d =  fEvent.genparticles().getGenParticles()[W_daughters.at(k)];
+			     if ( !mcTools.IsQuark(top_grand_d.pdgId()) ) //if the daus of W are not quarks (f.e. leptons), we reject the top 
+                               {
+                                 isTheRightTop = false;
+                                 continue;
+                               }
+
+                             if (obj1_exist == false)
+                               {
+                                 obj1_exist = true;
+                                 obj1_fromW_fromTop_p4 = top_grand_d.p4();
+                               }
+                             else
+                               {
+                                 obj2_fromW_fromTop_p4 = top_grand_d.p4();
+                               }
+                           }      //for loop, W's daus             
+                         if (!isTheRightTop) continue; // move out from the checking loop, reject this top                                    
+                       } // if W from top
+		     
+		     if (std::abs(d.pdgId()) == 5) // if b from top                                                                           
+                       {
+                         b_fromTop_NOTfromH_p4 = d.p4();
+                       }
+                   }//for top NOT from Higgs daus
+
+                 if (!isTheRightTop) continue; // move out from the checking loop, reject this top
+
+		 // Matching top and W with fat-jet++++++++++++++++++++++++++++++++++++++++++++++++++++  
+                 // what i will use from here: bool TheTopQuarkIsMatched_WithFatJet & closest_toTop_fatJet_p4    
+                 // what i will use from here: bool TheWQuarkIsMatched_WithFatJet & closest_toW_fatJet_p4         
+                 bool TheTopQuarkIsMatched_WithFatJet = false;
+                 bool TheWQuarkIsMatched_WithFatJet = false;
+
+                 double deltaRmin_fatJet_topQuark = 1e6; //give an initial, non sense value    
+                 double deltaRmin_fatJet_WQuark = 1e6; //give an initial, non sense value                
+		 math::XYZTLorentzVector closest_toTop_fatJet_p4(0,0,0,0), closest_toW_fatJet_p4(0,0,0,0);
+                 int AK8jetSD_index = -1;
+		 for(AK8JetsSoftDrop fatjet: fEvent.ak8jetsSoftDrop())
+                   {
+                     AK8jetSD_index++;
+		     math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+                     fatJet_p4 = fatjet.p4();
+                     double deltaR_fatJet_topQuark  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,Top_NOTfromH_p4);
+                     double deltaR_fatJet_WQuark    = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,W_fromTop_NOTfromH_p4);
+                     if(deltaR_fatJet_topQuark < deltaRmin_fatJet_topQuark)
+                       {
+                         deltaRmin_fatJet_topQuark = deltaR_fatJet_topQuark;
+                         closest_toTop_fatJet_p4 = fatjet.p4();
+                       }
+                     if(deltaR_fatJet_WQuark < deltaRmin_fatJet_WQuark)
+                       {
+                         deltaRmin_fatJet_WQuark = deltaR_fatJet_WQuark;
+                         closest_toW_fatJet_p4 = fatjet.p4();
+		       }
+                   }   //for fat-jets loop  
+
+                 if(deltaRmin_fatJet_topQuark <0.8) TheTopQuarkIsMatched_WithFatJet = true;
+                 if(deltaRmin_fatJet_WQuark <0.8)   TheWQuarkIsMatched_WithFatJet = true;
+                 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+		 double deltaR_b_fromTop_obj1 = ROOT::Math::VectorUtil::DeltaR(b_fromTop_NOTfromH_p4, obj1_fromW_fromTop_p4);
+                 double deltaR_b_fromTop_obj2 = ROOT::Math::VectorUtil::DeltaR(b_fromTop_NOTfromH_p4, obj2_fromW_fromTop_p4);
+                 double deltaR_obj1_obj2      = ROOT::Math::VectorUtil::DeltaR(obj1_fromW_fromTop_p4, obj2_fromW_fromTop_p4);
+                 double deltaRmax = -1; // give an initial, non sense value
+                 double deltaRmin = 1e6; // give an initial, non sense value       
+
+                 // find the dRmin                   
+                 if(deltaR_b_fromTop_obj1 > deltaR_b_fromTop_obj2 && deltaR_b_fromTop_obj1 > deltaR_obj1_obj2)
+                   {
+                     deltaRmax = deltaR_b_fromTop_obj1;
+                   }
+                 else if(deltaR_b_fromTop_obj2 > deltaR_b_fromTop_obj1 && deltaR_b_fromTop_obj2 > deltaR_obj1_obj2)
+                   {
+                     deltaRmax = deltaR_b_fromTop_obj2;
+                   }
+                 else deltaRmax = deltaR_obj1_obj2;
+		 
+		 h_objectsNOTfromHiggstop_maxdR             -> Fill(deltaRmax);
+		 
+		 //find the dRmin                                  
+                 if(deltaR_b_fromTop_obj1 < deltaR_b_fromTop_obj2 && deltaR_b_fromTop_obj1 < deltaR_obj1_obj2)   
+		   {
+		     deltaRmin = deltaR_b_fromTop_obj1;
+		   }
+                 else if(deltaR_b_fromTop_obj2 < deltaR_b_fromTop_obj1 && deltaR_b_fromTop_obj2 < deltaR_obj1_obj2) 
+		   {
+		     deltaRmin = deltaR_b_fromTop_obj2;
+		   }
+                 else deltaRmin = deltaR_obj1_obj2;
+
+                 h_objectsNOTfromHiggstop_mindR                                -> Fill(deltaRmin);
+                 h_objectsNOTfromHiggstop_Prob_mindR_lt_p8                     -> Fill("<0.8",0);
+
+                 if(deltaRmin < 0.8)
+                   {
+		     // what i will use from fat: bool TheTopQuarkIsMatched_WithFatJet & closest_toTop_fatJet_p4        
+                     // what i will use from fat: bool TheWQuarkIsMatched_WithFatJet & closest_toW_fatJet_p4             
+                     h_NotHs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj -> Fill("Matched",0);
+                     if(TheTopQuarkIsMatched_WithFatJet)
+                       {
+                         h_NotHs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj -> Fill("Matched",1);
+                         h_NotHs_objectsfromtop_mindR_ltp8_matchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+                       }
+                     else h_NotHs_objectsfromtop_mindR_ltp8_Prob_top_match_with_fj -> Fill("Not Matched",1);
+
+                     h_objectsNOTfromHiggstop_Prob_mindR_lt_p8 -> Fill("<0.8",1);
+                     h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",0);
+                     h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",0);
+                     if     (Top_NOTfromH_p4.pt() > 500.0) 
+		       {
+			 h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("> 500",1);
+			 if(TheTopQuarkIsMatched_WithFatJet)
+			   {
+			     h_NotHs_objectsfromtop_mindR_ltp8__topPt_more_500__matchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+			   }
+		       }
+                     else if(Top_NOTfromH_p4.pt() > 400.0)
+		       {
+			 h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("400<pT<500",1);
+		       }
+                     else h_objectsNOTfromHiggstop_Prob_mindR_lt_p8_and_TopPt_more_than -> Fill("< 400",1);
+		     
+		     if       (Top_NOTfromH_p4.pt() > 400.0)
+		       {
+			 if(TheTopQuarkIsMatched_WithFatJet)
+                           {
+                             h_NotHs_objectsfromtop_mindR_ltp8__topPt_more_400__matchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+                           }
+		       }
+                   }
+
+                 else  h_objectsNOTfromHiggstop_Prob_mindR_lt_p8               -> Fill(">0.8",1);
+		 
+		 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+                 /////////////////////////////////////////////////BaryCenter//////////////////////////////////////////////////////////////////
+                 double deltaR_b_fromTop_Top    = ROOT::Math::VectorUtil::DeltaR(b_fromTop_NOTfromH_p4, Top_NOTfromH_p4);
+                 double deltaR_obj1_fromTop_Top = ROOT::Math::VectorUtil::DeltaR(obj1_fromW_fromTop_p4, Top_NOTfromH_p4);
+                 double deltaR_obj2_fromTop_Top = ROOT::Math::VectorUtil::DeltaR(obj2_fromW_fromTop_p4, Top_NOTfromH_p4);
+                 unsigned int decayproductsintofatjet = 0;
+                 double objtop_deltaRmax = -1;  // give an initial, non sense value    
+                 double objtop_deltaRmin = 999;  // give an initial, non sense value    
+
+                 h_NotHs_which_objectfromtop_maxdR -> Fill ("W'obj",0) ; //just to determinate the first label   
+
+                 if(deltaR_b_fromTop_Top > deltaR_obj1_fromTop_Top && deltaR_b_fromTop_Top > deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmax = deltaR_b_fromTop_Top;
+                     h_NotHs_which_objectfromtop_maxdR -> Fill("b",1) ;
+		     
+		     if(deltaR_b_fromTop_Top > 0.8)
+                       {
+                         h_NotHs_mostdistantfromtop_isb__top_pT      -> Fill(Top_NOTfromH_p4.pt());
+                         h_NotHs_mostdistantfromtop_isb__W_pT        -> Fill(W_fromTop_NOTfromH_p4.pt());
+                         h_NotHs_mostdistantfromtop_isb__b_pT        -> Fill(b_fromTop_NOTfromH_p4.pt());
+                         h_NotHs_mostdistantfromtop_isb__dRmax_b_top -> Fill(deltaR_b_fromTop_Top);
+
+                         if(deltaR_b_fromTop_obj1 < deltaR_b_fromTop_obj2) 
+			   {
+			     h_NotHs_mostdistantfromtop_isb_dRmin_b_objfromW -> Fill(deltaR_b_fromTop_obj1);
+			   }
+                         else h_NotHs_mostdistantfromtop_isb_dRmin_b_objfromW -> Fill(deltaR_b_fromTop_obj2);
+                       }
+
+		     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7)
+                       {
+                         h_NotHs_mostdistantfromtop_isb__dRqq_Vs_W_pT   -> Fill(deltaR_obj1_obj2,W_fromTop_NOTfromH_p4.pt());
+                         h_NotHs_mostdistantfromtop_isb__dRqq_Vs_top_pT -> Fill(deltaR_obj1_obj2,Top_NOTfromH_p4.pt());
+
+			 // what i will use from fat: bool TheTopQuarkIsMatched_WithFatJet & closest_toTop_fatJet_p4 
+                         // what i will use from fat: bool TheWQuarkIsMatched_WithFatJet & closest_toW_fatJet_p4         
+                         //h_Hs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt
+			 //h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj
+			 //h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt
+			 //h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj -> Fill("Matched",0);
+                         if(TheTopQuarkIsMatched_WithFatJet)
+                           {
+                             h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj -> Fill("Matched",1);
+                             h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Topmatchedfj_pt -> Fill(closest_toTop_fatJet_p4.pt());
+                           }
+                         else h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_top_match_with_fj -> Fill("Not Matched",1);
+
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj -> Fill("Matched",0);
+                         if(TheWQuarkIsMatched_WithFatJet)
+                           {
+                             h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj -> Fill("Matched",1);
+                             h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Wmatchedfj_pt -> Fill(closest_toW_fatJet_p4.pt());
+                           }
+                         else h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_Prob_W_match_with_fj -> Fill("Not Matched",1);
+
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",0);
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",0);
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",0);
+                         h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",0);
+
+                         if     (Top_NOTfromH_p4.pt() > 500.0) 
+			   {
+			     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("> 500",1);
+			     if(TheTopQuarkIsMatched_WithFatJet)
+			       {
+				 h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more500_matchedfj_pt->Fill(closest_toTop_fatJet_p4.pt());
+			       }
+			   }
+                         else if(Top_NOTfromH_p4.pt() > 400.0)
+			   {
+			     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("400<pT<500",1);
+			   }
+                         else h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_TopPt_more_than -> Fill("< 400",1);
+
+			 if(Top_NOTfromH_p4.pt() > 400.0)
+			   {
+			     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__TopPt_more400_matchedfj_pt->Fill(closest_toTop_fatJet_p4.pt());
+			   }
+
+
+                         if     (W_fromTop_NOTfromH_p4.pt() > 300.0)
+			   {
+			     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill(">300",1);
+			     if(TheWQuarkIsMatched_WithFatJet)
+                               {
+                                 h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more300_matchedfj_pt->Fill(closest_toW_fatJet_p4.pt());
+                               }
+			   }
+                         else if(W_fromTop_NOTfromH_p4.pt() > 200.0) 
+			   {
+			     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("200<pT<300",1);
+			   }
+                         else h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__and_WPt_more_than -> Fill("< 200",1);
+			 
+			 if (W_fromTop_NOTfromH_p4.pt() > 200.0)
+			   {
+			     if(TheWQuarkIsMatched_WithFatJet)
+			       {
+				 h_NotHs_mostdistantfromtop_isb__dRqq_less_p7__WPt_more200_matchedfj_pt->Fill(closest_toW_fatJet_p4.pt());
+			       }
+			   }
+                       }
+		     
+		     h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",0);
+                     if(deltaR_b_fromTop_Top > 0.8 && deltaR_obj1_obj2 < 0.7) 
+		       {
+			 h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("True",1);
+		       }
+                     else h_NotHs_mostdistantfromtop_isb__dRqq_less_p7_tf -> Fill("False",1);
+		   }
+
+                 else if(deltaR_obj1_fromTop_Top > deltaR_b_fromTop_Top && deltaR_obj1_fromTop_Top > deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmax = deltaR_obj1_fromTop_Top;
+                     h_NotHs_which_objectfromtop_maxdR-> Fill("W'obj",1);
+                   }
+                 else
+                   {
+                     objtop_deltaRmax = deltaR_obj2_fromTop_Top;
+                     h_NotHs_which_objectfromtop_maxdR-> Fill("W'obj",1);
+                   }
+                 h_NotHs_objectsfromtop_top_maxdR -> Fill(objtop_deltaRmax);
+
+                 if(deltaR_b_fromTop_Top < deltaR_obj1_fromTop_Top && deltaR_b_fromTop_Top < deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmin = deltaR_b_fromTop_Top;
+                   }
+                 else if(deltaR_obj1_fromTop_Top < deltaR_b_fromTop_Top && deltaR_obj1_fromTop_Top < deltaR_obj2_fromTop_Top)
+                   {
+                     objtop_deltaRmin = deltaR_obj1_fromTop_Top;
+                   }
+                 else objtop_deltaRmin = deltaR_obj2_fromTop_Top;
+                 h_NotHs_objectsfromtop_top_mindR -> Fill(objtop_deltaRmin);
+
+
+                 if(deltaR_b_fromTop_Top < 0.8)  // b into fatjet             
+                   {
+                     decayproductsintofatjet++;
+                     bQuarkIntoFatJet = true;
+                   }
+                 else bQuarkIntoFatJet = false;
+		 
+		 if(deltaR_obj1_fromTop_Top < 0.8) decayproductsintofatjet++;  // obj1 into fatjet        
+                 if(deltaR_obj2_fromTop_Top < 0.8) decayproductsintofatjet++;  // obj2 into fatjet        
+
+                 h_Probdecayproductsintofatjet_NOTHs          -> Fill("0",0);  //just to determinate the label of the first bin   
+                 h_Probdecayproductsintofatjet_NOTHs          -> Fill("1",0);  //just to determinate the label of the second bin 
+                 h_Probdecayproductsintofatjet_NOTHs          -> Fill("2",0);  //just to determinate the label of the third bin   
+
+                 h_NotHs_QuarksintofatjetMultiplicity -> Fill("0",0);  //just to determinate the label of the first bin      
+                 h_NotHs_QuarksintofatjetMultiplicity -> Fill("q",0);
+                 h_NotHs_QuarksintofatjetMultiplicity -> Fill("b",0);
+                 h_NotHs_QuarksintofatjetMultiplicity -> Fill("qq",0);
+                 h_NotHs_QuarksintofatjetMultiplicity -> Fill("bq",0);
+
+                 h_NotHs_isbQuarkintofatjet           -> Fill("No b",0);  //just to determinate the label of the first bin
+		 
+		 if      (decayproductsintofatjet == 0)
+                   {
+                     h_Probdecayproductsintofatjet_NOTHs  -> Fill("0",1);
+                     h_NotHs_QuarksintofatjetMultiplicity -> Fill("0",1);
+                     h_NotHs_isbQuarkintofatjet           -> Fill("No b",1);
+                   }
+                 else if (decayproductsintofatjet == 1)
+                   {
+                     h_Probdecayproductsintofatjet_NOTHs -> Fill("1",1);
+                     if(bQuarkIntoFatJet)
+                       {
+                         h_NotHs_QuarksintofatjetMultiplicity -> Fill("b",1);
+                         h_NotHs_isbQuarkintofatjet           -> Fill("b",1);
+                       }
+                     else
+                       {
+                         h_NotHs_QuarksintofatjetMultiplicity -> Fill("q",1);
+                         h_NotHs_isbQuarkintofatjet           -> Fill("No b",1);
+                       }
+                   }
+		 else if (decayproductsintofatjet == 2)
+                   {
+                     h_Probdecayproductsintofatjet_NOTHs -> Fill("2",1);
+                     if(bQuarkIntoFatJet)
+                       {
+                         h_NotHs_QuarksintofatjetMultiplicity -> Fill("bq",1);
+                         h_NotHs_isbQuarkintofatjet           -> Fill("b",1);
+                       }
+                     else
+                       {
+                         h_NotHs_QuarksintofatjetMultiplicity -> Fill("qq",1);
+                         h_NotHs_isbQuarkintofatjet           -> Fill("No b",1);
+                       }
+                   }
+                 else
+                   {
+                     h_Probdecayproductsintofatjet_NOTHs  -> Fill("All 3",1);
+                     h_NotHs_QuarksintofatjetMultiplicity -> Fill("bqq",1);
+                     h_NotHs_isbQuarkintofatjet           -> Fill("b",1);
+                   }
+		 
+                 if (decayproductsintofatjet == 3)
+                   {
+                     unsigned int Num_pairs_withenough_deltaR_amongthemselves = 0;
+                     if      (deltaR_b_fromTop_obj1 < 0.4 && deltaR_b_fromTop_obj2 < 0.4 && deltaR_obj1_obj2 < 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 0;
+                       }
+
+                     else if (deltaR_b_fromTop_obj1 > 0.4 && deltaR_obj1_obj2 < 0.4 && deltaR_b_fromTop_obj2 < 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 1;
+                       }
+                     else if (deltaR_b_fromTop_obj2 > 0.4 && deltaR_obj1_obj2 < 0.4 && deltaR_b_fromTop_obj1 < 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 1;
+                       }
+                     else if (deltaR_obj1_obj2 > 0.4 && deltaR_b_fromTop_obj1 < 0.4 && deltaR_b_fromTop_obj2 < 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 1;
+                       }
+
+                     else if (deltaR_b_fromTop_obj1 > 0.4 && deltaR_obj1_obj2 > 0.4 && deltaR_b_fromTop_obj2 < 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 2;
+                       }
+                     else if (deltaR_b_fromTop_obj2 > 0.4 && deltaR_obj1_obj2 > 0.4 && deltaR_b_fromTop_obj1 < 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 2;
+                       }
+                     else if (deltaR_b_fromTop_obj2 > 0.4 && deltaR_b_fromTop_obj1 > 0.4 && deltaR_obj1_obj2 <0.4 )
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 2;
+                       }
+
+                     else if (deltaR_b_fromTop_obj1 > 0.4 && deltaR_b_fromTop_obj2 > 0.4 && deltaR_obj1_obj2 > 0.4)
+                       {
+                         Num_pairs_withenough_deltaR_amongthemselves = 3;
+                       }
+		     
+		     h_Pairsinbarycenter_enoughdeltaR_NOTHs         -> Fill("0",0);  //just to determinate the label of the first bin
+                     h_Pairsinbarycenter_enoughdeltaR_NOTHs         -> Fill("1 pair",0);  //just to determinate the label of the second bin
+                     h_Pairsinbarycenter_enoughdeltaR_NOTHs         -> Fill("2 pairs",0);  //just to determinate the label of the third bin 
+
+                     if      (Num_pairs_withenough_deltaR_amongthemselves == 0)   h_Pairsinbarycenter_enoughdeltaR_NOTHs -> Fill("0",1);
+                     else if (Num_pairs_withenough_deltaR_amongthemselves == 1)   h_Pairsinbarycenter_enoughdeltaR_NOTHs -> Fill("1 pair",1);
+                     else if (Num_pairs_withenough_deltaR_amongthemselves == 2)   h_Pairsinbarycenter_enoughdeltaR_NOTHs -> Fill("2 pairs",1);
+                     else                                                         h_Pairsinbarycenter_enoughdeltaR_NOTHs -> Fill("All 3",1);
+
+		     h_Iffatjet_NotHs_Top_pT         -> Fill (Top_NOTfromH_p4.pt());
+		     h_Iffatjet_NotHs_EventsWithHighTop_pT -> Fill("top.pT < 400 GeV", 0);
+		     if(Top_NOTfromH_p4.pt() > 400.0)       h_Iffatjet_NotHs_EventsWithHighTop_pT -> Fill("top.pT > 400 GeV", 1);
+                     else                                   h_Iffatjet_NotHs_EventsWithHighTop_pT -> Fill("top.pT < 400 GeV", 1);
+		     
+		   } // All 3 decay products into 0.8
+		 
+		 /////////////////////////////////////////////////BaryCenter//////////////////////////////////////////////////////////////////
+		 // barycenter not the top-direction                                                
+		 // h_NotHs_QuarksFromW_deltaR  h_NotHs_QuarksintoBaryCenterMultiplicity  h_NotHs_isbQuarkintoBaryCenter
+		 h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("0",0);  //just to determinate the label of the first bin
+                 h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("qq",0);
+                 h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("bq",0);
+                 h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("qq-bq",0);
+
+                 h_NotHs_isbQuarkintoBaryCenter           -> Fill("No b",0);  //just to determinate the label of the first bin
+                 h_NotHs_isbQuarkintoBaryCenter           -> Fill("?",0);
+
+                 h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("0",0);  //just to determinate the label of the first bin 
+                 h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq",0);
+                 h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("bq",0);
+                 h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq-bq",0);
+
+                 h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("No b",0);  //just to determinate the label of the first bin  
+                 h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("?",0);
+		 
+		 for (unsigned int applyCut = 0; applyCut < 2 ; applyCut++)
+                   {
+                     double quarksPtCut = 30.0;
+                     if(applyCut)
+                       {
+                         h_NotHs_QuarksFromTop_Passed_pTcuts -> Fill("Passed",0);
+                         if((obj1_fromW_fromTop_p4.pt() < quarksPtCut) || (obj2_fromW_fromTop_p4.pt() < quarksPtCut) ||  (b_fromTop_NOTfromH_p4.pt() < quarksPtCut))
+                           {
+                             h_NotHs_QuarksFromTop_Passed_pTcuts -> Fill("Not Passed",1);
+                             continue;
+                           }
+                         else h_NotHs_QuarksFromTop_Passed_pTcuts -> Fill("Passed",1);
+                       }
+
+                     if(applyCut)
+                       {
+			 h_NotHs_objectsfromtop_dRmax_pTcuts        -> Fill(deltaRmax);
+                         h_NotHs_objectsfromtop_Prob_dRmax_pTcuts        -> Fill("< 0.8",0);
+                         if(deltaRmax < 0.8) h_NotHs_objectsfromtop_Prob_dRmax_pTcuts -> Fill("< 0.8",1);
+                         else          h_NotHs_objectsfromtop_Prob_dRmax_pTcuts -> Fill("> 0.8",1);
+
+                         h_NotHs_objectsfromtop_dRmin_pTcuts        -> Fill(deltaRmin);
+                         h_NotHs_objectsfromtop_Prob_dRmin_pTcuts        -> Fill("< 0.8",0);
+                         if(deltaRmin < 0.8) h_NotHs_objectsfromtop_Prob_dRmin_pTcuts -> Fill("< 0.8",1);
+                         else          h_NotHs_objectsfromtop_Prob_dRmin_pTcuts -> Fill("> 0.8",1);
+			 
+                         h_NotHs_QuarksFromW_deltaR_pTcuts          -> Fill(deltaR_obj1_obj2);
+                         h_NotHs_QuarksFromW_Prob_deltaR_pTcuts     -> Fill("< 0.8",0);
+                         if(deltaR_obj1_obj2 < 0.8) h_NotHs_QuarksFromW_Prob_deltaR_pTcuts -> Fill("< 0.8",1);
+                         else                       h_NotHs_QuarksFromW_Prob_deltaR_pTcuts -> Fill("> 0.8",1);
+                       }
+		     else
+                       {
+                         h_NotHs_QuarksFromW_deltaR                                -> Fill(deltaR_obj1_obj2);
+                         h_NotHs_QuarksFromW_Prob_deltaR-> Fill("< 0.8",0);
+                         if(deltaR_obj1_obj2 < 0.8) h_NotHs_QuarksFromW_Prob_deltaR-> Fill("< 0.8",1);
+                         else                       h_NotHs_QuarksFromW_Prob_deltaR-> Fill("> 0.8",1);
+                       }
+
+                     if (deltaRmax < 0.8)
+                       {
+                         if(applyCut)
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("bqq",1);
+                             h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("b",1);
+                           }
+                         else
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("bqq",1);
+                             h_NotHs_isbQuarkintoBaryCenter           -> Fill("b",1);
+                           }
+		       }
+		     else if(deltaR_obj1_obj2 < 0.8 && deltaR_b_fromTop_obj1 > 0.8 && deltaR_b_fromTop_obj2 > 0.8)
+		       {
+			 if(applyCut)
+			   {
+			     h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq",1);
+			     h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("No b",1);
+			   }
+			 else
+			   {
+			     h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("qq",1);
+			     h_NotHs_isbQuarkintoBaryCenter           -> Fill("No b",1);
+			   }
+		       }
+		     else if(deltaR_obj1_obj2 < 0.8 && (deltaR_b_fromTop_obj1 < 0.8 || deltaR_b_fromTop_obj2 < 0.8))
+                       {
+                         if(applyCut)
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("qq-bq",1);
+                             h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("?",1);
+                           }
+                         else
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("qq-bq",1);
+                             h_NotHs_isbQuarkintoBaryCenter           -> Fill("?",1);
+                           }
+                       }
+                     else if(deltaR_obj1_obj2 > 0.8 && (deltaR_b_fromTop_obj1 < 0.8 || deltaR_b_fromTop_obj2 < 0.8))
+                       {
+                         if(applyCut)
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("bq",1);
+                             h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("b",1);
+                           }
+                         else
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("bq",1);
+                             h_NotHs_isbQuarkintoBaryCenter           -> Fill("b",1);
+                           }
+                       }
+		     else
+                       {
+                         if(applyCut)
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity_pTcuts -> Fill("0",1);
+                             h_NotHs_isbQuarkintoBaryCenter_pTcuts           -> Fill("No b",1);
+                           }
+                         else
+                           {
+                             h_NotHs_QuarksintoBaryCenterMultiplicity -> Fill("0",1);
+                             h_NotHs_isbQuarkintoBaryCenter           -> Fill("No b",1);
+                           }
+                       }
+		     
+		     if(applyCut) h_NotHs_OnlyQQ_dR_less_p7_pTcuts -> Fill("True",0);
+                     else         h_NotHs_OnlyQQ_dR_less_p7        -> Fill("True",0);
+
+                     if ((deltaR_b_fromTop_obj1 > 0.8) && (deltaR_b_fromTop_obj2 > 0.8) && (deltaR_obj1_obj2 < 0.7))  // %1   
+                       {
+                         if(applyCut) h_NotHs_OnlyQQ_dR_less_p7_pTcuts -> Fill("True",1);
+                         else         h_NotHs_OnlyQQ_dR_less_p7        ->Fill("True",1);
+
+                         double deltaRmin_fatJet_obj1 = 1e6; //give an initial, non sense value    
+			 math::XYZTLorentzVector closest_toObj1_fatJet_p4(0,0,0,0);
+                         int AK8jetSD_index = -1;
+			 for(AK8JetsSoftDrop fatjet: fEvent.ak8jetsSoftDrop())
+                           {
+                             AK8jetSD_index++;
+			     math::XYZTLorentzVector fatJet_p4(0,0,0,0);
+                             fatJet_p4 = fatjet.p4();
+                             if((fatJet_p4.pt() < 100.0) || (fatJet_p4.eta() > 2.4) || !fatjet.IDloose()) continue;
+                             double deltaR_fatJet_obj1  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,obj1_fromW_fromTop_p4);
+                             if(deltaR_fatJet_obj1 < deltaRmin_fatJet_obj1)
+                               {
+                                 deltaRmin_fatJet_obj1 = deltaR_fatJet_obj1;
+                                 closest_toObj1_fatJet_p4 = fatjet.p4();
+                               }
+                           }   //for fat-jets loop
+
+			 if(deltaRmin_fatJet_obj1 <0.8) //%2     
+                           {
+                             double deltaR_fatJet_obj2  = ROOT::Math::VectorUtil::DeltaR(closest_toObj1_fatJet_p4,obj2_fromW_fromTop_p4);
+                             h_NotHs_Prob_Diquark_match_with_fj ->Fill("Matched",0);
+                             if(deltaR_fatJet_obj2 < 0.8)
+                               {
+                                 if(applyCut)
+                                   {
+                                     h_NotHs_Prob_Diquark_match_with_fj_pTcuts -> Fill("Matched",1);
+                                     h_NotHs_MatchedWithDiquark_fj_pT_pTcuts   -> Fill(closest_toObj1_fatJet_p4.pt());
+				     h_NotHs_MatchedWithDiquark_Prob_fj_pT_pTcuts -> Fill("<300 GeV",0);
+                                     if(closest_toObj1_fatJet_p4.pt() < 300.0) h_NotHs_MatchedWithDiquark_Prob_fj_pT_pTcuts-> Fill("<300 GeV",1);
+                                     else                                      h_NotHs_MatchedWithDiquark_Prob_fj_pT_pTcuts-> Fill(">300 GeV",1);
+                                   }
+                                 else
+                                   {
+                                     h_NotHs_Prob_Diquark_match_with_fj -> Fill("Matched",1);
+                                     h_NotHs_MatchedWithDiquark_fj_pT -> Fill(closest_toObj1_fatJet_p4.pt());
+				     h_NotHs_MatchedWithDiquark_Prob_fj_pT -> Fill("<300 GeV",0);
+                                     if(closest_toObj1_fatJet_p4.pt() < 300.0) h_NotHs_MatchedWithDiquark_Prob_fj_pT-> Fill("<300 GeV",1);
+                                     else                                      h_NotHs_MatchedWithDiquark_Prob_fj_pT-> Fill(">300 GeV",1);
+                                   }
+                               }
+                             else if(applyCut) h_NotHs_Prob_Diquark_match_with_fj_pTcuts ->Fill("Not Matched",1);
+                             else         h_NotHs_Prob_Diquark_match_with_fj        ->Fill("Not Matched",1);
+                           } //%2
+			 
+		       } // %1  
+
+                     else if(applyCut) h_NotHs_OnlyQQ_dR_less_p7_pTcuts -> Fill("False",1);
+                     else              h_NotHs_OnlyQQ_dR_less_p7 -> Fill("False",1);
+                   }// for applying cuts
+
+		 
+	       } //else the top is not from Higgs                 
+           }     //if top               
+       }         //for gen particles  
+   }
+ 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+ //////kchristo//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////// TTsample, top-pt Reweighting/////////////////////////////////////////////////////////////////////
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+ if(1)
+   {
+     for (auto& p: fEvent.genparticles().getGenParticles())
+       {
+         if(std::abs(p.pdgId()) == 6 && p.isFirstCopy()) // find the top
+           {
+	     h_ttsample_Top_pt  -> Fill (p.pt());
+	   }
+       }   //for gen-particle
+   }
+
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
+ ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
  //////kchristo/////////////////////////////////////////Old Version////////////////////////////////////////////////////////////////////////// 
@@ -3008,7 +5241,7 @@ void kcKinematics::process(Long64_t entry) {
    {
      for (auto& p: fEvent.genparticles().getGenParticles())
        {
-	 if (p.pdgId() == 37 && p.isFirstCopy()) // find the Higgs
+	 if (std::abs(p.pdgId()) == 37 && p.isFirstCopy()) // find the Higgs
 	   {
 	     math::XYZTLorentzVector b_fromH_p4(0,0,0,0), top_fromH_p4(0,0,0,0);
 	     math::XYZTLorentzVector b_fromTop_fromH_p4(0,0,0,0), obj1_fromW_fromTop_p4(0,0,0,0), obj2_fromW_fromTop_p4(0,0,0,0);
@@ -3024,13 +5257,13 @@ void kcKinematics::process(Long64_t entry) {
 	       {
 		 genParticle d = fEvent.genparticles().getGenParticles()[lastHiggs_daughters.at(i)]; //create the particle object   
 		 
-		 if(d.pdgId() == -5) //if b from Higgs
+		 if(std::abs(d.pdgId()) == 5) //if b from Higgs
 		   {
 		     b_exist = true;
 		     b_fromH_p4 = d.p4();
 		   }
 
-		 if (d.pdgId() == 6) // if top from Higgs
+		 if (std::abs(d.pdgId()) == 6) // if top from Higgs
 		   {
 		     top_fromH_p4 = d.p4();
 		     unsigned int lastcopyt = GetTheLastCopy(d.index()); // we need to find the last copy in order to find the real daughters
@@ -3042,13 +5275,13 @@ void kcKinematics::process(Long64_t entry) {
 		       {
 			 genParticle Higgs_grand_d = fEvent.genparticles().getGenParticles()[Top_daughters.at(j)];
 			 
-			 if (Higgs_grand_d.pdgId() == 5) // if b from top from Higgs
+			 if (std::abs(Higgs_grand_d.pdgId()) == 5) // if b from top from Higgs
 			   {
 			     b_fromtop_exist = true;
 			     b_fromTop_fromH_p4 = Higgs_grand_d.p4();
 			   }
 
-			 else if (Higgs_grand_d.pdgId() == 24) //if W from top from Higgs
+			 else if (std::abs(Higgs_grand_d.pdgId()) == 24) //if W from top from Higgs
 			   {
 			     unsigned int lastcopyW = GetTheLastCopy(Higgs_grand_d.index()); // we need to find the last copy in order to find the real daughters
 			     lastcopy_W_fromTop_fromH = fEvent.genparticles().getGenParticles()[lastcopyW];
@@ -3141,14 +5374,14 @@ void kcKinematics::process(Long64_t entry) {
            {
              genParticle m; //create the particle object
 	     m =  fEvent.genparticles().getGenParticles()[b_mothers.at(i)];
-             if ( m.pdgId() == -6) 
+             if ( std::abs(m.pdgId()) == 6) 
 	       {
 		 bquarkno = 3;
 		 h_bfromAssociatedTop_Pt -> Fill(p.pt());
 		 h_bfromAssociatedTop_Eta -> Fill(p.eta());   
 	       }
 	     
-	     else if ( m.pdgId() == 37)
+	     else if ( std::abs(m.pdgId()) == 37)
 	       {
 	         bquarkno = 1;
 		 h_bfromH_Pt -> Fill(p.pt());
@@ -3169,7 +5402,7 @@ void kcKinematics::process(Long64_t entry) {
 		 
 	       }
 
-	     else if ( m.pdgId() == 6)
+	     else if ( std::abs(m.pdgId()) == 6)
 	       {
 	         bquarkno = 2;
 		 h_bfromtopfromH_Pt -> Fill(p.pt());
@@ -3177,7 +5410,7 @@ void kcKinematics::process(Long64_t entry) {
 	       }
 
 
-	     else if ( abs(m.pdgId()) == 21)
+	     else if ( std::abs(abs(m.pdgId())) == 21)
 	       {
 		 std::vector<short> mothersofgluon = m.mothers();
 		 for (unsigned int im = 0; im < mothersofgluon.size() ; im++)
@@ -3185,7 +5418,7 @@ void kcKinematics::process(Long64_t entry) {
 		     genParticle mg;
 		     mg = fEvent.genparticles().getGenParticles()[mothersofgluon.at(im)];
 
-		     if(mg.pdgId() == 2212) //gluon from hard scattering
+		     if(std::abs(mg.pdgId()) == 2212) //gluon from hard scattering
 		       {
 			 if(p.pt() == 0.0) continue; //sanity check
 			 
