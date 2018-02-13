@@ -249,6 +249,7 @@ signalHH160Style = signalHHStyle.clone()
 
 signal180Style = signalStyle.clone()
 signal190Style = signalStyle.clone()
+
 """
 # Problem with StyleCompound: solid signal histo in control plots. 13122016/SL
 signal200Style = StyleCompound([
@@ -326,6 +327,11 @@ noTopStyle        = Style(ROOT.kOpenSquare, ROOT.kRed+1) #ROOT.kRed-9)
 #StyleCompound([StyleMarker(markerSize=1.2, markerColor=ROOT.kBlue-3, markerSizes=None, markerStyle=4),
 #                                   StyleLine(lineColor=ROOT.kBlue-3, lineStyle=ROOT.kSolid, lineWidth=4), 
 #                                   StyleFill(fillColor=ROOT.kBlue-3, fillStyle=3001)])
+# kchristo
+#justmarkerStyle   = StyleCompound([StyleMarker(markerSize=1.2, markerColor=ROOT.kBlue, markerSizes=SetMarkerStyle(1), markerStyle=ROOT.kFullTriangleUp),
+#                                   StyleLine(lineColor=ROOT.kBlue, lineStyle=0, lineWidth=0),
+#                                   StyleFill(fillColor=ROOT.kBlue, fillStyle=0)])
+#
 
 baselineStyle     = StyleCompound([StyleMarker(markerSize=1.2, markerColor=ROOT.kBlue, markerSizes=None, markerStyle=ROOT.kFullTriangleUp),
                                    StyleLine(lineColor=ROOT.kBlue, lineStyle=ROOT.kSolid, lineWidth=3), 
