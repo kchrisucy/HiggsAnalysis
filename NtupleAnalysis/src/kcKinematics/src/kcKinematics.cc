@@ -40,8 +40,12 @@ public:
   /// Called for each event                                                      
   virtual void process(Long64_t entry) override;
   virtual vector<genParticle> GetGenParticles(const vector<genParticle> genParticles, double ptCut, double etaCut, const int pdgId, const bool isLastCopy=true, const bool hasNoDaughters=false);
-  virtual vector<GenJet> GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCut, std::vector<float> etaCut);
-  virtual vector<GenJet> GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCut, std::vector<float> etaCut, vector<genParticle> genParticlesToMatch);
+  // kchristo, different pT cuts/////////////////////////////////////////////////////////
+  //  virtual vector<GenJet> GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCut, std::vector<float> etaCut);
+  //  virtual vector<GenJet> GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCut, std::vector<float> etaCut, vector<genParticle> genParticlesToMatch);
+  virtual vector<GenJet> GetGenJets(const GenJetCollection& genJets, double ptCut, std::vector<float> etaCut);
+  virtual vector<GenJet> GetGenJets(const vector<GenJet> genJets, double ptCut, std::vector<float> etaCut, vector<genParticle> genParticlesToMatch);
+  //////////////////////////////////////////////////////////////////////////////////////////
   virtual TMatrixDSym ComputeMomentumTensor(std::vector<math::XYZTLorentzVector> jets, double r = 2.0);
   virtual TMatrixDSym ComputeMomentumTensor2D(std::vector<math::XYZTLorentzVector> jets);
   virtual vector<float> GetMomentumTensorEigenValues(std::vector<math::XYZTLorentzVector> jets,
@@ -79,7 +83,10 @@ private:
   const double cfg_TauPtCut;
   const double cfg_TauEtaCut;
   const ParameterSet PSet_JetSelection;
-  const std::vector<float> cfg_JetPtCuts;
+  // kchristo, different pT cuts////////////////////////////////////////////////////////// 
+  //const std::vector<float> cfg_JetPtCuts;
+  const double cfg_JetPtCuts;
+  ////////////////////////////////////////////////////////////////////////////////////////
   const std::vector<float> cfg_JetEtaCuts;
   const DirectionalCut<int> cfg_JetNumberCut;
   const ParameterSet PSet_HtSelection;
@@ -88,7 +95,10 @@ private:
   //const DirectionalCut<float> cfg_HtCut;
   ////////////////////////////////////////////////////////////////////////////////////////
   const ParameterSet PSet_BJetSelection;
-  const std::vector<float> cfg_BJetPtCuts;
+  // kchristo, different pT cuts//////////////////////////////////////////////////////////
+  //const std::vector<float> cfg_BJetPtCuts;
+  const double cfg_BJetPtCuts;
+  ////////////////////////////////////////////////////////////////////////////////////////
   const std::vector<float> cfg_BJetEtaCuts;
   const DirectionalCut<int> cfg_BJetNumberCut;
   // METSelection PSet_METSelection;                                                                                                                 
@@ -132,22 +142,22 @@ private:
   WrappedTH1 *h_genHT_GenJets;
 
   // Event-Shape Variables                                                                                                                            
-  WrappedTH1 *h_y23;
-  WrappedTH1 *h_Sphericity;
-  WrappedTH1 *h_SphericityT;
-  WrappedTH1 *h_Y;
-  WrappedTH2 *h_S_Vs_Y;
-  WrappedTH1 *h_Aplanarity;
-  WrappedTH1 *h_Planarity;
-  WrappedTH1 *h_CParameter;
-  WrappedTH1 *h_DParameter;
-  WrappedTH1 *h_H2;
-  WrappedTH1 *h_Circularity;
-  WrappedTH1 *h_Centrality;
-  WrappedTH1 *h_HT;
-  WrappedTH1 *h_JT;
-  WrappedTH1 *h_MHT;
-  WrappedTH1 *h_AlphaT;
+  //WrappedTH1 *h_y23;
+  //WrappedTH1 *h_Sphericity;
+  //WrappedTH1 *h_SphericityT;
+  //WrappedTH1 *h_Y;
+  //WrappedTH2 *h_S_Vs_Y;
+  //WrappedTH1 *h_Aplanarity;
+  //WrappedTH1 *h_Planarity;
+  //WrappedTH1 *h_CParameter;
+  //WrappedTH1 *h_DParameter;
+  //WrappedTH1 *h_H2;
+  //WrappedTH1 *h_Circularity;
+  //WrappedTH1 *h_Centrality;
+  //WrappedTH1 *h_HT;
+  //WrappedTH1 *h_JT;
+  //WrappedTH1 *h_MHT;
+  //WrappedTH1 *h_AlphaT;
 
   // GenParticles: BQuarks                                                                                                                            
   //  vector<WrappedTH1*> vh_BQuarks_Eta;                                                                                                             
@@ -619,7 +629,10 @@ kcKinematics::kcKinematics(const ParameterSet& config, const TH1* skimCounters)
     cfg_TauPtCut(config.getParameter<float>("TauSelection.tauPtCut")),
     cfg_TauEtaCut(config.getParameter<float>("TauSelection.tauEtaCut")),
     PSet_JetSelection(config.getParameter<ParameterSet>("JetSelection")),
-    cfg_JetPtCuts(config.getParameter<std::vector<float>>("JetSelection.jetPtCuts")),
+    // kchristo, different pT cuts//////////////////////////////////////////////////////////
+    //cfg_JetPtCuts(config.getParameter<std::vector<float>>("JetSelection.jetPtCuts")),
+    cfg_JetPtCuts(40.0),
+    ////////////////////////////////////////////////////////////////////////////////////////
     cfg_JetEtaCuts(config.getParameter<std::vector<float>>("JetSelection.jetEtaCuts")),
     cfg_JetNumberCut(config, "JetSelection.numberOfJetsCut"),
     PSet_HtSelection(config.getParameter<ParameterSet>("JetSelection")),
@@ -628,7 +641,10 @@ kcKinematics::kcKinematics(const ParameterSet& config, const TH1* skimCounters)
     cfg_HtCut(900.0),
     ////////////////////////////////////////////////////////////////////////////////////////
     PSet_BJetSelection(config.getParameter<ParameterSet>("BJetSelection")),
-    cfg_BJetPtCuts(config.getParameter<std::vector<float>>("BJetSelection.jetPtCuts")),
+    // kchristo, different pT cuts//////////////////////////////////////////////////////////
+    //cfg_BJetPtCuts(config.getParameter<std::vector<float>>("BJetSelection.jetPtCuts")),
+    cfg_BJetPtCuts(40.0),
+    ////////////////////////////////////////////////////////////////////////////////////////
     cfg_BJetEtaCuts(config.getParameter<std::vector<float>>("BJetSelection.jetEtaCuts")),
     cfg_BJetNumberCut(config, "BJetSelection.numberOfBJetsCut"),
     // PSet_METSelection(config.getParameter<ParameterSet>("METSelection")),                        
@@ -723,22 +739,22 @@ void kcKinematics::book(TDirectory *dir) {
   h_genHT_GenJets     =  fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital      , th1, "genHT_GenJets", ";GenJ H_{T} (GeV)"             , nBinsM  , minM  , maxM   );
 
   // Event-Shape Variables                                  
-  h_y23         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "y23"        , ";y_{23}"        , 25, 0.0,    0.25);
-  h_Sphericity  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Sphericity" , ";Sphericity"    , 20, 0.0,    1.00);
-  h_SphericityT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "SphericityT", ";Sphericity_{T}", 20, 0.0,    1.00);
-  h_Y           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Y"          , ";Y"             , 50, 0.0,    0.50);
-  h_S_Vs_Y      = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "S_Vs_Y"     , ";Sphericity;Y=#frac{#sqrt{3}}{2}x(Q1-Q2)", 100, 0.0, 1.0, 50, 0.0, 0.5);
-  h_Aplanarity  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Aplanarity" , ";Aplanarity" , 25, 0.0, 0.5);
-  h_Planarity   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Planarity"  , ";Planarity"  , 25, 0.0, 0.5);
-  h_CParameter  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "CParameter" , ";C"          , 20, 0.0, 1.0);
-  h_DParameter  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "DParameter" , ";D"          , 20, 0.0, 1.0);
-  h_H2          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "H2"         , ";H_{2}"      , 20, 0.0, 1.0);
-  h_Circularity = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Circularity", ";Circularity", 20, 0.0, 1.0);
-  h_Centrality  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Centrality" , ";Centrality" , 20, 0.0, 1.0);
-  h_HT          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "HT"         , ";H_{T}"      , 30, 0.0, 4000.0);
-  h_JT          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "JT"         , ";J_{T}"      , 30, 0.0, 4000.0);
-  h_MHT         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "MHT"        , ";MHT"        , 50, 0.0,  500.0);
-  h_AlphaT      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "AlphaT"     , ";#alpha_{T}" , 20, 0.0,    1.0);
+  //h_y23         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "y23"        , ";y_{23}"        , 25, 0.0,    0.25);
+  //h_Sphericity  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Sphericity" , ";Sphericity"    , 20, 0.0,    1.00);
+  //h_SphericityT = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "SphericityT", ";Sphericity_{T}", 20, 0.0,    1.00);
+  //h_Y           = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Y"          , ";Y"             , 50, 0.0,    0.50);
+  //h_S_Vs_Y      = fHistoWrapper.makeTH<TH2F>(HistoLevel::kVital, th2, "S_Vs_Y"     , ";Sphericity;Y=#frac{#sqrt{3}}{2}x(Q1-Q2)", 100, 0.0, 1.0, 50, 0.0, 0.5);
+  //h_Aplanarity  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Aplanarity" , ";Aplanarity" , 25, 0.0, 0.5);
+  //h_Planarity   = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Planarity"  , ";Planarity"  , 25, 0.0, 0.5);
+  //h_CParameter  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "CParameter" , ";C"          , 20, 0.0, 1.0);
+  //h_DParameter  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "DParameter" , ";D"          , 20, 0.0, 1.0);
+  //h_H2          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "H2"         , ";H_{2}"      , 20, 0.0, 1.0);
+  //h_Circularity = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Circularity", ";Circularity", 20, 0.0, 1.0);
+  //h_Centrality  = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "Centrality" , ";Centrality" , 20, 0.0, 1.0);
+  //h_HT          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "HT"         , ";H_{T}"      , 30, 0.0, 4000.0);
+  //h_JT          = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "JT"         , ";J_{T}"      , 30, 0.0, 4000.0);
+  //h_MHT         = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "MHT"        , ";MHT"        , 50, 0.0,  500.0);
+  //h_AlphaT      = fHistoWrapper.makeTH<TH1F>(HistoLevel::kVital, th1, "AlphaT"     , ";#alpha_{T}" , 20, 0.0,    1.0);
 
   // GenParticles: B-quarks                                                                                                                        
 
@@ -1300,7 +1316,7 @@ void kcKinematics::book(TDirectory *dir) {
 
 
     // -----------------------------------------------------------------------------------------------------------------------------------
-
+  // end of plots
 
   return;
 }
@@ -6411,7 +6427,10 @@ double kcKinematics::GetAlphaT(std::vector<math::XYZTLorentzVector> jets,
   return AlphaT;
 }
 
-vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCuts, std::vector<float> etaCuts, vector<genParticle> genParticlesToMatch)
+// kchristo, different pT cuts/////////////////////////////////////////////////////////
+//vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCuts, std::vector<float> etaCuts, vector<genParticle> genParticlesToMatch)
+vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, double ptCuts, std::vector<float> etaCuts, vector<genParticle> genParticlesToMatch)
+///////////////////////////////////////////////////////////////////////////////////////
 {
   /*                                                                                                                        
     Jet-Flavour Definitions (https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagMCTools)                             
@@ -6457,10 +6476,12 @@ vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vecto
           // Fail to match                                                                    
           if (dR > 0.3) continue;
 
-          // Apply cuts after the matching                                                                          
-          const float ptCut  = ptCuts.at(ptCut_index);
+          // Apply cuts after the matching                                  
+	  // kchristo, different pT cuts/////////////////////////////////////////////////////////
+          //const float ptCut  = ptCuts.at(ptCut_index);
+	  ///////////////////////////////////////////////////////////////////////////////////////
           const float etaCut = etaCuts.at(etaCut_index);
-	  if (jet.pt() < ptCut) continue;
+	  if (jet.pt() < ptCuts) continue; //also the "ptCut"
           if (std::abs(jet.eta()) > etaCut) continue;
 
           // Save this particle                                           
@@ -6468,8 +6489,10 @@ vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vecto
           if (0) std::cout << "dR = " << dR << ": dPt = " << dPt << ", dEta = " << dEta << ", dPhi = " << dPhi << std::endl;
 
           // Increment cut index only. Cannot be bigger than the size of the cut list provided                    
-          if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
-          if (etaCut_index < etaCuts.size()-1  ) etaCut_index++;
+	  // kchristo, different pT cuts/////////////////////////////////////////////////////////
+	  //if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
+	  ///////////////////////////////////////////////////////////////////////////////////////
+	  if (etaCut_index < etaCuts.size()-1  ) etaCut_index++;
           break;
         }
     }
@@ -6477,7 +6500,10 @@ vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vecto
   return jets;
 }
 
-vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCuts, std::vector<float> etaCuts)
+// kchristo, different pT cuts/////////////////////////////////////////////////////////
+//vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCuts, std::vector<float> etaCuts)
+vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, double ptCuts, std::vector<float> etaCuts)
+///////////////////////////////////////////////////////////////////////////////////////
 {
   std::vector<GenJet> jets;
 
@@ -6493,17 +6519,21 @@ vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, std::ve
       // Jet index (for pT and eta cuts)                                   
       jet_index++;
 
-      // Apply cuts                                                                                       
-      const float ptCut  = ptCuts.at(ptCut_index);
+      // Apply cuts                     
+      // kchristo, different pT cuts/////////////////////////////////////////////////////////
+      //const float ptCut  = ptCuts.at(ptCut_index);
+      ///////////////////////////////////////////////////////////////////////////////////////
       const float etaCut = etaCuts.at(etaCut_index);
-      if (jet.pt() < ptCut) continue;
+      if (jet.pt() < ptCuts) continue; //also the "ptCut"
       if (std::abs(jet.eta()) > etaCut) continue;
 
       // Save this particle                                                                                            
       jets.push_back(jet);
 
       // Increment cut index only. Cannot be bigger than the size of the cut list provided                                 
-      if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
+      // kchristo, different pT cuts/////////////////////////////////////////////////////////
+      //if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
+      //////////////////////////////////////////////////////////////////////////////////////
       if (etaCut_index < etaCuts.size()-1  ) etaCut_index++;
     }
   return jets;
