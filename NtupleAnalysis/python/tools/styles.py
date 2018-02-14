@@ -256,10 +256,7 @@ signal170Style = signalStyle.clone()
 signal175Style = signalStyle.clone()
 signal180Style = signalStyle.clone()
 signal190Style = signalStyle.clone()
-<<<<<<< HEAD
-=======
 signal200Style = signalStyle.clone()
->>>>>>> alexandros/master
 
 """
 # Problem with StyleCompound: solid signal histo in control plots. 13122016/SL
