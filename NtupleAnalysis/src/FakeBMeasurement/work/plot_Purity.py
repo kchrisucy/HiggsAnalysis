@@ -174,6 +174,13 @@ def main(opts):
         # Merge histograms (see NtupleAnalysis/python/tools/plots.py) 
         plots.mergeRenameReorderForDataMC(datasetsMgr) 
 
+        # Get Luminosity
+        if opts.intLumi < 0:
+            if "Data" in datasetsMgr.getAllDatasetNames():
+                opts.intLumi = datasetsMgr.getDataset("Data").getLuminosity()
+            else:
+                opts.intLumi = 1.0
+
         # Re-order datasets (different for inverted than default=baseline)
         if 0:
             newOrder = ["Data"]
@@ -352,6 +359,7 @@ def PlotHistoGraphs(hGraphList, _kwargs):
 
     # Create & draw the plot    
     p = plots.PlotBase( hGraphList, saveFormats=[])
+    p.setLuminosity(opts.intLumi)
     plots.drawPlot(p, histoName, **_kwargs)
 
     # Save the plot
@@ -382,7 +390,7 @@ def GetHistoKwargs(histoName, opts):
         "ratioInvert"      : False,
         "stackMCHistograms": False,
         "addMCUncertainty" : True,
-        "addLuminosityText": False,
+        "addLuminosityText": True,
         "addCmsText"       : True,
         "cmsExtraText"     : "Preliminary",
         # "opts"             : _opts,
@@ -473,11 +481,11 @@ def GetHistoKwargs(histoName, opts):
         myBins   = metBins
         
     if "mvamax1" in h.lower():
-        _xlabel = "Leading MVA"
+        _xlabel = "leading BDT"
         _cutBox = {"cutValue": 0.85, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
         myBins  = mvaBins
     if "mvamax2" in h.lower():
-        _xlabel = "Subleading MVA"
+        _xlabel = "subleading BDT"
         _cutBox = {"cutValue": 0.85, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
         myBins  = mvaBins
     if "trijetm" in h.lower():
