@@ -141,6 +141,9 @@ def main():
     from HiggsAnalysis.NtupleAnalysis.parameters.hplus2tbAnalysis import allSelections
     allSelections.verbose = opts.verbose
     allSelections.histogramAmbientLevel = opts.histoLevel
+    # kchristo
+    #allSelections.JetSelection.HTCutValue = 0.0
+    ##########
     # allSelections.BjetSelection.triggerMatchingApply = True
     # allSelections.TopSelection.ChiSqrCutValue = 100.0
     # allSelections.BJetSelection.numberOfBJetsCutValue = 0

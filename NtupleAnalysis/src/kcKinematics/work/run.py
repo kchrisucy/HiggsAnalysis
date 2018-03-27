@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 '''
+To change the defaul settings, go to "Overwrite Default Settings"  
+
 INSTRUCTIONS:
 The required minimum input is a multiCRAB directory with at least one dataset. If successfull
 a pseudo multiCRAB with name "analysis_YYMMDD_HHMMSS/" will be created, inside which each
@@ -141,6 +143,11 @@ def main():
     from HiggsAnalysis.NtupleAnalysis.parameters.hplus2tbAnalysis import allSelections
     allSelections.verbose = opts.verbose
     allSelections.histogramAmbientLevel = opts.histoLevel
+    # kchristo ####################################################################################
+    allSelections.JetSelection.HTCutValue = 0.0
+    allSelections.JetSelection.jetPtCuts = [40.0,40.0,40.0,40.0,40.0,40.0,40.0]
+    allSelections.BJetSelection.jetPtCuts = [40.0, 40.0, 40.0]
+    ###############################################################################################
     # allSelections.BjetSelection.triggerMatchingApply = True
     # allSelections.TopSelection.ChiSqrCutValue = 100.0
     # allSelections.BJetSelection.numberOfBJetsCutValue = 0

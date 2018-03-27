@@ -40,12 +40,8 @@ public:
   /// Called for each event                                                      
   virtual void process(Long64_t entry) override;
   virtual vector<genParticle> GetGenParticles(const vector<genParticle> genParticles, double ptCut, double etaCut, const int pdgId, const bool isLastCopy=true, const bool hasNoDaughters=false);
-  // kchristo, different pT cuts/////////////////////////////////////////////////////////
-  //  virtual vector<GenJet> GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCut, std::vector<float> etaCut);
-  //  virtual vector<GenJet> GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCut, std::vector<float> etaCut, vector<genParticle> genParticlesToMatch);
-  virtual vector<GenJet> GetGenJets(const GenJetCollection& genJets, double ptCut, std::vector<float> etaCut);
-  virtual vector<GenJet> GetGenJets(const vector<GenJet> genJets, double ptCut, std::vector<float> etaCut, vector<genParticle> genParticlesToMatch);
-  //////////////////////////////////////////////////////////////////////////////////////////
+  virtual vector<GenJet> GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCut, std::vector<float> etaCut);
+  virtual vector<GenJet> GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCut, std::vector<float> etaCut, vector<genParticle> genParticlesToMatch);
   virtual TMatrixDSym ComputeMomentumTensor(std::vector<math::XYZTLorentzVector> jets, double r = 2.0);
   virtual TMatrixDSym ComputeMomentumTensor2D(std::vector<math::XYZTLorentzVector> jets);
   virtual vector<float> GetMomentumTensorEigenValues(std::vector<math::XYZTLorentzVector> jets,
@@ -83,22 +79,13 @@ private:
   const double cfg_TauPtCut;
   const double cfg_TauEtaCut;
   const ParameterSet PSet_JetSelection;
-  // kchristo, different pT cuts////////////////////////////////////////////////////////// 
-  //const std::vector<float> cfg_JetPtCuts;
-  const double cfg_JetPtCuts;
-  ////////////////////////////////////////////////////////////////////////////////////////
+  const std::vector<float> cfg_JetPtCuts;
   const std::vector<float> cfg_JetEtaCuts;
   const DirectionalCut<int> cfg_JetNumberCut;
   const ParameterSet PSet_HtSelection;
-  // kchristo, different HT///////////////////////////////////////////////////////////////
-  const double cfg_HtCut;
-  //const DirectionalCut<float> cfg_HtCut;
-  ////////////////////////////////////////////////////////////////////////////////////////
+  const DirectionalCut<float> cfg_HtCut;
   const ParameterSet PSet_BJetSelection;
-  // kchristo, different pT cuts//////////////////////////////////////////////////////////
-  //const std::vector<float> cfg_BJetPtCuts;
-  const double cfg_BJetPtCuts;
-  ////////////////////////////////////////////////////////////////////////////////////////
+  const std::vector<float> cfg_BJetPtCuts;
   const std::vector<float> cfg_BJetEtaCuts;
   const DirectionalCut<int> cfg_BJetNumberCut;
   // METSelection PSet_METSelection;                                                                                                                 
@@ -629,22 +616,13 @@ kcKinematics::kcKinematics(const ParameterSet& config, const TH1* skimCounters)
     cfg_TauPtCut(config.getParameter<float>("TauSelection.tauPtCut")),
     cfg_TauEtaCut(config.getParameter<float>("TauSelection.tauEtaCut")),
     PSet_JetSelection(config.getParameter<ParameterSet>("JetSelection")),
-    // kchristo, different pT cuts//////////////////////////////////////////////////////////
-    //cfg_JetPtCuts(config.getParameter<std::vector<float>>("JetSelection.jetPtCuts")),
-    cfg_JetPtCuts(40.0),
-    ////////////////////////////////////////////////////////////////////////////////////////
+    cfg_JetPtCuts(config.getParameter<std::vector<float>>("JetSelection.jetPtCuts")),
     cfg_JetEtaCuts(config.getParameter<std::vector<float>>("JetSelection.jetEtaCuts")),
     cfg_JetNumberCut(config, "JetSelection.numberOfJetsCut"),
     PSet_HtSelection(config.getParameter<ParameterSet>("JetSelection")),
-    // kchristo, different HT///////////////////////////////////////////////////////////////
-    //cfg_HtCut(config, "JetSelection.HTCut"),
-    cfg_HtCut(900.0),
-    ////////////////////////////////////////////////////////////////////////////////////////
+    cfg_HtCut(config, "JetSelection.HTCut"),
     PSet_BJetSelection(config.getParameter<ParameterSet>("BJetSelection")),
-    // kchristo, different pT cuts//////////////////////////////////////////////////////////
-    //cfg_BJetPtCuts(config.getParameter<std::vector<float>>("BJetSelection.jetPtCuts")),
-    cfg_BJetPtCuts(40.0),
-    ////////////////////////////////////////////////////////////////////////////////////////
+    cfg_BJetPtCuts(config.getParameter<std::vector<float>>("BJetSelection.jetPtCuts")),
     cfg_BJetEtaCuts(config.getParameter<std::vector<float>>("BJetSelection.jetEtaCuts")),
     cfg_BJetNumberCut(config, "BJetSelection.numberOfBJetsCut"),
     // PSet_METSelection(config.getParameter<ParameterSet>("METSelection")),                        
@@ -1416,10 +1394,7 @@ void kcKinematics::process(Long64_t entry) {
       selJets_p4.push_back( jet_p4 );
     }
 
-  // kchristo, different HT///////////////////////////////////////////////////////////////
-  //if ( !cfg_HtCut.passedCut(genJ_HT) ) return;
-  if (genJ_HT < cfg_HtCut) return;
-  ////////////////////////////////////////////////////////////////////////////////////////
+  if ( !cfg_HtCut.passedCut(genJ_HT) ) return;
   cJetSelection.increment();
 
   //================================================================================================                                                  
@@ -3092,7 +3067,7 @@ void kcKinematics::process(Long64_t entry) {
  //////kchristo////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
  ////////////////////////////////////////////////////// Study Boosted Topologies///////////////////////////////////////////////////////////// 
  /////////////////////////////////////////////////////////With fat Jets//////////////////////////////////////////////////////////////////////
- if(1)
+ if(0)
    {
      for (auto& p: fEvent.genparticles().getGenParticles())
        {
@@ -4770,7 +4745,7 @@ void kcKinematics::process(Long64_t entry) {
  //////kchristo//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////// TTsample, top-pt Reweighting/////////////////////////////////////////////////////////////////////
  ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- if(1)
+ if(0)
    {
      for (auto& p: fEvent.genparticles().getGenParticles())
        {
@@ -6427,10 +6402,7 @@ double kcKinematics::GetAlphaT(std::vector<math::XYZTLorentzVector> jets,
   return AlphaT;
 }
 
-// kchristo, different pT cuts/////////////////////////////////////////////////////////
-//vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCuts, std::vector<float> etaCuts, vector<genParticle> genParticlesToMatch)
-vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, double ptCuts, std::vector<float> etaCuts, vector<genParticle> genParticlesToMatch)
-///////////////////////////////////////////////////////////////////////////////////////
+vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, std::vector<float> ptCuts, std::vector<float> etaCuts, vector<genParticle> genParticlesToMatch)
 {
   /*                                                                                                                        
     Jet-Flavour Definitions (https://twiki.cern.ch/twiki/bin/view/CMSPublic/SWGuideBTagMCTools)                             
@@ -6477,11 +6449,9 @@ vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, double ptC
           if (dR > 0.3) continue;
 
           // Apply cuts after the matching                                  
-	  // kchristo, different pT cuts/////////////////////////////////////////////////////////
-          //const float ptCut  = ptCuts.at(ptCut_index);
-	  ///////////////////////////////////////////////////////////////////////////////////////
-          const float etaCut = etaCuts.at(etaCut_index);
-	  if (jet.pt() < ptCuts) continue; //also the "ptCut"
+          const float ptCut  = ptCuts.at(ptCut_index);
+	  const float etaCut = etaCuts.at(etaCut_index);
+	  if (jet.pt() < ptCut) continue;
           if (std::abs(jet.eta()) > etaCut) continue;
 
           // Save this particle                                           
@@ -6489,9 +6459,7 @@ vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, double ptC
           if (0) std::cout << "dR = " << dR << ": dPt = " << dPt << ", dEta = " << dEta << ", dPhi = " << dPhi << std::endl;
 
           // Increment cut index only. Cannot be bigger than the size of the cut list provided                    
-	  // kchristo, different pT cuts/////////////////////////////////////////////////////////
-	  //if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
-	  ///////////////////////////////////////////////////////////////////////////////////////
+	  if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
 	  if (etaCut_index < etaCuts.size()-1  ) etaCut_index++;
           break;
         }
@@ -6500,10 +6468,7 @@ vector<GenJet> kcKinematics::GetGenJets(const vector<GenJet> genJets, double ptC
   return jets;
 }
 
-// kchristo, different pT cuts/////////////////////////////////////////////////////////
-//vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCuts, std::vector<float> etaCuts)
-vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, double ptCuts, std::vector<float> etaCuts)
-///////////////////////////////////////////////////////////////////////////////////////
+vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, std::vector<float> ptCuts, std::vector<float> etaCuts)
 {
   std::vector<GenJet> jets;
 
@@ -6520,20 +6485,16 @@ vector<GenJet> kcKinematics::GetGenJets(const GenJetCollection& genJets, double 
       jet_index++;
 
       // Apply cuts                     
-      // kchristo, different pT cuts/////////////////////////////////////////////////////////
-      //const float ptCut  = ptCuts.at(ptCut_index);
-      ///////////////////////////////////////////////////////////////////////////////////////
+      const float ptCut  = ptCuts.at(ptCut_index);
       const float etaCut = etaCuts.at(etaCut_index);
-      if (jet.pt() < ptCuts) continue; //also the "ptCut"
+      if (jet.pt() < ptCut) continue;
       if (std::abs(jet.eta()) > etaCut) continue;
 
       // Save this particle                                                                                            
       jets.push_back(jet);
 
       // Increment cut index only. Cannot be bigger than the size of the cut list provided                                 
-      // kchristo, different pT cuts/////////////////////////////////////////////////////////
-      //if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
-      //////////////////////////////////////////////////////////////////////////////////////
+      if (ptCut_index  < ptCuts.size()-1  ) ptCut_index++;
       if (etaCut_index < etaCuts.size()-1  ) etaCut_index++;
     }
   return jets;

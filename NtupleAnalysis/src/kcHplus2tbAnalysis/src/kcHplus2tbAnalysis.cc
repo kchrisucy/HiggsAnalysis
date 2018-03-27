@@ -68,7 +68,7 @@ private:
   BJetSelection fBJetSelection;
   Count cBTaggingSFCounter;
   METSelection fMETSelection;
-  TopologySelection fTopologySelection;
+  //TopologySelection fTopologySelection;
   TopSelectionBDT fTopSelection;
   Count cSelected;
   
@@ -126,7 +126,7 @@ kcHplus2tbAnalysis::kcHplus2tbAnalysis(const ParameterSet& config, const TH1* sk
     fBJetSelection(config.getParameter<ParameterSet>("BJetSelection"), fEventCounter, fHistoWrapper, &fCommonPlots, ""),
     cBTaggingSFCounter(fEventCounter.addCounter("b tag SF")),
     fMETSelection(config.getParameter<ParameterSet>("METSelection"), fEventCounter, fHistoWrapper, &fCommonPlots, ""),
-    fTopologySelection(config.getParameter<ParameterSet>("TopologySelection"), fEventCounter, fHistoWrapper, &fCommonPlots, ""),
+    //fTopologySelection(config.getParameter<ParameterSet>("TopologySelection"), fEventCounter, fHistoWrapper, &fCommonPlots, ""),
     fTopSelection(config.getParameter<ParameterSet>("TopSelectionBDT"), fEventCounter, fHistoWrapper, &fCommonPlots, ""),
     cSelected(fEventCounter.addCounter("Selected Events")),  // Marina ","      
     // Marina                  
@@ -149,7 +149,7 @@ void kcHplus2tbAnalysis::book(TDirectory *dir) {
   fJetSelection.bookHistograms(dir);
   fBJetSelection.bookHistograms(dir);
   fMETSelection.bookHistograms(dir);
-  fTopologySelection.bookHistograms(dir);
+  //fTopologySelection.bookHistograms(dir);
   fTopSelection.bookHistograms(dir);
   
   // Marina
@@ -301,8 +301,8 @@ void kcHplus2tbAnalysis::process(Long64_t entry) {
   //================================================================================================
   // 11) Topology selection
   //================================================================================================
-  if (0) std::cout << "=== Topology selection" << std::endl;
-  const TopologySelection::Data topologyData = fTopologySelection.analyze(fEvent, jetData);
+  //if (0) std::cout << "=== Topology selection" << std::endl;
+  //const TopologySelection::Data topologyData = fTopologySelection.analyze(fEvent, jetData);
   // if (!topologyData.passedSelection()) return; 
 
   //================================================================================================
@@ -326,12 +326,13 @@ void kcHplus2tbAnalysis::process(Long64_t entry) {
   // Standard Selections
   //================================================================================================
   if (0) std::cout << "=== Standard Selections" << std::endl;
-  fCommonPlots.fillControlPlotsAfterStandardSelections(fEvent, jetData, bjetData, METData, topologyData, topData, bjetData.isGenuineB());
-  
+  //fCommonPlots.fillControlPlotsAfterStandardSelections(fEvent, jetData, bjetData, METData, jetData, topData, bjetData.isGenuineB());
+  fCommonPlots.fillControlPlotsAfterStandardSelections(fEvent, jetData, bjetData, METData, TopologySelection::Data(), topData, bjetData.isGenuineB());
+
   //================================================================================================
   // All Selections
   //================================================================================================
-  if (!topologyData.passedSelection()) return;
+  //if (!topologyData.passedSelection()) return;
   if (!topData.passedSelection()) return;
 
   if (0) std::cout << "=== All Selections" << std::endl;
@@ -370,11 +371,11 @@ void kcHplus2tbAnalysis::process(Long64_t entry) {
 	  double deltaR_fatJet_bjet  = ROOT::Math::VectorUtil::DeltaR(fatJet_p4,bJet_p4);
 	  if(deltaR_fatJet_bjet < deltaRmin_fatJet_bjet) deltaRmin_fatJet_bjet = deltaR_fatJet_bjet;
 	}  
-
+      
       h_IsFatJetBtagged                       -> Fill("b-tag",0);
       h_BtagFatJet_Prob_dRmin_bjet_less_p8    -> Fill("< 0.8",0);
       h_NotBtagFatJet_Prob_dRmin_bjet_less_p8 -> Fill("< 0.8",0);
-
+      
       if(FJhasBTagSubjet) 
 	{
 	  h_IsFatJetBtagged              -> Fill("b-tag",1);
@@ -392,7 +393,7 @@ void kcHplus2tbAnalysis::process(Long64_t entry) {
 	    }
 	  h_BtagFatJet_NumOfSubjets      -> Fill(fatjet.nSubjets());
 	}
-
+      
       else // if does not have btagsubjet
 	{
 	  h_IsFatJetBtagged              -> Fill("Not b-tag",1);
@@ -403,19 +404,19 @@ void kcHplus2tbAnalysis::process(Long64_t entry) {
 	      h_NotBtagFatJet_Prob_dRmin_bjet_less_p8 -> Fill("< 0.8",1);
 	      h_NotBtagFatJet_dRmin_bjet_less_p8_pT   -> Fill(fatJet_p4.pt());
 	    }
-          else     
+	  else     
 	    {
 	      h_NotBtagFatJet_Prob_dRmin_bjet_less_p8 -> Fill("> 0.8",1);
 	      h_NotBtagFatJet_dRmin_bjet_more_p8_pT   -> Fill(fatJet_p4.pt());
 	    }
 	  h_NotBtagFatJet_NumOfSubjets   -> Fill(fatjet.nSubjets());
 	}
-
+       
 
       //////kchristo/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
       ////////////////////////////////////////////////////// Study Boosted Topologies//////////////////////////////////////////////////////// 
       /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////// 
-      if(1)
+      if(0)
 	{
 	  for (auto& p: fEvent.genparticles().getGenParticles())
 	    {
