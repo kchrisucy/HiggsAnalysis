@@ -84,6 +84,13 @@ def createBinByBinStatUncertHistograms(hRate, xmin=None, xmax=None):
     nNegativeRate = 0
     nBelowMinStatUncert = 0
     nEmptyDownHistograms = 0
+
+#   TEST PRINT
+#    print "Contents of histogram %s:"%hRate.GetTitle()
+#    for i in range(1, hRate.GetNbinsX()+1):
+#        print "bin %d (from %f to %f): %f +- %f"%(i,hRate.GetXaxis().GetBinLowEdge(i),hRate.GetXaxis().GetBinUpEdge(i),hRate.GetBinContent(i),hRate.GetBinError(i))
+         
+
     # For-loop: All histogram bins
     for i in range(1, hRate.GetNbinsX()+1):
         #print hRate.GetXaxis().GetBinLowEdge(i), xmin, hRate.GetXaxis().GetBinUpEdge(i), xmax
@@ -931,11 +938,24 @@ class TableProducer:
             # asymmetric
             return "~^{+%s}_{-%s}"%(formatStr%uncUp, formatStr%uncDown)
 
-    def getLatexResultString(self, hwu,formatStr,myPrecision):
-        if not hwu==None:
-            return "$%s \\pm %s %s $"%(formatStr%hwu.getRate(),formatStr%hwu.getRateStatUncertainty(),
-                                       self.getLatexFormattedUnc(formatStr,myPrecision,*hwu.getRateSystUncertainty()))
-        else: return ""
+    def getLatexResultString(self, hwu, formatStr, myPrecision):
+        '''
+        hwu = Histo With Uncertainties
+        '''
+        if hwu==None:
+            return ""
+        
+        # For sanity checks
+        if 0:
+            hwu.printUncertainties()
+            hwu.Debug()
+        
+        # Construct the result with the given precision
+        rate   = formatStr % hwu.getRate()
+        stat   = formatStr % hwu.getRateStatUncertainty()
+        syst   = self.getLatexFormattedUnc(formatStr, myPrecision, *hwu.getRateSystUncertainty())
+        result = "$%s \\pm %s %s $" % (rate, stat, syst)
+        return result
 
     def makeEventYieldSummary(self):
         '''
@@ -953,6 +973,8 @@ class TableProducer:
         self.formatStr += "f"
         
         # For-loop: All mass points
+        global HW 
+        global containsQCDdataset
         for i, m in enumerate(self._config.MassPoints, 1):
             Verbose("Mass point is %d" % (m), i==1)
 
@@ -1007,6 +1029,7 @@ class TableProducer:
                     
 
             # Calculate signal yield
+            global myBr
             myBr = self._config.OptionBr
             if not (self._config.OptionLimitOnSigmaBr or m > 161 or HW==None):
                 if self._config.OptionBr == None:
@@ -1133,9 +1156,10 @@ class TableProducer:
             myOutputLatex += "\\GenuineB background              & %s \\\\ \n" % self.getLatexResultString(Embedding, self.formatStr, self.myPrecision)
         myOutputLatex += "  \\hline\n"
         myOutputLatex += "  Total expected from the SM              & %s \\\\ \n" % self.getLatexResultString(TotalExpected, self.formatStr, self.myPrecision)
-        if self._config.BlindAnalysis*0:
-            myOutputLatex += "  Observed: & BLINDED \\\\ \n"
-        myOutputLatex += "  Observed & %5d \\\\ \n"%self._observation.getCachedShapeRootHistogramWithUncertainties().getRate()
+        if self._config.BlindAnalysis:
+            myOutputLatex += "  Observed & BLINDED \\\\ \n"
+        else:
+            myOutputLatex += "  Observed & %5d \\\\ \n"%self._observation.getCachedShapeRootHistogramWithUncertainties().getRate()
         myOutputLatex += "  \\hline\n"
         myOutputLatex += "  \\end{tabular}\n"
         #myOutputLatex += "\\end{table}\n"
@@ -1205,13 +1229,12 @@ class TableProducer:
         signalColumn="CMS_Hptntj_Hp"
         if light:
             signalColumn="HW"
-        myColumnOrder = [signalColumn,
-                         "QCDandFakeTau",
-                         "ttbar_t_genuine",
-                         "W_t_genuine",
-                         "singleTop_t_genuine",
-                         "DY_t_genuine",
-                         "VV_t_genuine"]
+        myColumnOrder = [signalColumn, 
+                         "ttbar_CMS_Hptntj", 
+                         "CMS_Hptntj_W", 
+                         "CMS_Hptntj_singleTop",
+                         "CMS_Hptntj_DY", 
+                         "CMS_Hptntj_VV"]
 
 
         if self._h2tb:
@@ -1226,7 +1249,7 @@ class TableProducer:
                                ["CMS_eff_b", "b-tagging eff."],
                                ["CMS_scale_j", "jet energy scale"],
                                ["CMS_res_j", "jet energy resolution"],
-                               # ["CMS_topPtReweight","top $p_T$ reweighting"],
+                               ["CMS_topPtReweight","top $p_T$ reweighting"],
                                ["CMS_pileup", "pileup reweighting"],
                                ["CMS_topTagging", "top tagging"],
                                ["CMS_scale_ttbar", "$t\\bar{t}$ scale"],
@@ -1250,29 +1273,28 @@ class TableProducer:
                                ["CMS_eff_met_trg_MC","trigger MET leg eff. for MC"],
                                ["CMS_eff_e_veto","electron veto eff."],
                                ["CMS_eff_m_veto","muon veto eff."],
-                               # ["CMS_fake_eToTau","CMS fake eToTau"],
-                               # ["CMS_fake_muToTau","CMS fake muToTau"],
-                               # ["CMS_fake_jetToTau","CMS fake jetToTau"],
+                               ["CMS_fake_e_to_t","electrons mis-id. as taus"],
+                               ["CMS_fake_m_to_t","muons mis-id. as taus"],
                                ["CMS_eff_b","b-tagging eff."],
                                ["CMS_fake_b","b-mistagging eff."],
                                ["CMS_scale_t","tau energy scale"],
                                ["CMS_scale_j","jet energy scale"],
                                ["CMS_scale_met","MET unclustered energy scale"],
                                ["CMS_res_j","jet energy resolution"],
-                               ["CMS_Hptntj_topPtReweight","top $p_T$ reweighting"],
+                               ["CMS_topPtReweight","top $p_T$ reweighting"],
                                ["CMS_pileup","pileup reweighting"],
-                               ["CMS_scale_ttbar", "ttbar scale"],
-                               ["CMS_pdf_ttbar", "ttbar pdf"],
-                               ["CMS_mass_ttbar", "ttbar mass"],
-                               ["CMS_scale_Wjets", "W+jets scale"],
-                               ["CMS_pdf_Wjets", "W+jets pdf"],
-                               ["CMS_scale_DY", "DY scale"],
-                               ["CMS_pdf_DY", "DY pdf"],
-                               ["CMS_scale_VV", "diboson scale"],
-                               ["CMS_pdf_VV", "diboson pdf"],
+                               ["QCDscale_ttbar", "ttbar scale"],
+                               ["pdf_ttbar", "ttbar pdf"],
+                               ["mass_ttbar", "ttbar mass"],
+                               ["QCDscale_Wjets", "W+jets scale"],
+                               ["pdf_Wjets", "W+jets pdf"],
+                               ["QCDscale_DY", "DY scale"],
+                               ["pdf_DY", "DY pdf"],
+                               ["QCDscale_VV", "diboson scale"],
+                               ["pdf_VV", "diboson pdf"],
                                ["lumi_13TeV","luminosity (13 TeV)"],
-                               ["CMS_Hptntj_QCDbkg_templateFit","Fake tau template fit"],
-                               ["CMS_Hptntj_QCDkbg_metshape","Fake tau MET shape"]
+                               ["CMS_Hptntj_fake_t_fit","Fake tau template fit"],
+                               ["CMS_Hptntj_fake_t_shape","Fake tau MET shape"]
                                ]
             
         # Make table - The horror!
@@ -1295,8 +1317,8 @@ class TableProducer:
 
                     # if column name matches to dataset group label
                     foundMatch = columnName in c.getLabel()
-                    if self._h2tb and not "Hp": # dirty but works (for now)
-                        foundMatch = (columnName == c.getLabel()) # exact match needed
+                    if self._h2tb and not "Hp" in c.getLabel():
+                        foundMatch = (columnName == c.getLabel())
                     if foundMatch: 
                         # if this column+nuisance combination matches to a list, loop over the list
                         if isinstance(n[0], list): 
@@ -1389,7 +1411,7 @@ class TableProducer:
                 myRow[0]+=" (S)"
             myTable.append(myRow)
 
-        # Make systematics table & save to file
+        # Make systematics table & save to file        
         myOutput = self.getSystematicsTable(myTable)
         fileName = self.getSystematicsFileName(light)
         myFile   = open(fileName, "w")
@@ -1414,7 +1436,7 @@ class TableProducer:
         myOutput += "\\noindent\\makebox[\\textwidth]{\n"
         myOutput += "\\begin{tabular}{l|c|c|ccccc}\n"
         myOutput += "\\hline\n"
-        myOutput += "& Signal & Fake tau & \multicolumn{5}{c}{EWK+t\={t} genuine tau}"
+        myOutput += "& Signal & Jet \to \taujet & \multicolumn{5}{c}{EWK+t\={t} genuine tau and e/\mu \to \taujet}"
         myOutput += "\n \\\\"
         myCaptionLine = [["","","","t\={t}","W+jets","single top","DY","Diboson"]] 
         # Calculate dimensions of tables

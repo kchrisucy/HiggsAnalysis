@@ -55,7 +55,7 @@ import aux
 #================================================================================================
 _lightHplusMasses        = [ 80,  90, 100, 120, 140, 150, 155, 160]
 _intermediateHplusMasses = [145,150,155,160,165,170,175,180,190,200]
-_heavyHplusToTBbarMasses = [180, 200, 220, 250, 300, 350, 400, 500, 600, 650, 800, 1000, 1500, 2000, 2500, 3000, 5000, 7000]
+_heavyHplusToTBbarMasses = [180, 200, 220, 250, 300, 350, 400, 500, 600, 650, 800, 1000, 1500, 2000, 2500, 3000, 5000, 7000, 10000]
 _heavyHplusMasses        = [180, 200, 220, 250, 300, 350, 400, 500, 600, 700, 750,  800, 1000, 1500, 2000, 3000] #HToTauNu
 
 ## These MC datasets must be added together before any
@@ -72,6 +72,8 @@ _physicalMcAdd = {
     "WZ"     : "WZ",
     "WZ_ext" : "WZ",
     "WZ_ext1": "WZ",
+    "WW"     : "WW",
+    "WW_ext1": "WW",
     "ZZ"     : "ZZ",
     "ZZ_ext1": "ZZ",
     "WWTo2L2Nu" : "WWTo2L2Nu",
@@ -126,10 +128,10 @@ _physicalMcAdd = {
     "QCD_Pt_470to600_MuEnrichedPt5_ext1" : "QCD_Pt_470to600_MuEnrichedPt5",
     "QCD_Pt_470to600_MuEnrichedPt5_ext2" : "QCD_Pt_470to600_MuEnrichedPt5",
     "QCD_Pt_600to800_MuEnrichedPt5"      : "QCD_Pt_600to800_MuEnrichedPt5",
-    "QCD_Pt_600to800_MuEnrichedPt5_ext1" : "QCD_Pt_600to800_MuEnrichedPt5_ext1",
+    "QCD_Pt_600to800_MuEnrichedPt5_ext1" : "QCD_Pt_600to800_MuEnrichedPt5",
     "QCD_Pt_800to1000_MuEnrichedPt5"     : "QCD_Pt_800to1000_MuEnrichedPt5",
-    "QCD_Pt_800to1000_MuEnrichedPt5_ext1": "QCD_Pt_800to1000_MuEnrichedPt5_ext1",
-    "QCD_Pt_800to1000_MuEnrichedPt5_ext2": "QCD_Pt_800to1000_MuEnrichedPt5_ext2",
+    "QCD_Pt_800to1000_MuEnrichedPt5_ext1": "QCD_Pt_800to1000_MuEnrichedPt5",
+    "QCD_Pt_800to1000_MuEnrichedPt5_ext2": "QCD_Pt_800to1000_MuEnrichedPt5",
     "QCD_Pt_1000toInf_MuEnrichedPt5"     : "QCD_Pt_1000toInf_MuEnrichedPt5",
     
     "WJetsToLNu_HT_0To70"          : "WJetsToLNu_HT_0To70",
@@ -191,6 +193,68 @@ _physicalMcAdd = {
     "ChargedHiggs_HplusTB_HplusToTB_M_2000": "ChargedHiggs_HplusTB_HplusToTB_M_2000",
     "ChargedHiggs_HplusTB_HplusToTB_M_2500": "ChargedHiggs_HplusTB_HplusToTB_M_2500",
     "ChargedHiggs_HplusTB_HplusToTB_M_3000": "ChargedHiggs_HplusTB_HplusToTB_M_3000",
+
+
+    "TTJets_SingleLeptFromT_madgraph"               : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromT_madgraph_ext1"          : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromT_genMET_150_madgraph"    : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromT_amcatnlo"               : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromTbar_madgraph"            : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromTbar_madgraph_ext1"       : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromTbar_genMET_150_madgraph" : "TTJets_SemiLept",
+    "TTJets_SingleLeptFromTbar_amcatnlo"            : "TTJets_SemiLept",
+    "TTGJets"      : "TTGJets",
+    "TTGJets_ext1" : "TTGJets",
+    "TTToSemiLep_TuneCUETP8M2T4down" : "TTToSemiLep_TuneCUETP8M2T4down",
+    "TTToSemiLep_TuneCUETP8M2T4up"   : "TTToSemiLep_TuneCUETP8M2T4up",
+    "TTToSemiLep_hdampDOWN" : "TTToSemiLep_hdampDOWN",
+    "TTToSemiLep_hdampUP"   : "TTToSemiLep_hdampUP",
+    "TTWJetsToLNu_ext1" : "TTWJetsToLNu",
+    "TTWJetsToLNu_ext2" : "TTWJetsToLNu",
+    "TT_GluonMoveCRTune" : "TT_GluonMoveCRTune",
+    "TT_QCDbasedCRTune_erdON"      : "TT_QCDbasedCRTune_erdON",
+    "TT_QCDbasedCRTune_erdON_ext1" : "TT_QCDbasedCRTune_erdON",
+    "TT_TuneCUETP8M2T4down"      : "TT_TuneCUETP8M2T4down",
+    "TT_TuneCUETP8M2T4down_ext1" : "TT_TuneCUETP8M2T4down",
+    "TT_TuneCUETP8M2T4up"      : "TT_TuneCUETP8M2T4up",
+    "TT_TuneCUETP8M2T4up_ext1" : "TT_TuneCUETP8M2T4up",
+    "TT_TuneEE5C"      : "TT_TuneEE5C",
+    "TT_TuneEE5C_ext2" : "TT_TuneEE5C",
+    "TT_TuneEE5C_ext3" : "TT_TuneEE5C",
+    "TT_erdON"      : "TT_erdON",
+    "TT_erdON_ext1" : "TT_erdON",
+    "TT_evtgen" : "TT_evtgen",
+    "TT_fsrup"      : "TT_fsrup",
+    "TT_fsrup_ext1" : "TT_fsrup",
+    "TT_fsrup_ext2" : "TT_fsrup",
+    "TT_fsrdown"      : "TT_fsrdown",
+    "TT_fsrdown_ext1" : "TT_fsrdown",
+    "TT_fsrdown_ext2" : "TT_fsrdown",
+    "TT_hdampDOWN"      : "TT_hdampDOWN",
+    "TT_hdampDOWN_ext1" : "TT_hdampDOWN",
+    "TT_hdampUP"      : "TT_hdampUP",
+    "TT_hdampUP_ext1" : "TT_hdampUP",
+    "TT_isrdown" : "TT_isrdown", 
+    "TT_isrdown_ext1" : "TT_isrdown",
+    "TT_isrdown_ext2" : "TT_isrdown",
+    "TT_isrup_ext1" : "TT_isrup",
+    "TT_isrup_ext2" : "TT_isrup",
+    "TT_mtop1665" : "TT_mtop1665",
+    "TT_mtop1695_ext1" : "TT_mtop1695",
+    "TT_mtop1695_ext2" : "TT_mtop1695",
+    "TT_mtop1715" : "TT_mtop1715",
+    "TT_mtop1735" : "TT_mtop1735",
+    "TT_mtop1755" : "TT_mtop1755",
+    "TT_mtop1755_ext1" : "TT_mtop1755",
+    "TT_mtop1755_ext2" : "TT_mtop1755",
+    "TT_mtop1785" : "TT_mtop1785",
+    "TT_widthx0p2" : "TT_widthx0p2",
+    "TT_widthx0p5" : "TT_widthx0p5",
+    "TT_widthx0p8" : "TT_widthx0p8",
+    "TT_widthx2"   : "TT_widthx2",
+    "TT_widthx4"   : "TT_widthx4",
+    "TT_widthx8"   : "TT_widthx8",
+    
 }
 
 ## Map the physical dataset names to logical names
@@ -225,7 +289,7 @@ _physicalToLogical.update({
         "TTJets_FullLept": "TTJets_FullLept",
         "TTJets_SemiLept": "TTJets_SemiLept",
         "TTJets_Hadronic".replace("_", "_ext_"): "TTJets_Hadronic",
-        
+
         # powheg ttbar
         "TT": "TT",
         
@@ -313,7 +377,38 @@ _physicalToLogical.update({
         "WW": "WW",
         "WZ": "WZ",
         "ZZ": "ZZ",
-
+        
+        "TTGJets"                        : "TTGJets",
+        "TTToSemiLep_TuneCUETP8M2T4down" : "TTToSemiLep_TuneCUETP8M2T4down",
+        "TTToSemiLep_TuneCUETP8M2T4up"   : "TTToSemiLep_TuneCUETP8M2T4up",
+        "TTToSemiLep_hdampDOWN"          : "TTToSemiLep_hdampDOWN",
+        "TTToSemiLep_hdampUP"            : "TTToSemiLep_hdampUP",
+        "TTWJetsToLNu"                   : "TTWJetsToLNu",
+        "TT_GluonMoveCRTune"             : "TT_GluonMoveCRTune",
+        "TT_QCDbasedCRTune_erdON"        : "TT_QCDbasedCRTune_erdON",
+        "TT_TuneCUETP8M2T4down"          : "TT_TuneCUETP8M2T4down",
+        "TT_TuneCUETP8M2T4up"            : "TT_TuneCUETP8M2T4up",
+        "TT_TuneEE5C"                    : "TT_TuneEE5C",
+        "TT_erdON"                       : "TT_erdON",
+        "TT_evtgen"                      : "TT_evtgen",
+        "TT_fsrup"                       : "TT_fsrup",
+        "TT_fsrdown"                     : "TT_fsrdown",
+        "TT_hdampDOWN"                   : "TT_hdampDOWN",
+        "TT_hdampUP"                     : "TT_hdampUP",
+        "TT_isrdown"                     : "TT_isrdown", 
+        "TT_isrup"                       : "TT_isrup",
+        "TT_mtop1665"                    : "TT_mtop1665",
+        "TT_mtop1715"                    : "TT_mtop1715",
+        "TT_mtop1735"                    : "TT_mtop1735",
+        "TT_mtop1755"                    : "TT_mtop1755",
+        "TT_mtop1785"                    : "TT_mtop1785",
+        "TT_widthx0p2"                   : "TT_widthx0p2",
+        "TT_widthx0p5"                   : "TT_widthx0p5",
+        "TT_widthx0p8"                   : "TT_widthx0p8",
+        "TT_widthx2"                     : "TT_widthx2",
+        "TT_widthx4"                     : "TT_widthx4",
+        "TT_widthx8"                     : "TT_widthx8",
+        
         })
 
 # Map the datasets to be merged to the name of the merged dataset.
@@ -1514,24 +1609,19 @@ def _createCutBoxAndLine(frame, cutValue, fillColor=18, box=True, line=True, **k
 # \param box        If true, draw cut box
 # \param line       If true, draw cut line
 # \param kwargs     Keyword arguments (\a lessThan or \a greaterThan, forwarded to histograms.isLessThan())
-def _createCutBoxAndLineY(frame, cutValue, fillColor=18, fillStyle=3001, box=True, line=True, **kwargs):
+def _createCutBoxAndLineY(frame, cutValue, fillColor=18, fillStyle=3001, box=True, line=True, mirror=False, **kwargs):
     xmin = frame.GetXaxis().GetXmin()
     xmax = frame.GetXaxis().GetXmax()
     ymin = cutValue
     ymax = cutValue
     ret  = []
 
-    if box:
-        if histograms.isLessThan(**kwargs):
-            ymin = frame.GetYaxis().GetXmin()
-            ymax = cutValue
-        else:
-            ymin = cutValue
-            ymax = frame.GetYaxis().GetXmax()
-        b = ROOT.TBox(xmin, ymin, xmax, ymax)
-        b.SetFillColor(fillColor)
-        b.SetFillStyle(fillStyle)
-        ret.append(b)
+    # Mirror calculations
+    dy = 1.0-cutValue
+    if dy < 0:
+        cutValueMirror = 1.0-abs(dy)
+    else:
+        cutValueMirror = 1.0+abs(dy)
 
     if line:
         l = ROOT.TLine(xmin, cutValue, xmax, cutValue)
@@ -1539,7 +1629,19 @@ def _createCutBoxAndLineY(frame, cutValue, fillColor=18, fillStyle=3001, box=Tru
         l.SetLineStyle(ROOT.kDashed)
         l.SetLineColor(ROOT.kBlack)
         ret.append(l)
+        if mirror:
+            l = ROOT.TLine(xmin, cutValueMirror, xmax, cutValueMirror)
+            l.SetLineWidth(3)
+            l.SetLineStyle(ROOT.kDashed)
+            l.SetLineColor(ROOT.kBlack)
+            ret.append(l)            
 
+    if box:
+        b = ROOT.TBox(xmin, cutValue, xmax, cutValueMirror)
+        b.SetFillColor(fillColor)
+        b.SetFillStyle(fillStyle)
+        ret.append(b)
+        
     return ret
 
 ## Helper function for creating a histograms.Histo object from a ROOT object based on the ROOT object type

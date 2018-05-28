@@ -109,9 +109,9 @@ def main(opts):
 
     # Apply TDR style
     style = tdrstyle.TDRStyle()
+    style.setGridX(False)
+    style.setGridY(False)
     style.setOptStat(False)
-    style.setGridX(True)
-    style.setGridY(True)
 
     # Obtain dsetMgrCreator and register it to module selector
     dsetMgrCreator = dataset.readFromMulticrabCfg(directory=opts.mcrab)
@@ -318,6 +318,7 @@ def PlotComparison(datasetsMgr, hBaseline, hInverted, ext):
 
     # Create the final plot object
     p = plots.ComparisonManyPlot(baseline_FakeB, [inverted_FakeB], saveFormats=[])
+    #p = plots.ComparisonPlot(baseline_FakeB, inverted_FakeB, saveFormats=[]) #also works!
     p.setLuminosity(opts.intLumi)
 
     # Apply histogram styles
@@ -372,8 +373,9 @@ def GetHistoKwargs(histoName, ext, opts):
     _cutBox = None
     _rebinX = 1
     _ylabel = None
+    _yNorm  = "Events"
     if opts.normaliseToOne:
-        #_opts   = {"ymin": 3e-4, "ymaxfactor": 2.0}
+        _yNorm  = "Arbitrary units"
         _opts   = {"ymin": 0.7e-4, "ymaxfactor": 2.0}
     else:
         _opts   = {"ymin": 1e0, "ymaxfactor": 2.0}
@@ -393,7 +395,7 @@ def GetHistoKwargs(histoName, ext, opts):
         _rebinX = systematics._dataDrivenCtrlPlotBinning["MET_AfterAllSelections"]  #2
         _opts["xmax"] = 300.0
         binWmin, binWmax = GetBinWidthMinMax(_rebinX)
-        _ylabel = "Events / %.0f-%.0f %s" % (binWmin, binWmax, _units)
+        _ylabel = _yNorm + " / %.0f-%.0f %s" % (binWmin, binWmax, _units)
     if "ht_" in hName:
         _units  = "GeV"
         #_rebinX = 5 #2
@@ -402,14 +404,20 @@ def GetHistoKwargs(histoName, ext, opts):
         _opts["xmax"] = 3000.0
         _cutBox       = {"cutValue": 500.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
         binWmin, binWmax = GetBinWidthMinMax(_rebinX)
-        _ylabel = "Events / %.0f-%.0f %s" % (binWmin, binWmax, _units)
-    if "mvamax" in hName:
+        _ylabel = _yNorm + " / %.0f-%.0f %s" % (binWmin, binWmax, _units)
+    if "mvamax1" in hName:
         _rebinX = 1
         _units  = ""
         _format = "%0.2f " + _units
-        #_xlabel = "BDTG discriminant"
         _xlabel = "top-tag discriminant"
         _opts["xmin"] =  0.0 #0.45
+        _cutBox = {"cutValue": 0.40, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
+    if "mvamax2" in hName:
+        _rebinX = 1
+        _units  = ""
+        _format = "%0.2f " + _units
+        _xlabel = "top-tag discriminant"
+        #_opts["xmin"] = -1.0 #0.45
         _cutBox = {"cutValue": 0.40, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
     if "nbjets" in hName:
         _units  = ""
@@ -493,9 +501,11 @@ def GetHistoKwargs(histoName, ext, opts):
     if "eta" in hName:
         _format = "%0.2f"
         _cutBox = {"cutValue": 0.0, "fillColor": 16, "box": False, "line": True, "greaterThan": True}
-        _opts["xmin"] = -2.6 #-3.0
-        _opts["xmax"] = +2.6 #+3.0
-        ROOT.gStyle.SetNdivisions(10, "X")
+        #_opts["xmin"] = -2.6 #-3.0
+        _opts["xmin"] =  0.0 #iro
+        _opts["xmax"] = +2.4 #+3.0
+        _rebinX = 1
+        #ROOT.gStyle.SetNdivisions(10, "X")
     if "deltaeta" in hName:
         _format = "%0.2f"
         _opts["xmin"] = 0.0
@@ -530,9 +540,11 @@ def GetHistoKwargs(histoName, ext, opts):
     if "tetrajetm" in hName:
         #_rebinX = 4
         _units  = "GeV/c^{2}"
-        _rebinX = systematics.getBinningForTetrajetMass(0)
+        #_rebinX = systematics.getBinningForTetrajetMass(0)
+        _rebinX = systematics.getBinningForTetrajetMass(9)
+        #_rebinX  = systematics._dataDrivenCtrlPlotBinning["LdgTetrajetMass_AfterAllSelections"]
         binWmin, binWmax = GetBinWidthMinMax(_rebinX)
-        _ylabel = "Events / %.0f-%.0f %s" % (binWmin, binWmax, _units)
+        _ylabel = _yNorm + " / %.0f-%.0f %s" % (binWmin, binWmax, _units)
         _xlabel = "m_{jjbb} (%s)" % (_units)
         #_opts["xmax"] = 3000.0
 
@@ -541,10 +553,10 @@ def GetHistoKwargs(histoName, ext, opts):
 
     _kwargs = {
         "ratioCreateLegend": True,
-        #"ratioType"        : None, #"errorScale", #"errorScale", #binomial #errorPropagation
-        "ratioType"        : "errorScale",
-        "ratioErrorOptions": {"numeratorStatSyst": False, "denominatorStatSyst": False}, # Include stat.+syst. to numerator (if syst globally enabled)
-        "ratioMoveLegend"  : {"dx": -0.51, "dy": 0.03, "dh": -0.05},
+        "ratioType"        : opts.ratioType, #"errorPropagation", "errorScale", "binomial"
+        "divideByBinWidth" : False,
+        "ratioErrorOptions": {"numeratorStatSyst": False, "denominatorStatSyst": False}, # Include "stat.+syst." in legend? (if False just "stat.")
+        "ratioMoveLegend"  : {"dx": -0.51, "dy": 0.03, "dh": -0.08},
         "errorBarsX"       : True,
         "xlabel"           : _xlabel,
         "ylabel"           : _ylabel,
@@ -552,7 +564,7 @@ def GetHistoKwargs(histoName, ext, opts):
         "rebinY"           : None,
         "ratioYlabel"      : ext.split("v")[0] + "/" + ext.split("v")[1],
         "ratio"            : _ratio,
-        "ratioInvert"      : True, 
+        "ratioInvert"      : False, 
         "addMCUncertainty" : True,
         "addLuminosityText": True,
         "addCmsText"       : True,
@@ -641,6 +653,7 @@ if __name__ == "__main__":
     USEMC        = False
     SIGNALMASS   = 500
     FOLDER       = "ForFakeBMeasurement"
+    RATIOTYPE    = "errorPropagation" # "errorPropagation", "errorScale", "binomial"
 
     # Define the available script options
     parser = OptionParser(usage="Usage: %prog [options]")
@@ -696,6 +709,10 @@ if __name__ == "__main__":
     parser.add_option("--folder", dest="folder", type="string", default = FOLDER,
                       help="ROOT file folder under which all histograms to be plotted are located [default: %s]" % (FOLDER) )
 
+    parser.add_option("--ratioType", dest="ratioType", type="string", default = RATIOTYPE,
+                      help="Error type for to be used for the ratio [default: %s]" % (RATIOTYPE) )
+
+
     (opts, parseArgs) = parser.parse_args()
 
     # Require at least two arguments (script-name, path to multicrab)
@@ -736,6 +753,10 @@ if __name__ == "__main__":
         sys.exit()
     else:
         opts.signal = "ChargedHiggs_HplusTB_HplusToTB_M_%.0f" % opts.signalMass
+
+    ratioTypes = ["errorPropagation", "errorScale", "binomial"]
+    if opts.ratioType not in ratioTypes:
+        raise Exception("Invalid ration type \"%s\". Please select from:%s" % (opts.ratioType, ", ".join(ratioTypes)  ))
 
     # Call the main function
     main(opts)

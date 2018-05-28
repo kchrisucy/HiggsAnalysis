@@ -187,6 +187,19 @@ public:
       else return fMVAmax1;
     }
 
+    const std::vector<Jet>& getSelectedTopsJet1() const { return fSelectedTopsJet1; }
+    const std::vector<Jet>& getSelectedTopsJet2() const { return fSelectedTopsJet2; }
+    const std::vector<Jet>& getSelectedTopsBJet() const { return fSelectedTopsBJet; }
+    const std::vector<float>& getSelectedTopsMVA() const { return fSelectedTopsMVA; }
+    const std::vector<Jet>& getAllTopsJet1() const { return fAllTopsJet1; }
+    const std::vector<Jet>& getAllTopsJet2() const { return fAllTopsJet2; }
+    const std::vector<Jet>& getAllTopsBJet() const { return fAllTopsBJet; }
+    const std::vector<float>& getAllTopsMVA() const { return fAllTopsMVA; }
+    const std::vector<Jet>& getSelectedCleanedTopsJet1() const { return fSelectedCleanedTopsJet1; }
+    const std::vector<Jet>& getSelectedCleanedTopsJet2() const { return fSelectedCleanedTopsJet2; }
+    const std::vector<Jet>& getSelectedCleanedTopsBJet() const { return fSelectedCleanedTopsBJet; }
+    const std::vector<float>& getSelectedCleanedTopsMVA() const { return fSelectedCleanedTopsMVA; }
+
     friend class TopSelectionBDT;
 
   private:
@@ -220,6 +233,22 @@ public:
     math::XYZTLorentzVector fDijetWithMinDR_p4;
     // DijetWithMaxDR
     math::XYZTLorentzVector fDijetWithMaxDR_p4;
+
+    std::vector<Jet> fSelectedTopsJet1;
+    std::vector<Jet> fSelectedTopsJet2;
+    std::vector<Jet> fSelectedTopsBJet;
+    std::vector<float> fSelectedTopsMVA;
+
+    std::vector<Jet> fAllTopsJet1;
+    std::vector<Jet> fAllTopsJet2;
+    std::vector<Jet> fAllTopsBJet;
+    std::vector<float> fAllTopsMVA;
+
+    std::vector<Jet> fSelectedCleanedTopsJet1;
+    std::vector<Jet> fSelectedCleanedTopsJet2;
+    std::vector<Jet> fSelectedCleanedTopsBJet;
+    std::vector<float> fSelectedCleanedTopsMVA;
+
   };
   
   // Main class

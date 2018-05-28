@@ -332,7 +332,17 @@ datasetsSignalTauNu.append(Dataset('/ChargedHiggs_TTToHplusBWB_HplusToTauNu_M-15
 datasetsSignalTauNu.append(Dataset('/ChargedHiggs_TTToHplusBWB_HplusToTauNu_M-155_13TeV_amcatnlo_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', dataVersion="80Xmc", dasQuery=das))
 datasetsSignalTauNu.append(Dataset('/ChargedHiggs_TTToHplusBWB_HplusToTauNu_M-160_13TeV_amcatnlo_pythia8/RunIISummer16MiniAODv2-PUMoriond17_80X_mcRun2_asymptotic_2016_TrancheIV_v6-v1/MINIAODSIM', dataVersion="80Xmc", dasQuery=das))
 #datasetsSignalTauNu.extend(datasetsSignalTauNu_reHLT)
+
+#Pythia8
 datasetsSignalTauNu.append(Dataset('/HplusToTauNu_M_200_TuneCUETP8M1_tauola_13TeV_pythia8/amarini-GEN-SIM-71-6edf4b210aa48b81088c0de44a7af6f5/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_M140_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_HplusTB_HplusToTauNu_M_140_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_M160_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_HplusTB_HplusToTauNu_M_160_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_M180_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_HplusTB_HplusToTauNu_M_180_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_M220_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_HplusTB_HplusToTauNu_M_220_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_lowmass_M140_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_TTToHplusBWB_HplusToTauNu_M_140_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_lowmass_M150_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_TTToHplusBWB_HplusToTauNu_M_150_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_lowmass_M155_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_TTToHplusBWB_HplusToTauNu_M_155_Pythia8"))
+datasetsSignalTauNu.append(Dataset('/ChargedHToTauNu_lowmass_M160_13TeV_pythia8/amarini-PUMoriond17-MINIAODSIM-v1-28028af67189b3de7224b79195bd0e1d/USER', dbs="phys03",dataVersion="80Xmc", dasQuery=das, name="ChargedHiggs_TTToHplusBWB_HplusToTauNu_M_160_Pythia8"))
 
 datasetsSingleTop = []
 das1 = "https://cmsweb.cern.ch/das/request?view=list&limit=50&instance=prod%2Fglobal&input=dataset%3D%2FST_t-channel_antitop*%2FRunII*PUMoriond17_80X_mcRun2*%2FMINIAODSIM"
@@ -630,10 +640,10 @@ hplus2tbAnalysisDatasets = []
 #hplus2tbAnalysisDatasets.extend(datasetsJetHTData_18Apr2017)
 hplus2tbAnalysisDatasets.extend(datasetsJetHTData_03Feb2017)
 hplus2tbAnalysisDatasets.extend(datasetsSignalTB)
-# hplus2tbAnalysisDatasets.extend(datasetsSignalTB_ext1)
+hplus2tbAnalysisDatasets.extend(datasetsSignalTB_ext1)
 hplus2tbAnalysisDatasets.extend(datasetsTop)
 #hplus2tbAnalysisDatasets.extend(datasetsTTJets) #-ve weights
-hplus2tbAnalysisDatasets.extend(datasetsTTJets_SingleLeptFromT)
+#hplus2tbAnalysisDatasets.extend(datasetsTTJets_SingleLeptFromT)
 hplus2tbAnalysisDatasets.extend(datasetsSingleTop)
 hplus2tbAnalysisDatasets.extend(datasetsDYJetsToQQ)
 hplus2tbAnalysisDatasets.extend(datasetsWJetsToQQ)

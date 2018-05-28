@@ -32,7 +32,20 @@ TopSelectionBDT::Data::Data()
   fTrijet2_p4(),
   fTetrajetBJet(),
   fLdgTetrajet_p4(),
-  fSubldgTetrajet_p4()
+  fSubldgTetrajet_p4(),
+  fSelectedTopsJet1(),
+  fSelectedTopsJet2(),
+  fSelectedTopsBJet(),
+  fSelectedTopsMVA(),
+  fAllTopsJet1(),
+  fAllTopsJet2(),
+  fAllTopsBJet(),
+  fAllTopsMVA(),
+  fSelectedCleanedTopsJet1(),
+  fSelectedCleanedTopsJet2(),
+  fSelectedCleanedTopsBJet(),
+  fSelectedCleanedTopsMVA()
+
 { }
 
 TopSelectionBDT::Data::~Data() { }
@@ -366,7 +379,7 @@ TopSelectionBDT::Data TopSelectionBDT::privateAnalyze(const Event& event, const 
   output.fJetsUsedAsBJets = selectedBjets;
   
   // Sanity check
-  if (selectedBjets.size() < 3) return output;
+  //if (selectedBjets.size() < 3) return output;
   cSubPassedBjetsCut.increment();
 
   // Only resize if their size exceeds max allowed value
@@ -606,7 +619,32 @@ TopSelectionBDT::Data TopSelectionBDT::privateAnalyze(const Event& event, const 
   output.fLdgTetrajet_p4    = ldgTetrajet_P4;
   output.fSubldgTetrajet_p4 = subLdgTetrajet_P4;
 
-  //================================================================================================
+
+  for (size_t i = 0; i < fSelectedTops.MVA.size(); i++)
+    {
+      output.fSelectedTopsJet1.push_back(fSelectedTops.Jet1.at(i));
+      output.fSelectedTopsJet2.push_back(fSelectedTops.Jet2.at(i));
+      output.fSelectedTopsBJet.push_back(fSelectedTops.BJet.at(i));
+      output.fSelectedTopsMVA.push_back(fSelectedTops.MVA.at(i));
+    }
+
+  for (size_t i = 0; i < fAllTops.MVA.size(); i++)
+    {
+      output.fAllTopsJet1.push_back(fAllTops.Jet1.at(i));
+      output.fAllTopsJet2.push_back(fAllTops.Jet2.at(i));
+      output.fAllTopsBJet.push_back(fAllTops.BJet.at(i));
+      output.fAllTopsMVA.push_back(fAllTops.MVA.at(i));
+    }
+
+  for (size_t i = 0; i < fSelectedCleanedTops.MVA.size(); i++)
+    {
+      output.fSelectedCleanedTopsJet1.push_back(fSelectedCleanedTops.Jet1.at(i));
+      output.fSelectedCleanedTopsJet2.push_back(fSelectedCleanedTops.Jet2.at(i));
+      output.fSelectedCleanedTopsBJet.push_back(fSelectedCleanedTops.BJet.at(i));
+      output.fSelectedCleanedTopsMVA.push_back(fSelectedCleanedTops.MVA.at(i));
+    }
+
+   //================================================================================================
   // Increment counters
   //================================================================================================
   if (0) std::cout << "=== TopSelectionBDT:: Increment counters" << std::endl;
